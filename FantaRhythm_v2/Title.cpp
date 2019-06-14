@@ -3,7 +3,6 @@
 #define TWOPI 6.28318
 
 Title::Title(void) {
-	alpha = 255;
 	FontAsset::Register(U"font", 50);
 	FontAsset::Preload(U"font");
 	TextureAsset::Register(U"back", U"resources/images/back/start_back_image.jpg");
