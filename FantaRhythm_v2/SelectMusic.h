@@ -7,7 +7,7 @@ public:
 	void draw(void);
 private:
 	std::vector<String> music;
-	int count;
+	int musicCount;
 	int cursor;
 	int angle;
 	Audio *audio;
