@@ -12,7 +12,7 @@ SelectMusic::SelectMusic(void) : cursor(0) {
 	FontAsset::Preload(U"font");
 
 	//‹È”‚ÌŽæ“¾
-	musicCount = FileSystem::DirectoryContents(U"resources/musics/main", false).count();
+	musicCount = FileSystem::DirectoryContents(U"resources/musics/main/", false).count();
 
 	/*‹È–¼Žæ“¾*/
 	String musicPath;
@@ -88,7 +88,7 @@ void SelectMusic::rotateMusic(void) {
 }
 
 void SelectMusic::playMusic(int musicNum) {
-	audio = new Audio(U"resources/musics/previews/" + music[musicNum] + U".wav");
+	audio = new Audio(U"resources/musics/main/" + music[musicNum] + U"/preview.wav");
 	audio->setLoop(true);
 	audio->play();
 }
