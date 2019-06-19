@@ -342,4 +342,5 @@ healthchecksdb
 [Ii]ntermediate/
 FantaRhythm_v2/App/*.exe
 FantaRhythm_v2/App/*.html
-FantaRhythm_v2/App/resources/
+FantaRhythm_v2/App/resources/*
+!FantaRhythm_v2/App/resources/.gitkeep
