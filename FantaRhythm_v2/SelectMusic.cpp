@@ -46,9 +46,9 @@ void SelectMusic::draw(void) {
 	/*曲名の描画*/
 	for (int i = 0; i < 5; i++) {
 		//座標の指定
-		int rotate = 120 + 30 * i + angle;
-		int x = 1800 + cos((rotate)* PI / 180.0) * 1000;
-		int y = (Window::Height() / 2) - sin((rotate)* PI / 180.0) * 500;
+		int angle = 120 + 30 * i + rotation;
+		int x = 1800 + cos((angle)* PI / 180.0) * 1000;
+		int y = (Window::Height() / 2) - sin((angle)* PI / 180.0) * 500;
 		//描画
 		TextureAsset(U"title").drawAt(x, y);
 		FontAsset(U"font")(music[(cursor - 2 + i + musicCount) % musicCount]).drawAt(x, y, Color(0, 0, 0));
@@ -59,7 +59,7 @@ void SelectMusic::moveCursor(void) {
 	if (KeyUp.down()) {
 		cursor == 0 ? cursor = musicCount - 1 : cursor--;
 		//曲名を回転させるため角度を30度マイナス
-		angle = -30;
+		rotation = -30;
 
 		//新しい曲のセット&再生
 		delete audio;
@@ -68,7 +68,7 @@ void SelectMusic::moveCursor(void) {
 	if (KeyDown.down()) {
 		cursor == musicCount - 1 ? cursor = 0 : cursor++;
 		//曲名を回転させるため角度を30度プラス
-		angle = 30;
+		rotation = 30;
 
 		//新しい曲のセット&再生
 		delete audio;
@@ -77,13 +77,13 @@ void SelectMusic::moveCursor(void) {
 }
 
 void SelectMusic::rotateMusic(void) {
-	if (angle < 0) {
+	if (rotation < 0) {
 		//既定の位置にくるまで1フレームおきに角度をプラス
-		angle += 3;
+		rotation += 3;
 	}
-	if (angle > 0) {
+	if (rotation > 0) {
 		//既定の位置にくるまで1フレームおきに角度をマイナス
-		angle -= 3;
+		rotation -= 3;
 	}
 }
 

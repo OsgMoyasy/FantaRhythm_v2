@@ -9,7 +9,7 @@ private:
 	std::vector<String> music;
 	int musicCount;
 	int cursor;
-	int angle;
+	int rotation;
 	Audio *audio;
 	void moveCursor(void);
 	void rotateMusic(void);
