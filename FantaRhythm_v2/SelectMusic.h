@@ -1,5 +1,7 @@
 #pragma once
-class SelectMusic{
+#include "Scene.h"
+
+class SelectMusic:public Scene{
 public:
 	SelectMusic(void);
 	~SelectMusic(void);	

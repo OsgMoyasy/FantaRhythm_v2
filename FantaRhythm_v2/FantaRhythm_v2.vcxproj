@@ -264,6 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FantaRhythm_v2.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectMusic.h" />
     <ClInclude Include="Title.h" />

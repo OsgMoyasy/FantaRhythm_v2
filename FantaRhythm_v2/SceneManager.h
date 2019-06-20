@@ -1,5 +1,7 @@
 #pragma once
 #include "FantaRhythm_v2.h"
+#include "Scene.h"
+
 class SceneManager {
 public:
 	SceneManager();
@@ -8,7 +10,5 @@ private:
 	int nextScene;
 	int nowScene;
 	void changeScene();
-
-	Title *title;
-	SelectMusic *selectMusic;
+	Scene *scene;
 };
