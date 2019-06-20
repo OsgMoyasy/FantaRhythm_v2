@@ -27,6 +27,7 @@ SelectMusic::SelectMusic(void) : cursor(0) {
 
 SelectMusic::~SelectMusic(void) {
 	TextureAsset::UnregisterAll();
+	FontAsset::Unregister(U"font");
 	delete audio;
 }
 
