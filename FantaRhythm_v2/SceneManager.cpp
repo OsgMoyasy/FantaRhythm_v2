@@ -27,9 +27,9 @@ void SceneManager::changeScene(){
 		delete scene;
 		scene = new Title();
 		break;
-	case SELECT_MUSIC:
+	case SELECT_ELEMENT:
 		delete scene;
-		scene = new SelectMusic();
+		scene = new SelectElement();
 		break;
 	default:
 		break;

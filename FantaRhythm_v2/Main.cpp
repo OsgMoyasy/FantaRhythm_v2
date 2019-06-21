@@ -7,10 +7,10 @@ void Main(){
 
 	SceneManager sceneManager;
 	while (System::Update()){
-		ClearPrint();
+		//ClearPrint();
 		sceneManager.sceneUpdate();
 
 		//デバッグ出力: FPSの表示
-		Print << Profiler::FPS();
+		//Print << Profiler::FPS();
 	}
 }

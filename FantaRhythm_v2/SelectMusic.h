@@ -1,20 +1,18 @@
 #pragma once
-#include "Scene.h"
+#include "SelectScene.h"
+#include <vector>
 
-class SelectMusic:public Scene{
+class SelectMusic:public SelectScene{
 public:
-	SelectMusic(void);
-	~SelectMusic(void);	
-	int update(void);
-	void draw(void);
+	SelectMusic(std::vector<String>& elementName, int& elementCount);
+	~SelectMusic(void);
+	void getElementName(std::vector<String>& elementName, int elementCount);
+	void update(int& rotation, int elementCount);
+	int getCursor(void);
 private:
-	std::vector<String> music;
-	int musicCount;
 	int cursor;
-	int rotation;
-	Audio *audio;
-	void moveCursor(void);
-	void rotateMusic(void);
-	void playMusic(int musicNum);
+	String getMusicName(int musicNum);
+	void moveCursor(int& rotation, int elementCount);
+	void rotateMusic(int& rotation);
+	void playMusic(const int& rotation);
 };
-
