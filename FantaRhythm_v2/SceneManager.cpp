@@ -3,7 +3,7 @@
 SceneManager::SceneManager() {
 	nowScene = TITLE;
 	nextScene = TITLE;
-	title = new Title();
+	scene = new Title();
 }
 
 void SceneManager::sceneUpdate() {
@@ -12,49 +12,28 @@ void SceneManager::sceneUpdate() {
 		changeScene();
 		nowScene = nextScene;
 	}
+	
 
 	//シーンの呼び出し
-	switch (nowScene){
-	case TITLE:
-		nextScene = title->update();
-		title->draw();
-		break;
-
-	case SELECT_MUSIC:
-		nextScene = selectMusic->update();
-		selectMusic->draw();
-		break;
-
-	default:
-
-		break;
-	}
+	nextScene = scene->update();
+	scene->draw();
+	
 }
 
 void SceneManager::changeScene(){
 	//現在のシーンの破棄
-	switch (nowScene){
-	case TITLE:
-		delete title;
-		break;
-	case SELECT_MUSIC:
-		delete selectMusic;
-		break;
-	default:
-		break;
-	}
-
-	//次のシーンの初期化
 	switch (nextScene){
 	case TITLE:
-		title = new Title();
+		delete scene;
+		scene = new Title();
 		break;
-
-	case SELECT_MUSIC:
-		selectMusic = new SelectMusic();
+	case SELECT_ELEMENT:
+		delete scene;
+		scene = new SelectElement();
 		break;
-
 	default:
 		break;
 	}
+
+
 }

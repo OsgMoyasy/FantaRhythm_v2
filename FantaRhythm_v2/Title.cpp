@@ -16,7 +16,7 @@ Title::~Title(void) {
 
 int Title::update(void) {
 	if (KeyA.down()) {
-		return SELECT_MUSIC;
+		return SELECT_ELEMENT;
 	}
 
 	changeAlpha();

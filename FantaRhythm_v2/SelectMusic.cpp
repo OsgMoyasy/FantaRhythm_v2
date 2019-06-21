@@ -1,82 +1,54 @@
 #include "FantaRhythm_v2.h"
-#define PI 3.141592
+#include "SelectMusic.h"
 
+SelectMusic::SelectMusic(std::vector<String>& elementName, int& elementCount) : cursor(0){
+	elementCount = FileSystem::DirectoryContents(U"resources/musics/main/", false).count();
+	getElementName(elementName, elementCount);
 
-SelectMusic::SelectMusic(void) : cursor(0) {
-	TextureAsset::Register(U"back", U"resources/images/back/BackScreen.jpg");
-	TextureAsset::Preload(U"back");
-	TextureAsset::Register(U"title", U"resources/images/items/title.png");
-	TextureAsset::Preload(U"title");
-
-	FontAsset::Register(U"font", 30);
-	FontAsset::Preload(U"font");
-
-	//曲数の取得
-	musicCount = FileSystem::DirectoryContents(U"resources/musics/main/", false).count();
-
-	/*曲名取得*/
-	String musicPath;
-	for (int i = 0; i < musicCount; i++) {
-		musicPath = FileSystem::DirectoryContents(U"resources/musics/main/", false).at(i);
-		music.push_back(FileSystem::BaseName(musicPath));
-	}
-
-	//曲プレビューの再生
-	playMusic(0);
+	AudioAsset::Register(U"music", U"resources/musics/main/" + getMusicName(0) + U"/preview.wav");
+	AudioAsset(U"music").play();
 }
 
 SelectMusic::~SelectMusic(void) {
-	TextureAsset::UnregisterAll();
-	delete audio;
+	return;
 }
 
-int SelectMusic::update(void) {
-	moveCursor();
-	rotateMusic();
-	if (KeyA.down()) {
-		return TITLE;
-	}
-	return SELECT_MUSIC;
+void SelectMusic::update(int& rotation, int elementCount) {
+	playMusic(rotation);
+	moveCursor(rotation, elementCount);
+	rotateMusic(rotation);
 }
 
-void SelectMusic::draw(void) {
-	//背景画像描画
-	TextureAsset(U"back").draw();
+void SelectMusic::getElementName(std::vector<String>& elementName, int elementCount) {
+	//elementNameの要素を全削除
+	std::vector<String>().swap(elementName);
 
-	/*曲名の描画*/
-	for (int i = 0; i < 5; i++) {
-		//座標の指定
-		int angle = 120 + 30 * i + rotation;
-		int x = 1800 + cos((angle)* PI / 180.0) * 1000;
-		int y = (Window::Height() / 2) - sin((angle)* PI / 180.0) * 500;
-		//描画
-		TextureAsset(U"title").drawAt(x, y);
-		FontAsset(U"font")(music[(cursor - 2 + i + musicCount) % musicCount]).drawAt(x, y, Color(0, 0, 0));
+	String musicPath;
+	for (int i = 0; i < elementCount; i++) {
+		musicPath = FileSystem::DirectoryContents(U"resources/musics/main/", false).at(i);
+		elementName.push_back(FileSystem::BaseName(musicPath));
 	}
 }
 
-void SelectMusic::moveCursor(void) {
+String SelectMusic::getMusicName(int musicNum) {
+	String musicPath = FileSystem::DirectoryContents(U"resources/musics/main/", false).at(musicNum);
+	return FileSystem::BaseName(musicPath);
+}
+
+void SelectMusic::moveCursor(int& rotation, int elementCount) {
 	if (KeyUp.down()) {
-		cursor == 0 ? cursor = musicCount - 1 : cursor--;
+		cursor == 0 ? cursor = elementCount - 1 : cursor--;
 		//曲名を回転させるため角度を30度マイナス
 		rotation = -30;
-
-		//新しい曲のセット&再生
-		delete audio;
-		playMusic(cursor);
 	}
 	if (KeyDown.down()) {
-		cursor == musicCount - 1 ? cursor = 0 : cursor++;
+		cursor == elementCount - 1 ? cursor = 0 : cursor++;
 		//曲名を回転させるため角度を30度プラス
 		rotation = 30;
-
-		//新しい曲のセット&再生
-		delete audio;
-		playMusic(cursor);
 	}
 }
 
-void SelectMusic::rotateMusic(void) {
+void SelectMusic::rotateMusic(int& rotation) {
 	if (rotation < 0) {
 		//既定の位置にくるまで1フレームおきに角度をプラス
 		rotation += 3;
@@ -87,8 +59,16 @@ void SelectMusic::rotateMusic(void) {
 	}
 }
 
-void SelectMusic::playMusic(int musicNum) {
-	audio = new Audio(U"resources/musics/main/" + music[musicNum] + U"/preview.wav");
-	audio->setLoop(true);
-	audio->play();
+int SelectMusic::getCursor(void){
+	return cursor;
 }
+
+void SelectMusic::playMusic(const int& rotation) {
+	//音楽の再生
+//上下ボタン連打した時にフレームレートが無茶苦茶下がるのの対策
+	if (rotation == 3 || rotation == -3) {
+		AudioAsset::Unregister(U"music");
+		AudioAsset::Register(U"music", U"resources/musics/main/" + getMusicName(cursor) + U"/preview.wav");
+		AudioAsset(U"music").play();
+	}
+};

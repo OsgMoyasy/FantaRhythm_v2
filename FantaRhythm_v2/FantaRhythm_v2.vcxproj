@@ -199,6 +199,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SelectElement.cpp" />
     <ClCompile Include="SelectMusic.cpp" />
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
@@ -264,8 +265,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FantaRhythm_v2.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SelectElement.h" />
     <ClInclude Include="SelectMusic.h" />
+    <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>
