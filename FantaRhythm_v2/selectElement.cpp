@@ -35,6 +35,8 @@ int SelectElement::update(void) {
 			}
 			else {
 				//難易度選択に切り替え
+				//難易度選択がないため代わりに曲選択に移動
+				//移動したとき曲が変わらないのは仕様なので問題なし
 				switcher = DIFFICULTY;
 				scene.push(new SelectMusic(elementName, elementCount));
 			}
