@@ -1,60 +1,51 @@
 #include "SceneManager.h"
 
-SceneManager::SceneManager() {
-	nowScene = TITLE;
-	nextScene = TITLE;
-	title = new Title();
-}
+Scene* SceneManager::scene;
+SceneManager::SCENE SceneManager::nowscene;
+SceneManager::SCENE SceneManager::nextscene;
 
-void SceneManager::sceneUpdate() {
-	//シーンに変更があったとき
-	if (nowScene != nextScene) {
+
+void SceneManager::initialize() {
+	scene = new Title();
+}
+void SceneManager::finalize() {
+	delete scene;
+}
+void SceneManager::updateScene() {
+	if (nowscene != nextscene) {
 		changeScene();
-		nowScene = nextScene;
 	}
-
-	//シーンの呼び出し
-	switch (nowScene){
-	case TITLE:
-		nextScene = title->update();
-		title->draw();
-		break;
-
-	case SELECT_MUSIC:
-		nextScene = selectMusic->update();
-		selectMusic->draw();
-		break;
-
-	default:
-
-		break;
-	}
+	scene->update();
+}
+void SceneManager::drawScene() {
+	scene->draw();
 }
 
-void SceneManager::changeScene(){
-	//現在のシーンの破棄
-	switch (nowScene){
-	case TITLE:
-		delete title;
+void SceneManager::setNextScene(SCENE next) {
+	nextscene = next;
+}
+
+void SceneManager::changeScene() {
+	switch (nextscene) {//nextsceneがNONE以外の時シーン移行する
+	case SCENE_TITLE:
+		delete scene;
+		scene = new Title();
 		break;
-	case SELECT_MUSIC:
-		delete selectMusic;
+	case SCENE_SELECTMUSIC:
+		delete scene;
+		scene = new SelectMusic();
+		break;
+	case SCENE_GAME:
+		if (nowscene == SCENE_SELECTMUSIC) {
+			//曲のパスと難易度選択のパスを退避
+			String musicpath = ((SelectMusic*)scene)->getMusicPath();
+			String filepath = ((SelectMusic*)scene)->getDifPath();
+			delete scene;
+			scene = new Game(musicpath,filepath);
+		}
 		break;
 	default:
 		break;
 	}
-
-	//次のシーンの初期化
-	switch (nextScene){
-	case TITLE:
-		title = new Title();
-		break;
-
-	case SELECT_MUSIC:
-		selectMusic = new SelectMusic();
-		break;
-
-	default:
-		break;
-	}
+	nowscene = nextscene;
 }

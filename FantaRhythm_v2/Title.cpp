@@ -1,4 +1,6 @@
 #include "Title.h"
+#include "SceneManager.h"
+
 #define CYCLE 3000
 #define TWOPI 6.28318
 
@@ -14,13 +16,13 @@ Title::~Title(void) {
 	TextureAsset::Unregister(U"back");
 }
 
-int Title::update(void) {
-	if (KeyA.down()) {
-		return SELECT_MUSIC;
+void Title::update(void) {
+	if (KeyA.down()) {//‹È‘I‘ð‰æ–Ê‚Ö
+		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
 	}
-
-	changeAlpha();
-	return TITLE;
+	else {
+		changeAlpha();
+	}
 }
 
 void Title::draw(void) {
