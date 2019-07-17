@@ -135,9 +135,7 @@ void NotesManager::judgeLong(int lane) {
 	}
 	if (longflag[lane]) {
 		if (press[lane]) {//ƒ{ƒ^ƒ“‰Ÿ‰º’†
-			if ((nowTime - checkitr[lane]->time) >= 0) {//Ž~‚ß‚éƒ^ƒCƒ~ƒ“ƒO 
-				checkitr[lane]->time = (int)(nowTime);//”»’èˆÊ’uˆÈ~‚ÅŽ~‚ß‚é
-			}
+			checkitr[lane]->time = (int)(nowTime);//”»’èˆÊ’uˆÈ~‚ÅŽ~‚ß‚é
 			if (nowTime >= checkitr[lane]->longtime) {//‰Ÿ‚³‚ê‚Ä‚¢‚é‚Ü‚Ü”»’èˆÊ’u‚Ö—ˆ‚½Žž
 				checkitr[lane]->time = checkitr[lane]->longtime;
 				if (nowTime >= checkitr[lane]->longtime + good) {//‰Ÿ‚³‚ê‚Ä‚¢‚éŠÔ‚Í”»’èŽžŠÔ‚¬‚è‚¬‚è‚Ü‚Å‘Ò‹@‚³‚¹‚é‚½‚ßgood‰ÁŽZ
@@ -161,6 +159,7 @@ void NotesManager::judgeLong(int lane) {
 }
 
 
+
 void NotesManager::draw(void){
 	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);
 	for(int i = 0; i < LANESIZE; i++){
@@ -173,10 +172,10 @@ void NotesManager::draw(void){
 
 			switch (itr->type){
 			case NORMAL:
-				displayNormal(i, itr);
+				displayNormal(i, itr->time);
 				break;
 			case LONG:
-				displayLong(i, itr);
+				displayLong(i, itr->time, itr->longtime);
 				break;
 			default:
 				break;
@@ -184,8 +183,16 @@ void NotesManager::draw(void){
 		}	
 	}
 }
-void NotesManager::displayNormal(int lane, std::list<Notes>::iterator& itr) {
-	double progressRate = (timeRequired - (itr->time - nowTime)) / timeRequired;
+
+double NotesManager::getProgress(int time) {
+	return (timeRequired - (time - nowTime)) / timeRequired;
+}
+int NotesManager::getCurrentPosition(int startPos, int endPos, double progressRate) {
+	return (int)(startPos + (endPos - startPos) * progressRate);
+}
+
+void NotesManager::displayNormal(int lane, int time) {
+	double progressRate = getProgress(time);
 	double currentY = laneStartY + (laneJudgeY - laneStartY) * progressRate;
 	if (currentY > laneGoalY) {
 		plusItr(lane ,displayitr[lane]);
@@ -194,8 +201,8 @@ void NotesManager::displayNormal(int lane, std::list<Notes>::iterator& itr) {
 	double currentX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRate;
 	TextureAsset(U"note").drawAt(currentX, currentY);
 }
-void NotesManager::displayLong(int lane, std::list<Notes>::iterator& itr) {
-	double progressRateEnd = (timeRequired - (itr->longtime - nowTime)) / timeRequired;
+void NotesManager::displayLong(int lane, int time, int longtime) {
+	double progressRateEnd = getProgress(longtime);
 	double currentEndY = laneStartY + (laneJudgeY - laneStartY) * progressRateEnd;
 	if (currentEndY > laneGoalY) {
 		plusItr(lane, displayitr[lane]);
@@ -203,7 +210,7 @@ void NotesManager::displayLong(int lane, std::list<Notes>::iterator& itr) {
 	}
 	double currentEndX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRateEnd;
 
-	double progressRateBgn = (timeRequired - (itr->time - nowTime)) / timeRequired;
+	double progressRateBgn = getProgress(time);
 	double currentBgnY = laneStartY + (laneJudgeY - laneStartY) * progressRateBgn;
 	double currentBgnX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRateBgn;
 

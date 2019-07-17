@@ -49,8 +49,11 @@ private:
 	void controlJudge(void);
 	void judgeNormal(int lane);
 	void judgeLong(int lane);
-	void displayNormal(int lane, std::list<Notes>::iterator& itr);
-	void displayLong(int lane, std::list<Notes>::iterator& itr);
+	void displayNormal(int lane, int time);
+	void displayLong(int lane, int time, int longtime);
+
+	double getProgress(int time);
+	int getCurrentPosition(int startPos, int endPos, double progressRate);
 	
 public:
 	NotesManager(const String& difpath);
