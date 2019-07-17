@@ -14,7 +14,8 @@ class NotesManager {
 private:
 	enum NOTESTYPE {
 		NORMAL,
-		LONG
+		LONG,
+		SENTINEL
 	};
 	typedef struct _Notes {
 		NOTESTYPE type;

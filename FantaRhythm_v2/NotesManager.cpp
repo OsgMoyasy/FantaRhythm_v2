@@ -27,9 +27,16 @@ NotesManager::NotesManager(const String& difpath) {
 		note.display = true;
 		notelist[lane].push_back(note);
 	}
-	for (int i = 0; i < LANESIZE; i++) {//レーンごとに到着時間を格納
-		displayitr[i] = checkitr[i] = notelist[i].begin();//チェック用のイテレータ初期
-		longflag[i] = false;
+
+	note.type = SENTINEL;
+	note.time = 0;
+	note.longtime = 0;
+	note.display = false;
+
+	for (int lane = 0; lane < LANESIZE; lane++) {//レーンごとに到着時間を格納
+		notelist[lane].push_back(note);//番兵の設置
+		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//チェック用のイテレータ初期
+		longflag[lane] = false;
 	}
 
 	laneStartX[0] = 520;
@@ -60,7 +67,7 @@ void NotesManager::update(void)
 }
 
 void NotesManager::plusItr(int lane, std::list<Notes>::iterator& itr) {
-	if (itr != notelist[lane].end())
+	if (itr->type != SENTINEL)//番兵かどうか判定
 		itr++;
 }
 
@@ -114,22 +121,6 @@ void NotesManager::judgeLong(int lane) {
 	static const int good = 150;//判定の最大範囲
 	int checktime = abs(nowTime - checkitr[lane]->time);
 
-	//もう少しゲームの内容すり合わせ
-	//スコアの出方　hpの減るタイミング
-	//スレッドから取得する値
-	//ロングノーツの判定
-	//ロングノーツ流れ方	//現在の欠点　押しすぎ時とか
-	/*	条件整理　
-		ボタン押下			→					判定外か判断
-			↓										↓
-		判定位置通り過ぎたら止める					↓
-		ボタン離した　　　　→　離していない		↓	
-			↓						↓				↓
-		スコア処理				判定外判断（good内)	↓
-			↓										↓
-		イテレータ進める←←←←←←←←←←←←←
-	
-	*/
 	if (down[lane] && checktime <= good) {//押されたらフラグを立てる
 		longflag[lane] = true;
 	}
