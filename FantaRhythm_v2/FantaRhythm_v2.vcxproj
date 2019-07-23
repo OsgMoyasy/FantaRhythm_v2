@@ -198,6 +198,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HitPoint.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
@@ -268,8 +269,10 @@
   <ItemGroup>
     <ClInclude Include="FantaRhythm_v2.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HitPoint.h" />
     <ClInclude Include="MusicManager.h" />
     <ClInclude Include="NotesManager.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectMusic.h" />

@@ -1,6 +1,7 @@
 #pragma once
 #include "Game.h"
 #include "FantaRhythm_v2.h"
+#include "Observer.h"
 #include <vector>
 #include <list>
 
@@ -23,17 +24,19 @@ private:
 		int longtime;
 		bool display;
 	}Notes;
+
+	int notewidth;
 	
 	float notespeed;
 
-	//float checktime[4] = { 10,30,50,200 };
+	class NotesSubject* subject;
 	
 	std::list<Notes> notelist[LANESIZE];
 	std::list<Notes>::iterator checkitr[LANESIZE];//判定すべきイテレータ保持
 	std::list<Notes>::iterator displayitr[LANESIZE];//表示すべきイテレータ保持
 
-	bool down[4];
-	bool press[4];
+	bool down[4];//将来的にはboolではなくなり押された瞬間、離された瞬間の再生時刻が入る
+	bool press[4];//ここはboolで押されてる状態離されてる状態を管理
 
 	bool longflag[4];
 
@@ -45,7 +48,7 @@ private:
 	float timeRequired;//ノーツの出現から判定まで流れる時間[ms]
 	double nowTime;
 
-	void plusItr(int i, std::list<Notes>::iterator& itr);
+	void plusItr(std::list<Notes>::iterator& itr);
 	void checkAttack(void);
 	void controlJudge(void);
 	void judgeNormal(int lane);
@@ -55,9 +58,12 @@ private:
 
 	double getProgress(int time);
 	int getCurrentPosition(int startPos, int endPos, double progressRate);
+	double getScale(double currenty);
+
+	void setEvent(Massage msg, int val);
 	
 public:
-	NotesManager(const String& difpath);
+	NotesManager(NotesSubject* sub,const String& difpath);
 	~NotesManager();
 	void update(void);
 	void draw(void);

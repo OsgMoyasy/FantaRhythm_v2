@@ -1,14 +1,17 @@
 #include "NotesManager.h"
 
 
-
-NotesManager::NotesManager(const String& difpath) {
+NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
 	TextureAsset::Register(U"longef", U"resources/images/items/longNortsEffect2.png");
 	TextureAsset::Preload(U"longef");
+
+
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
+
+	subject = sub;
 
 	csv.load(difpath);//譜面のロード
 	NotesManager::Notes note;
@@ -53,6 +56,7 @@ NotesManager::NotesManager(const String& difpath) {
 	notespeed = 1.5;
 	timeRequired = 2000 / notespeed;//ノーツの出現から判定まで流れる時間[ms]
 
+	notewidth = TextureAsset(U"note").width();
 }
 NotesManager::~NotesManager() {
 	TextureAsset::UnregisterAll();
@@ -66,10 +70,11 @@ void NotesManager::update(void)
 	controlJudge();
 }
 
-void NotesManager::plusItr(int lane, std::list<Notes>::iterator& itr) {
+void NotesManager::plusItr(std::list<Notes>::iterator& itr) {
 	if (itr->type != SENTINEL)//番兵かどうか判定
 		itr++;
 }
+
 
 void NotesManager::checkAttack(void) {
 	 down[0] = KeyA.down();
@@ -100,21 +105,22 @@ void NotesManager::judgeNormal(int lane) {
 	static const int good = 100;//GOOD判定範囲[ms]÷2
 	static const int great = 25;//GREAT判定範囲[ms]÷2
 	int checktime = abs(nowTime - checkitr[lane]->time);
-	if (down[lane] && checktime <= bad) {
-		if (checktime <= great) {
-			//GREAT
+	if (down[lane] && checktime <= bad) {//押されてるかつ判定時間内なら判定処理
+		if (checktime <= great) {//GREAT
+			
 		}
-		else if (checktime < good) {
-			//GOOD
+		else if (checktime < good) {//GOOD
+			
 		}
-		else{
-
+		else{//BAD
+			setEvent(Massage::SMALLDAMAGE, 0);
 		}
 		checkitr[lane]->display = false;
-		plusItr(lane, checkitr[lane]);
+		plusItr(checkitr[lane]);
 	}
-	else if (nowTime >= checkitr[lane]->time + bad) {
-		plusItr(lane, checkitr[lane]);
+	else if (nowTime >= checkitr[lane]->time + bad) {//押されてないまま終了時
+		setEvent(Massage::SMALLDAMAGE, 0);
+		plusItr(checkitr[lane]);
 	}
 }
 void NotesManager::judgeLong(int lane) {
@@ -139,11 +145,15 @@ void NotesManager::judgeLong(int lane) {
 			if ((abs(nowTime - checkitr[lane]->longtime)) <= good) {
 				checkitr[lane]->display = false;//成功
 			}
+			else {//失敗
+				setEvent(Massage::SMALLDAMAGE, 0);
+			}
 			checkitr[lane]++;
 			longflag[lane] = false;
 		}
 	}
 	else if (nowTime >= checkitr[lane]->longtime) {//押されていないまま終了時
+		setEvent(Massage::SMALLDAMAGE, 0);
 		checkitr[lane]++;
 		longflag[lane] = false;
 	}
@@ -182,33 +192,67 @@ int NotesManager::getCurrentPosition(int startPos, int endPos, double progressRa
 	return (int)(startPos + (endPos - startPos) * progressRate);
 }
 
+double NotesManager::getScale(double currenty) {
+	double temp = currenty / (laneJudgeY - 100);//少し早めに縮小率をもとに戻すため引いてみている
+	return  temp;
+}
+
 void NotesManager::displayNormal(int lane, int time) {
 	double progressRate = getProgress(time);
 	double currentY = laneStartY + (laneJudgeY - laneStartY) * progressRate;
 	if (currentY > laneGoalY) {
-		plusItr(lane ,displayitr[lane]);
+		plusItr(displayitr[lane]);
 		return;
 	}
 	double currentX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRate;
-	TextureAsset(U"note").drawAt(currentX, currentY);
+	TextureAsset(U"note").scaled(getScale(currentY)).drawAt(currentX, currentY);
 }
 void NotesManager::displayLong(int lane, int time, int longtime) {
+	//描画位置の計算
+	//上側
 	double progressRateEnd = getProgress(longtime);
-	double currentEndY = laneStartY + (laneJudgeY - laneStartY) * progressRateEnd;
-	if (currentEndY > laneGoalY) {
-		plusItr(lane, displayitr[lane]);
+	double currentEndY = laneStartY + (laneJudgeY - laneStartY) * progressRateEnd;//描画位置Y座標を計算
+	if (currentEndY > laneGoalY) {//描画が終了しているなら
+		plusItr(displayitr[lane]);
 		return;
 	}
-	double currentEndX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRateEnd;
-
-	double progressRateBgn = getProgress(time);
-	double currentBgnY = laneStartY + (laneJudgeY - laneStartY) * progressRateBgn;
-	double currentBgnX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRateBgn;
-
-	for (int linex = 0; linex <= 25; linex++) {
-		Line(currentEndX + linex, currentEndY, currentBgnX + linex, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
-		Line(currentEndX - linex, currentEndY, currentBgnX - linex, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
+	double currentEndX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRateEnd;//描画位置X座標を計算
+	if (currentEndY < laneStartY) {//上側がまだ描画位置に到達していないなら
+		currentEndX = laneStartX[lane];
+		currentEndY = laneStartY;//初期位置へ固定
 	}
-	TextureAsset(U"note").drawAt(currentEndX, currentEndY);
-	TextureAsset(U"note").drawAt(currentBgnX, currentBgnY);
+
+	//下側
+	double progressRateBgn = getProgress(time);
+	double currentBgnY = laneStartY + (laneJudgeY - laneStartY) * progressRateBgn;//描画位置Y座標を計算
+	double currentBgnX = laneStartX[lane] + (laneJudgeX[lane] - laneStartX[lane]) * progressRateBgn;//描画位置X座標を計算
+
+	//拡大率計算
+	double scaleEnd = getScale(currentEndY);
+	double scaleBgn = getScale(currentBgnY);
+
+	//描画処理
+	for (int linex = 0; linex <= 25; linex++) {
+		Line(currentEndX + linex * scaleEnd, currentEndY, currentBgnX + linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
+		Line(currentEndX - linex * scaleEnd, currentEndY, currentBgnX - linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
+	}
+	
+	TextureAsset(U"note").scaled(scaleEnd).drawAt(currentEndX, currentEndY);
+	TextureAsset(U"note").scaled(scaleBgn).drawAt(currentBgnX, currentBgnY);
+
+}
+
+void NotesManager::setEvent(Massage msg, int val) {
+	switch (msg) {
+	case Massage::SMALLDAMAGE:
+		break;
+	case Massage::BIGDAMAGE:
+		break;
+	case Massage::NONE:
+		break;
+	default:
+		break;
+	}
+	subject->setEvent(msg, val);//イベントオブジェクトセット
+	subject->notifyObservers();//イベント起動
 }

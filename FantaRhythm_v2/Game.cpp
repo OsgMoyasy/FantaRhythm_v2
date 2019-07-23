@@ -1,12 +1,17 @@
 #include "Game.h"
-#include "FantaRhythm_v2.h"
-#include "MusicManager.h"
 
 Game::Game(const String& music, const String& dif) {
 	musicpath = music;
 	difpath = dif;
 
-	notes = new NotesManager(difpath);
+	subject = new NotesSubject();
+	hitpoint = new HitPoint();
+
+	subject->addObserver(hitpoint);
+	
+	notes = new NotesManager(subject,difpath);
+	
+	
 	
 	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");
 	TextureAsset::Preload(U"back");
@@ -16,7 +21,7 @@ Game::Game(const String& music, const String& dif) {
 
 	MusicManager::playMusicGame(musicpath);
 
-
+	
 }
 Game::~Game() {
 	delete notes;
@@ -26,11 +31,11 @@ Game::~Game() {
 
 void Game::update() {
 	notes->update();
-
-
+	hitpoint->update();
 }
 void Game::draw() {
 	//”wŒi‰æ‘œ•`‰æ
 	TextureAsset(U"back").draw();
 	notes->draw();
+	hitpoint->draw();
 }
