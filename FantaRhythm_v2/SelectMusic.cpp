@@ -64,7 +64,7 @@ void SelectMusic::initDifficulty(void) {
 
 void SelectMusic::setArray(s3d::Array<FilePath>&array,const FilePath& filepath,int& count) {
 	array = FileSystem::DirectoryContents(filepath, false);
-	count = array.count();
+	count = (int)array.count();
 }
 String SelectMusic::getDiffilepath(int cursor) {//難易度ファイルパス取得
 	return (musicarray[cursor] + U"/score/");
@@ -161,8 +161,8 @@ void SelectMusic::drawMusic(void) {
 	for (int i = 0; i < 5; i++) {
 		//座標の指定
 		int angle = DEFAULT_ANGLE + FORWARD_ANGLE * i + musicrotation;
-		int x = 1800 + cos((angle)* PI / 180.0) * 1000;
-		int y = (Window::Height() / 2) - sin((angle)* PI / 180.0) * 500;
+		int x = (int)(1800 + cos((angle)* PI / 180.0) * 1000);
+		int y = (int)((Window::Height() / 2) - sin((angle)* PI / 180.0) * 500);
 		//描画
 		TextureAsset(U"title").drawAt(x, y);
 		FontAsset(U"font")(FileSystem::BaseName(musicarray[(musiccursor - 2 + i + musiccount) % musiccount])).drawAt(x, y, Color(0, 0, 0));
@@ -173,8 +173,8 @@ void SelectMusic::drawDifficulty(void) {
 	for (int i = 0; i < 5; i++) {
 		//座標の指定
 		int angle = DEFAULT_ANGLE + FORWARD_ANGLE * i + difrotation;
-		int x = 1800 + cos((angle)* PI / 180.0) * 1000;
-		int y = (Window::Height() / 2) - sin((angle)* PI / 180.0) * 500;
+		int x = (int)(1800 + cos((angle)* PI / 180.0) * 1000);
+		int y = (int)((Window::Height() / 2) - sin((angle)* PI / 180.0) * 500);
 		//描画
 		TextureAsset(U"title").drawAt(x, y);
 		FontAsset(U"font")(FileSystem::BaseName(difarray[(difcursor - 2 + i + difcount) % difcount])).drawAt(x, y, Color(0, 0, 0));

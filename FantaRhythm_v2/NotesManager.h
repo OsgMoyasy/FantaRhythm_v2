@@ -27,38 +27,42 @@ private:
 
 	int notewidth;
 	
-	float notespeed;
-
 	class NotesSubject* subject;
 	
 	std::list<Notes> notelist[LANESIZE];
-	std::list<Notes>::iterator checkitr[LANESIZE];//判定すべきイテレータ保持
-	std::list<Notes>::iterator displayitr[LANESIZE];//表示すべきイテレータ保持
+	using noteitr = std::list<Notes>::iterator;
+	noteitr checkitr[LANESIZE];		//判定すべきイテレータ保持
+	noteitr displayitr[LANESIZE];	//表示すべきイテレータ保持
 
-	bool down[4];//将来的にはboolではなくなり押された瞬間、離された瞬間の再生時刻が入る
-	bool press[4];//ここはboolで押されてる状態離されてる状態を管理
+	int nowTime;	//現在時間[ms]
+
+	bool down[4];	//将来的にはboolではなくなり押された瞬間、離された瞬間の再生時刻が入る
+	bool press[4];	//ここはboolで押されてる状態離されてる状態を管理
 
 	bool longflag[4];
 
-	int laneStartX[4];
-	int laneJudgeX[4];
+	//描画関係の変数
+	int laneStartX[4];	//Start = レーンの上端
+	int laneJudgeX[4];	//Judge = レーンと判定線が交わる所
 	int laneStartY;
-	int laneJudgeY;//CHECKLINEYの代わり
-	int laneGoalY;//画面Y座標限界+10
-	float timeRequired;//ノーツの出現から判定まで流れる時間[ms]
-	double nowTime;
+	int laneJudgeY;
+	int laneGoalY;		//Goal = 流れ切ったノーツの表示をやめる所
+	float timeRequired;	//ノーツの出現から判定まで流れる時間[ms]
+	float notespeed;	//ノーツ速度の補正倍率
 
-	void plusItr(std::list<Notes>::iterator& itr);
-	void checkAttack(void);
-	void controlJudge(void);
-	void judgeNormal(int lane);
-	void judgeLong(int lane);
-	void displayNormal(int lane, int time);
-	void displayLong(int lane, int time, int longtime);
+	void plusItr(noteitr& itr);	//notelistのイテレータを進める
+	void checkAttack(void);		//ボタンの押し状況を確認する
 
-	double getProgress(int time);
-	int getCurrentPosition(int startPos, int endPos, double progressRate);
-	double getScale(double currenty);
+	void controlJudge(void);	//ノーツの種類毎に判定用関数を呼び出し
+	void judgeNormal(int lane);	//ノーマルノーツを判定
+	void judgeLong(int lane);	//ロングノーツを判定
+
+	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
+	double getCurrentPosition(int startPos, int endPos, double progressRate);//現在座標を返す
+	double getScale(double currenty);//拡大率計算
+
+	void displayNormal(int lane, int time);				//ノーマルノーツを表示
+	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
 
 	void setEvent(Massage msg, int val);
 	

@@ -35,6 +35,6 @@ void Title::draw(void) {
 }
 
 void Title::changeAlpha(void) {
-	const int32 t = Time::GetMillisec();
+	const uint64 t = Time::GetMillisec();
 	alpha = Sin(t % CYCLE / static_cast<double>(CYCLE) * TWOPI) * 0.42 + 0.58;
 }
