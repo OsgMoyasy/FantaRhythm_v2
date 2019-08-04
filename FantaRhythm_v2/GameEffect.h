@@ -5,10 +5,10 @@ namespace SE {
 	enum NAME {
 		HIT
 	};
-	enum TYPE {//“¯‚¶SE‚ª•¡”Ä¶‚³‚ê‚½Žž‚Ìˆ—(Œ»Ýd•¡‚Ì‚Ý)
+	enum TYPE {//“¯‚¶SE‚ª•¡”Ä¶‚³‚ê‚½Žž‚Ìˆ—
 		DUL,	//d•¡
 		REP,	//Å‰‚©‚çÄ¶
-		IGN		//–³Ž‹()
+		IGN		//–³Ž‹
 	};
 }
 namespace VE {
