@@ -58,6 +58,7 @@ private:
 	void judgeLong(int lane);	//ロングノーツを判定
 
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
+	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
 	double getCurrentPosition(int startPos, int endPos, double progressRate);//現在座標を返す
 	double getScale(double currenty);//拡大率計算
 
