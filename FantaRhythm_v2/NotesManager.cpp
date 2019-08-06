@@ -191,6 +191,19 @@ void NotesManager::draw(void){
 double NotesManager::getProgress(int time) {
 	return (timeRequired - (time - nowTime)) / timeRequired;
 }
+
+double NotesManager::progressByAngle(double progressRate) {
+	using namespace std;
+	constexpr double PI = 3.1415;
+	constexpr double EYE_HEIGHT = 1.0;
+	constexpr double START_ANGLE = 0.4 * PI;//単位はラジアン(0.5以上を設定してはならない)
+	constexpr double JUDGE_ANGLE = 0.1 * PI;//単位はラジアン
+	const static double START_RANGE = EYE_HEIGHT * tan(START_ANGLE);
+	const static double JUDGE_RANGE = EYE_HEIGHT * tan(JUDGE_ANGLE);
+	double nowRange = START_RANGE - (START_RANGE - JUDGE_RANGE) * progressRate;
+	return (START_ANGLE - atan(nowRange / EYE_HEIGHT)) / (START_ANGLE - JUDGE_ANGLE);
+}
+
 double NotesManager::getCurrentPosition(int startPos, int endPos, double progressRate) {
 	return startPos + (endPos - startPos) * progressRate;
 }
@@ -201,7 +214,7 @@ double NotesManager::getScale(double currenty) {
 }
 
 void NotesManager::displayNormal(int lane, int time) {
-	double progressRate = getProgress(time);
+	double progressRate = progressByAngle(getProgress(time));
 	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
 	if (currentY > laneGoalY) {
 		plusItr(displayitr[lane]);
@@ -213,7 +226,7 @@ void NotesManager::displayNormal(int lane, int time) {
 void NotesManager::displayLong(int lane, int time, int longtime) {
 	//描画位置の計算
 	//上側
-	double progressRateEnd = getProgress(longtime);
+	double progressRateEnd = progressByAngle(getProgress(longtime));
 	double currentEndY = getCurrentPosition(laneStartY, laneJudgeY, progressRateEnd);//描画位置Y座標を計算
 	if (currentEndY > laneGoalY) {//描画が終了しているなら
 		plusItr(displayitr[lane]);
@@ -226,7 +239,7 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	}
 
 	//下側
-	double progressRateBgn = getProgress(time);
+	double progressRateBgn = progressByAngle(getProgress(time));
 	double currentBgnY = getCurrentPosition(laneStartY, laneJudgeY, progressRateBgn);//描画位置Y座標を計算
 	double currentBgnX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateBgn);//描画位置X座標を計算
 
@@ -242,7 +255,6 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	
 	TextureAsset(U"note").scaled(scaleEnd).drawAt(currentEndX, currentEndY);
 	TextureAsset(U"note").scaled(scaleBgn).drawAt(currentBgnX, currentBgnY);
-
 }
 
 void NotesManager::setEvent(Massage msg, int val) {
