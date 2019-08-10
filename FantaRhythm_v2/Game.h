@@ -6,14 +6,11 @@
 
 #include "FantaRhythm_v2.h"
 #include "MusicManager.h"
-#include "HitPoint.h"
-
 
 class Game : public Scene {
 private:
 	String musicpath, difpath;
 	class NotesManager *notes;
-	class HitPoint* hitpoint;
 	class CharacterManager* character;
 	class NotesSubject* subject;
 	

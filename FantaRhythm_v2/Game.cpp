@@ -5,9 +5,6 @@ Game::Game(const String& music, const String& dif) {
 	difpath = dif;
 
 	subject = new NotesSubject();
-	hitpoint = new HitPoint();
-
-	subject->addObserver(hitpoint);
 	
 	notes = new NotesManager(subject,difpath);
 	
@@ -31,11 +28,9 @@ Game::~Game() {
 
 void Game::update() {
 	notes->update();
-	hitpoint->update();
 }
 void Game::draw() {
 	//”wŒi‰æ‘œ•`‰æ
 	TextureAsset(U"back").draw();
 	notes->draw();
-	hitpoint->draw();
 }
