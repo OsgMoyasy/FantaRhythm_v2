@@ -87,6 +87,12 @@
     <ClCompile Include="GameEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -277,6 +283,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
