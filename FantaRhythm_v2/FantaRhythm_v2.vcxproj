@@ -206,6 +206,7 @@
     <ClCompile Include="NotesManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SelectMusic.cpp" />
+    <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +281,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectMusic.h" />
+    <ClInclude Include="Soldier.h" />
     <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>

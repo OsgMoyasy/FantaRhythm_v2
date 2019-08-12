@@ -1,19 +1,14 @@
 #include"CharacterSet.h"
+#include "Soldier.h"
 
 CharacterSet::CharacterSet(int save[]) {
-
 	CSVData csv;
-
 	csv.load(U"resources/charadata.csv");
+	
 	for (int i = 0; i < CHANUMBER; i++) {
-		cha[i] = new Character(900 + i * 50, 150 + i * 50);
+		cha[i] = new Soldier(csv,900 + i * 50, 150 + i * 50,0);
 	}
-	/*
-	for (int j = 0; j < csv.rows(); j++) {
-		int lane = csv.get<int>(j, 2);
 
-	}
-	*/
 }
 
 CharacterSet::~CharacterSet() {
@@ -30,4 +25,8 @@ void CharacterSet::update() {
 	for (int i = 0; i < CHANUMBER; i++) {
 		cha[i]->update();
 	}
+}
+
+void CharacterSet::funcEvent(Obj obj) {
+
 }
