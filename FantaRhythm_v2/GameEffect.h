@@ -31,22 +31,36 @@ public:
 };
 */
 
-struct SE {
+class SE {
+	Audio* sound;
+public:
 	SE(FilePath& path);
 	~SE();
 	void play();
-private:
-	Audio* sound;
 };
 
-struct mapchip {	//渡されたマップチップ画像からチップ画像を切り出す
-	mapchip(const FilePath& path, int yChipHeight, int xChipWidth);
-	~mapchip();
-	TextureRegion chipFromMap();	//呼ばれる度に次の位置のチップ画像のポインタを返す
-private:
+class mapflip {	//渡されたマップチップ画像からチップ画像を切り出す
 	Texture* map;
-	int yChipHeight;
-	int xChipWidth;
+	int yFlipHeight;
+	int xFlipWidth;
 	int yMapHeight;
 	int xMapWidth;
+	int nowPosX;
+	int nowPosY;
+public:
+	mapflip(const FilePath& path, int yFlipHeight, int xFlipWidth);
+	~mapflip();
+	bool mapflip::nextFlip();
+	TextureRegion* flipFromMap();	//呼ばれる度に次の位置のチップ画像のポインタを返す
+	inline TextureRegion* operator()() { return flipFromMap(); }
+};
+
+class flipMovie :IEffect {
+	mapflip* flip;
+	int drawX;
+	int drawY;
+public:
+	flipMovie(const FilePath& path, int yFlipHeight, int xFlipWidth, int drawX, int drawY);
+	~flipMovie();
+	bool update(double t);
 };

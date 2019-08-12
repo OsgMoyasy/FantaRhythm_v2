@@ -51,27 +51,46 @@ void SE::play() {
 }
 
 
-mapchip::mapchip(const FilePath& path, int yChipHeight, int xChipWidth) {
+mapflip::mapflip(const FilePath& path, int yFlipHeight, int xFlipWidth) {
 	map = new Texture(path);
-	this->yChipHeight = yChipHeight;
-	this->xChipWidth = xChipWidth;
+	this->yFlipHeight = yFlipHeight;
+	this->xFlipWidth = xFlipWidth;
 	yMapHeight = map->height();
 	xMapWidth = map->width();
+	nowPosX = 0;
+	nowPosY = 0;
 }
-mapchip::~mapchip() {
+mapflip::~mapflip() {
 	delete map;
 }
-TextureRegion mapchip::chipFromMap() {
-	static int nowPosX = 0;
-	static int nowPosY = 0;
-	TextureRegion chip = (*map)(nowPosX, nowPosY, xChipWidth, yChipHeight);
-
-	if (nowPosX += xChipWidth, nowPosX >= xMapWidth) {
+bool mapflip::nextFlip() {
+	if (nowPosX += xFlipWidth, nowPosX >= xMapWidth) {	//ŽŸ‚Ì—ñ‚Ö
 		nowPosX = 0;
-		if (nowPosY += yChipHeight, nowPosY >= yMapHeight) {
+		if (nowPosY += yFlipHeight, nowPosY >= yMapHeight) {	//ŽŸ‚Ìs‚Ìˆê”Ô¶‚Ì—ñ‚Ö
 			nowPosY = 0;
+			return false;
 		}
 	}
-
-	return chip;
+	return true;
 }
+TextureRegion* mapflip::flipFromMap() {
+	return &(*map)(nowPosX, nowPosY, xFlipWidth, yFlipHeight);
+}
+
+
+flipMovie::flipMovie(const FilePath& path, int yFlipHeight, int xFlipWidth, int drawX, int drawY) {
+	flip = new mapflip(path, yFlipHeight, xFlipWidth);
+	this->drawX = drawX;
+	this->drawY = drawY;
+
+}
+flipMovie::~flipMovie() {
+	delete flip;
+}
+bool flipMovie::update(double t) {
+	if (flip->nextFlip() == false) {
+		return false;
+	}
+	(*flip)()->drawAt(drawX, drawY);
+}
+
