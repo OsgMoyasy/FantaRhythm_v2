@@ -197,6 +197,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameEffect.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -267,6 +268,7 @@
     <Xml Include="App\example\test.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="FantaRhythm_v2.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameEffect.h" />
