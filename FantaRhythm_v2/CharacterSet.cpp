@@ -6,7 +6,7 @@ CharacterSet::CharacterSet(int save[]) {
 	csv.load(U"resources/charadata.csv");
 	
 	for (int i = 0; i < CHANUMBER; i++) {
-		cha[i] = new Soldier(csv,900 + i * 50, 150 + i * 50,0);
+		cha[i] = new Soldier(csv,900 + i * 90, 150 + i * 80,i);
 	}
 
 }
@@ -28,7 +28,6 @@ void CharacterSet::update() {
 }
 
 void CharacterSet::funcEvent(Obj obj) {//イベントを通達
-	for (int i = 0; i < CHANUMBER; i++) {
-		cha[i]->getEvent(obj);
-	}
+	cha[obj.lane]->getEvent(obj.msg);
+	
 }

@@ -8,7 +8,7 @@ public:
 	~Soldier();
 	void update();
 	void draw();
-	void getEvent(Obj obj);
+	void getEvent(Massage msg);
 
 private:
 	int chargecount;

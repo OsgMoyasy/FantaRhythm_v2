@@ -33,8 +33,8 @@ void Soldier::chargeAttack() {
 	chargedamage=getPower()* (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
 }
 
-void Soldier::getEvent(Obj obj) {
-	switch (obj.msg) {
+void Soldier::getEvent(Massage msg) {
+	switch (msg) {
 	case Massage::UPATTACK:
 		charge();
 		break;
@@ -43,7 +43,7 @@ void Soldier::getEvent(Obj obj) {
 		break;
 	case Massage::SMALLDAMAGE:
 	case Massage::BIGDAMAGE:
-		charge();
+		chargeClear();
 		break;
 	}
 }

@@ -110,19 +110,19 @@ void NotesManager::judgeNormal(int lane) {
 	int checktime = abs(nowTime - checkitr[lane]->time);
 	if (down[lane] && checktime <= bad) {//‰Ÿ‚³‚ê‚Ä‚é‚©‚Â”»’èŠÔ“à‚È‚ç”»’èˆ—
 		if (checktime <= great) {//GREAT
-			
+			setEvent(Massage::UPATTACK, lane);
 		}
 		else if (checktime < good) {//GOOD
-			
+			setEvent(Massage::UPATTACK, lane);
 		}
 		else{//BAD
-			setEvent(Massage::SMALLDAMAGE, 0);
+			setEvent(Massage::SMALLDAMAGE, lane);
 		}
 		checkitr[lane]->display = false;
 		plusItr(checkitr[lane]);
 	}
 	else if (nowTime >= checkitr[lane]->time + bad) {//‰Ÿ‚³‚ê‚Ä‚È‚¢‚Ü‚ÜI—¹
-		setEvent(Massage::SMALLDAMAGE, 0);
+		setEvent(Massage::SMALLDAMAGE, lane);
 		plusItr(checkitr[lane]);
 	}
 }
@@ -138,7 +138,8 @@ void NotesManager::judgeLong(int lane) {
 			checkitr[lane]->time = (int)(nowTime);//”»’èˆÊ’uˆÈ~‚Å~‚ß‚é
 			if (nowTime >= checkitr[lane]->longtime) {//‰Ÿ‚³‚ê‚Ä‚¢‚é‚Ü‚Ü”»’èˆÊ’u‚Ö—ˆ‚½
 				checkitr[lane]->time = checkitr[lane]->longtime;
-				if (nowTime >= checkitr[lane]->longtime + good) {//‰Ÿ‚³‚ê‚Ä‚¢‚éŠÔ‚Í”»’èŠÔ‚¬‚è‚¬‚è‚Ü‚Å‘Ò‹@‚³‚¹‚é‚½‚ßgood‰ÁZ
+				if (nowTime >= checkitr[lane]->longtime + good) {//‰Ÿ‚³‚ê‚Ä‚¢‚éŠÔ‚Ì”»’èŠÔ‚à‰ß‚¬‚½‚Æ‚«
+					setEvent(Massage::SMALLDAMAGE, lane);
 					longflag[lane] = false;
 					plusItr(checkitr[lane]);
 				}
@@ -146,17 +147,18 @@ void NotesManager::judgeLong(int lane) {
 		}
 		else {//—£‚µ‚½
 			if ((abs(nowTime - checkitr[lane]->longtime)) <= good) {
+				setEvent(Massage::UPATTACK, lane);
 				checkitr[lane]->display = false;//¬Œ÷
 			}
 			else {//¸”s
-				setEvent(Massage::SMALLDAMAGE, 0);
+				setEvent(Massage::SMALLDAMAGE, lane);
 			}
 			plusItr(checkitr[lane]);
 			longflag[lane] = false;
 		}
 	}
 	else if (nowTime >= checkitr[lane]->longtime) {//‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢‚Ü‚ÜI—¹
-		setEvent(Massage::SMALLDAMAGE, 0);
+		setEvent(Massage::SMALLDAMAGE, lane);
 		plusItr(checkitr[lane]);
 		longflag[lane] = false;
 	}

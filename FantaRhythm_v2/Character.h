@@ -10,7 +10,7 @@ public:
 	void chaDraw();
 	virtual void draw()=0;
 	virtual void update()=0;
-	virtual void getEvent(Obj obj)=0;
+	virtual void getEvent(Massage msg)=0;
 	void moveUpDown();
 	void moveRigthLight();
 	void damage(Obj obj);
