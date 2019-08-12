@@ -51,7 +51,7 @@ void SE::play() {
 }
 
 
-mapchip::mapchip(FilePath& path, int yChipHeight, int xChipWidth) {
+mapchip::mapchip(const FilePath& path, int yChipHeight, int xChipWidth) {
 	map = new Texture(path);
 	this->yChipHeight = yChipHeight;
 	this->xChipWidth = xChipWidth;

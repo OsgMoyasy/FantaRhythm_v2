@@ -40,7 +40,7 @@ private:
 };
 
 struct mapchip {	//渡されたマップチップ画像からチップ画像を切り出す
-	mapchip(FilePath& path, int yChipHeight, int xChipWidth);
+	mapchip(const FilePath& path, int yChipHeight, int xChipWidth);
 	~mapchip();
 	TextureRegion chipFromMap();	//呼ばれる度に次の位置のチップ画像のポインタを返す
 private:
