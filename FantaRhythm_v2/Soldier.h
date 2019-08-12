@@ -9,4 +9,11 @@ public:
 	void update();
 	void draw();
 	void getEvent(Obj obj);
+
+private:
+	int chargecount;
+	int chargedamage;
+	void charge();
+	void chargeClear();
+	void chargeAttack();
 };

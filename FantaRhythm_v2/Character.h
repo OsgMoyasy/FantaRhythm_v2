@@ -14,6 +14,9 @@ public:
 	void moveUpDown();
 	void moveRigthLight();
 	void damage(Obj obj);
+	int getPower();
+	int getArgs1();
+	int getArgs2();
 
 private:
 	int chnumber;	//ƒLƒƒƒ‰‚Ì”Ô†

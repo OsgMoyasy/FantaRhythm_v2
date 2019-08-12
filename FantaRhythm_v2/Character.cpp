@@ -40,3 +40,15 @@ void Character::moveRigthLight() {
 void Character::damage(Obj obj) {
 
 }
+
+int Character::getPower() {
+	return power;
+}
+
+int Character::getArgs1() {
+	return args1;
+}
+
+int Character::getArgs2() {
+	return args2;
+}
