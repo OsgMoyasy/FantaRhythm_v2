@@ -16,6 +16,13 @@ void Soldier::update() {
 	moveUpDown();
 }
 
-void Soldier::getEvent() {
-
+void Soldier::getEvent(Obj obj) {
+	switch (obj.msg) {
+	case Massage::UPATTACK:
+		//イベント関数呼び出し
+		break;
+	case Massage::DOWNATTACK:
+		//イベント関数呼び出し
+		break;
+	}
 }

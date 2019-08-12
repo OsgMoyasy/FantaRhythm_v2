@@ -10,12 +10,15 @@ Game::Game(const String& music, const String& dif) {
 	
 	int tmp[4] = { 0,0,1,1 };
 	characterm = new CharacterSet(tmp);
+
+	subject->addObserver(characterm);//オブザーバーへ登録
 	
 	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");
 	TextureAsset::Preload(U"back");
 
 	FontAsset::Register(U"font", 30);
 	FontAsset::Preload(U"font");
+
 
 	MusicManager::playMusicGame(musicpath);
 

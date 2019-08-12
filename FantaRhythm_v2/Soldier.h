@@ -8,5 +8,5 @@ public:
 	~Soldier();
 	void update();
 	void draw();
-	void getEvent();
+	void getEvent(Obj obj);
 };

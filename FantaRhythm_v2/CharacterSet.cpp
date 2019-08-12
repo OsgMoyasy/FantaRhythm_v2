@@ -27,6 +27,8 @@ void CharacterSet::update() {
 	}
 }
 
-void CharacterSet::funcEvent(Obj obj) {
-
+void CharacterSet::funcEvent(Obj obj) {//イベントを通達
+	for (int i = 0; i < CHANUMBER; i++) {
+		cha[i]->getEvent(obj);
+	}
 }
