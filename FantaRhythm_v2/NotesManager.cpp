@@ -1,6 +1,5 @@
 #include "NotesManager.h"
 
-
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
@@ -11,15 +10,15 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
 
-	subject = sub;
+	subject = sub;//サブジェクトの登録
 
 	csv.load(difpath);//譜面のロード
 	NotesManager::Notes note;
-	for (int j = 0; j < csv.rows(); j++) {
-		int lane = csv.get<int>(j, 2);
-		note.time = csv.get<int>(j, 0);
-		note.longtime = note.time + csv.get<int>(j, 1);
-		switch (csv.get<int>(j, 3)) {
+	for (int row = 0; row < csv.rows(); row++) {
+		note.time = csv.get<int>(row, 0);
+		note.longtime = note.time + csv.get<int>(row, 1);
+		int lane = csv.get<int>(row, 2);
+		switch (csv.get<int>(row, 3)) {
 			case 0:
 				note.type = NORMAL;
 				break;
@@ -31,10 +30,14 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		notelist[lane].push_back(note);
 	}
 
-	note.type = SENTINEL;
+	note.type = SENTINEL;//番兵の追加
 	note.time = 0;
 	note.longtime = 0;
 	note.display = false;
+
+	for (int i = 0; i < JUDGETYPE::SIZE; i++) {
+		judgeCount.cnt[i] = 0;
+	}
 
 	for (int lane = 0; lane < LANESIZE; lane++) {//レーンごとに到着時間を格納
 		notelist[lane].push_back(note);//番兵の設置
@@ -104,63 +107,75 @@ void NotesManager::controlJudge(void) {
 	}
 }
 void NotesManager::judgeNormal(int lane) {
-	static const int bad = 200;//判定の最大範囲[ms]÷2
-	static const int good = 100;//GOOD判定範囲[ms]÷2
-	static const int great = 25;//GREAT判定範囲[ms]÷2
 	int checktime = abs(nowTime - checkitr[lane]->time);
-	if (down[lane] && checktime <= bad) {//押されてるかつ判定時間内なら判定処理
-		if (checktime <= great) {//GREAT
-			
-		}
-		else if (checktime < good) {//GOOD
-			
-		}
-		else{//BAD
-			setEvent(Massage::SMALLDAMAGE, 0);
-		}
-		checkitr[lane]->display = false;
-		plusItr(checkitr[lane]);
+
+	if (down[lane] && checktime <= BAD_RANGE) {//押されてるかつ判定時間内なら判定処理
+		return judgeEvent(judgeType(checktime), lane);
 	}
-	else if (nowTime >= checkitr[lane]->time + bad) {//押されてないまま終了時
-		setEvent(Massage::SMALLDAMAGE, 0);
-		plusItr(checkitr[lane]);
+	else if (nowTime >= checkitr[lane]->time + BAD_RANGE) {//押されてないまま終了時
+		return judgeEvent(BAD, lane);
 	}
 }
 void NotesManager::judgeLong(int lane) {
-	static const int good = 150;//判定の最大範囲
 	int checktime = abs(nowTime - checkitr[lane]->time);
 
-	if (down[lane] && checktime <= good) {//押されたらフラグを立てる
+	if (down[lane] && checktime <= GOOD_RANGE) {//押されたらフラグを立てる
 		longflag[lane] = true;
 	}
-	if (longflag[lane]) {
+
+	if (longflag[lane]) {//離すときの処理
 		if (press[lane]) {//ボタン押下中
-			checkitr[lane]->time = (int)(nowTime);//判定位置以降で止める
+			checkitr[lane]->time = (int)(nowTime);//判定位置以降で下側を止める
 			if (nowTime >= checkitr[lane]->longtime) {//押されているまま判定位置へ来た時
-				checkitr[lane]->time = checkitr[lane]->longtime;
-				if (nowTime >= checkitr[lane]->longtime + good) {//押されている間は判定時間ぎりぎりまで待機させるためgood加算
-					longflag[lane] = false;
-					plusItr(checkitr[lane]);
-				}
+				checkitr[lane]->time = checkitr[lane]->longtime;//上側を判定位置に止める
 			}
 		}
 		else {//離した
-			if ((abs(nowTime - checkitr[lane]->longtime)) <= good) {
-				checkitr[lane]->display = false;//成功
-			}
-			else {//失敗
-				setEvent(Massage::SMALLDAMAGE, 0);
-			}
-			plusItr(checkitr[lane]);
-			longflag[lane] = false;
+			checktime = abs(nowTime - checkitr[lane]->longtime);
+			return judgeLongEvent(judgeType(checktime), lane);			
 		}
 	}
-	else if (nowTime >= checkitr[lane]->longtime) {//押されていないまま終了時
-		setEvent(Massage::SMALLDAMAGE, 0);
-		plusItr(checkitr[lane]);
-		longflag[lane] = false;
+	
+	if (nowTime >= checkitr[lane]->longtime + GOOD_RANGE) {//判定を超えた時
+		return judgeLongEvent(BAD, lane);
 	}
 }
+
+void NotesManager::judgeLongEvent(JUDGETYPE type, int lane) {
+	judgeEvent(type, lane);
+	longflag[lane] = false;//判定したので長押しの状態を初期化
+}
+
+void NotesManager::judgeEvent(JUDGETYPE type, int lane) {
+	checkitr[lane]->display = false;//ディスプレイ表示オフ
+	plusItr(checkitr[lane]);//判定対象を次に進める
+	judgeCount.cnt[type]++;//判定をカウントアップ
+	if(type == BAD){
+		setEvent(Massage::SMALLDAMAGE, lane);
+	}
+	else {
+		setEvent(Massage::ATTACK, lane);
+	}
+}
+NotesManager::JUDGETYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
+	if (checktime <= PERFECT_RANGE) {//PERFECT
+		return PERFECT;
+	}
+	else if (checktime <= GREAT_RANGE) {//GREAT
+		return GREAT;
+	}
+	else if (checktime <= GOOD_RANGE) {//GOOD
+		return GOOD;
+	}
+	else {//BAD
+		return BAD;
+	}
+}
+
+NotesManager::JUDGECOUNT NotesManager::getJudgeCount() {
+	return judgeCount;
+}
+
 
 
 
@@ -248,7 +263,7 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	double scaleBgn = getScale(currentBgnY);
 
 	//描画処理
-	for (int linex = 0; linex <= 25; linex++) {
+	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
 		Line(currentEndX + linex * scaleEnd, currentEndY, currentBgnX + linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
 		Line(currentEndX - linex * scaleEnd, currentEndY, currentBgnX - linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
 	}
