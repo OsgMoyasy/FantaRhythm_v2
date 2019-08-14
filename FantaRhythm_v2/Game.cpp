@@ -7,6 +7,7 @@ Game::Game(const String& music, const String& dif) {
 	subject = new NotesSubject();
 	
 	notes = new NotesManager(subject,difpath);
+	enemy = new Enemy(music);
 	
 	
 	
@@ -28,9 +29,11 @@ Game::~Game() {
 
 void Game::update() {
 	notes->update();
+	enemy->update();
 }
 void Game::draw() {
 	//”wŒi‰æ‘œ•`‰æ
 	TextureAsset(U"back").draw();
 	notes->draw();
+	enemy->draw();
 }
