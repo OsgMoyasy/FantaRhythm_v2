@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "NotesManager.h"
 #include "Observer.h"
+#include "Enemy.h"
 
 #include "FantaRhythm_v2.h"
 #include "MusicManager.h"
@@ -13,7 +14,7 @@ private:
 	class NotesManager *notes;
 	class CharacterManager* character;
 	class NotesSubject* subject;
-	
+	class Enemy* enemy;
 
 public:
 	
