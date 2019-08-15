@@ -174,8 +174,8 @@ JUDGE::TYPE NotesManager::judgeType(int checktime) {//”»’è‚Ìƒ^ƒCƒv‚ð•Ô‚·
 	}
 }
 
-JUDGE::JudgeCount NotesManager::getJudgeCount() {
-	return judgeCount;
+JUDGE::JudgeCount* NotesManager::getJudgeCount() {
+	return &judgeCount;
 }
 
 

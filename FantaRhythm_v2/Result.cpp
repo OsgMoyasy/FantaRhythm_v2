@@ -2,7 +2,9 @@
 
 
 Result::Result(JUDGE::JudgeCount* judgecnt, int totaldmg, bool cflag) {
-
+	judgecount = judgecnt;
+	totaldamage = totaldmg;
+	clearflag = cflag;
 }
 Result::~Result(void) {
 

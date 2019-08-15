@@ -4,6 +4,7 @@
 class MusicManager {
 private:
 	static Audio* audio;
+	static Stopwatch stopwatch;
 
 public:
 	MusicManager() = delete;

@@ -4,9 +4,13 @@
 #include "NotesManager.h"
 #include "Observer.h"
 #include "Enemy.h"
-
-#include "FantaRhythm_v2.h"
+#include "SceneManager.h"
 #include "MusicManager.h"
+
+namespace JUDGE {
+	union _JudgeCount;
+	typedef _JudgeCount JudgeCount;
+}
 
 class Game : public Scene {
 private:
@@ -16,6 +20,8 @@ private:
 	class NotesSubject* subject;
 	class Enemy* enemy;
 
+	bool clearflag;
+
 public:
 	
 
@@ -24,5 +30,9 @@ public:
 
 	void update(void);
 	void draw(void);
+	bool getClearFlag(void);
+	int getTotalDamage(void);
+	JUDGE::JudgeCount* getJudgeCount(void);
+	void gameEndCheck(void);
 
 };

@@ -88,7 +88,7 @@ private:
 
 	void judgeEvent(JUDGE::TYPE type, int lane);
 	void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane);
-	JUDGE::JudgeCount getJudgeCount();
+	
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
 	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
 	double getCurrentPosition(int startPos, int endPos, double progressRate);//現在座標を返す
@@ -104,5 +104,5 @@ public:
 	~NotesManager();
 	void update(void);
 	void draw(void);
-
+	JUDGE::JudgeCount* getJudgeCount(void);
 };
