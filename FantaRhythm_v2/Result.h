@@ -18,11 +18,4 @@ private:
 	int totaldamage;
 	JUDGE::JudgeCount *judgecount;
 	bool clearflag;
-	//ゲームクリア用
-	void gameclearUpdate(void);
-	void gameclearDraw(void);
-	//ゲームオーバー用
-	void gameoverUpdate(void);	
-	void gameoverDraw(void);
-
 };
