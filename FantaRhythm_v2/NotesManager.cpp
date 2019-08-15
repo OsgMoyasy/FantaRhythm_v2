@@ -1,5 +1,7 @@
 #include "NotesManager.h"
 
+
+
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
@@ -35,7 +37,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	note.longtime = 0;
 	note.display = false;
 
-	for (int i = 0; i < JUDGETYPE::SIZE; i++) {
+	for (int i = 0; i < JUDGE::TYPE::TYPE_SIZE; i++) {
 		judgeCount.cnt[i] = 0;
 	}
 
@@ -113,7 +115,7 @@ void NotesManager::judgeNormal(int lane) {
 		return judgeEvent(judgeType(checktime), lane);
 	}
 	else if (nowTime >= checkitr[lane]->time + BAD_RANGE) {//押されてないまま終了時
-		return judgeEvent(BAD, lane);
+		return judgeEvent(JUDGE::BAD, lane);
 	}
 }
 void NotesManager::judgeLong(int lane) {
@@ -137,42 +139,42 @@ void NotesManager::judgeLong(int lane) {
 	}
 	
 	if (nowTime >= checkitr[lane]->longtime + GOOD_RANGE) {//判定を超えた時
-		return judgeLongEvent(BAD, lane);
+		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
 
-void NotesManager::judgeLongEvent(JUDGETYPE type, int lane) {
+void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	judgeEvent(type, lane);
 	longflag[lane] = false;//判定したので長押しの状態を初期化
 }
 
-void NotesManager::judgeEvent(JUDGETYPE type, int lane) {
+void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
 	checkitr[lane]->display = false;//ディスプレイ表示オフ
 	plusItr(checkitr[lane]);//判定対象を次に進める
 	judgeCount.cnt[type]++;//判定をカウントアップ
-	if(type == BAD){
+	if(type == JUDGE::BAD){
 		setEvent(Massage::SMALLDAMAGE, lane);
 	}
 	else {
 		setEvent(Massage::ATTACK, lane);
 	}
 }
-NotesManager::JUDGETYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
+JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 	if (checktime <= PERFECT_RANGE) {//PERFECT
-		return PERFECT;
+		return JUDGE::PERFECT;
 	}
 	else if (checktime <= GREAT_RANGE) {//GREAT
-		return GREAT;
+		return JUDGE::GREAT;
 	}
 	else if (checktime <= GOOD_RANGE) {//GOOD
-		return GOOD;
+		return JUDGE::GOOD;
 	}
 	else {//BAD
-		return BAD;
+		return JUDGE::BAD;
 	}
 }
 
-NotesManager::JUDGECOUNT NotesManager::getJudgeCount() {
+JUDGE::JudgeCount NotesManager::getJudgeCount() {
 	return judgeCount;
 }
 

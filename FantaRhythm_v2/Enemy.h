@@ -9,14 +9,14 @@
 class Enemy {
 public:
 	Enemy(String path);
-	~Enemy();
-	void update();
-	void draw();
+	~Enemy(void);
+	void update(void);
+	void draw(void);
 	void addDamage(int dmg);
-	int getTotalDamage();
+	int getTotalDamage(void);
 
 private:
-	void moveUpDown();
+	void moveUpDown(void);
 	int cnt;
 	int totaldmg;//ìGÇ…ó^Ç¶ÇΩëçÉ_ÉÅÅ[ÉW
 	int x, y;

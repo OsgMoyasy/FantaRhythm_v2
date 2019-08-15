@@ -43,6 +43,19 @@ void SceneManager::changeScene() {
 			delete scene;
 			scene = new Game(musicpath,filepath);
 		}
+		else {
+			nextscene = SCENE_NONE;
+		}
+		break;
+	case SCENE_RESULT:
+		if (nowscene == SCENE_GAME) {
+			//判定のカウント数と敵への総ダメージ量を退避
+			int totaldmg;
+			delete scene;
+		}
+		else {
+			nextscene = SCENE_NONE;
+		}
 		break;
 	default:
 		break;

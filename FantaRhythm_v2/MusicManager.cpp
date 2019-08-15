@@ -22,3 +22,10 @@ double MusicManager::getMusicTime() {
 double MusicManager::getMilliSec() {
 	return audio->samplingRate() / 1000.0;
 }
+
+bool MusicManager::musicEndCheck() {
+	if (audio->posSec() >= audio->lengthSec() + 5) {
+		return true;
+	}
+	return false;
+}
