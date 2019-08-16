@@ -1,16 +1,18 @@
 #pragma once
+# include <Siv3D.hpp> // OpenSiv3D v0.3.2
 #include "Game.h"
-#include "FantaRhythm_v2.h"
 #include "Observer.h"
 #include <vector>
 #include <list>
 #include <array>
+#include "Judge.h"
 
 constexpr int LANESIZE = 4;		//LANEの数
 constexpr int BAD_RANGE = 200;//判定の最大範囲[ms]÷2
 constexpr int GOOD_RANGE = 100;//GOOD判定範囲[ms]÷2
 constexpr int GREAT_RANGE = 25;//GREAT判定範囲[ms]÷2
 constexpr int PERFECT_RANGE = 5;//PERFECT判定範囲[ms]÷2
+
 
 
 
@@ -25,22 +27,7 @@ private:
 		LONG,
 		SENTINEL,
 	};
-	enum JUDGETYPE {
-		PERFECT,
-		GREAT,
-		GOOD,
-		BAD,
-		SIZE,
-	};
-
-	typedef union _JUDGECOUNT {//判定のカウント数を格納していく
-		int cnt[JUDGETYPE::SIZE];
-		int perfect;
-		int great;
-		int good;
-		int bad;
-	}JUDGECOUNT;
-
+	
 	typedef struct _Notes {
 		NOTESTYPE type;
 		int time;
@@ -57,7 +44,7 @@ private:
 	noteitr checkitr[LANESIZE];		//判定すべきイテレータ保持
 	noteitr displayitr[LANESIZE];	//表示すべきイテレータ保持
 
-	JUDGECOUNT judgeCount;
+	JUDGE::JudgeCount judgecount;
 
 	int nowTime;	//現在時間[ms]
 
@@ -82,11 +69,11 @@ private:
 	void judgeNormal(int lane);	//ノーマルノーツを判定
 	void judgeLong(int lane);	//ロングノーツを判定
 
-	JUDGETYPE judgeType(int checktime);//判定のタイプを返す
+	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 
-	void judgeEvent(JUDGETYPE type, int lane);
-	void NotesManager::judgeLongEvent(JUDGETYPE type, int lane);
-	JUDGECOUNT getJudgeCount();
+	void judgeEvent(JUDGE::TYPE type, int lane);
+	void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane);
+	
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
 	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
 	double getCurrentPosition(int startPos, int endPos, double progressRate);//現在座標を返す
@@ -102,5 +89,5 @@ public:
 	~NotesManager();
 	void update(void);
 	void draw(void);
-
+	JUDGE::JudgeCount* getJudgeCount(void);
 };

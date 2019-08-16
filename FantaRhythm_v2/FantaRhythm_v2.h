@@ -4,5 +4,6 @@
 #include "SelectMusic.h"
 #include "Game.h"
 #include "MusicManager.h"
+#include "Result.h"
 
 
