@@ -23,6 +23,9 @@ private:
 	bool clearflag;
 
 	int framecnt;
+	static const int alphatime = 3 * 60;//アルファ値が元に戻るまでの時間×フレーム数
+	double alpha;
+	double alphafont;
 
 	void(Result::* stateUpdate)(void);//実行する計算処理への関数ポインタ
 	void(Result::* stateDraw)(void);//実行する描画処理への関数ポインタ
@@ -35,8 +38,6 @@ private:
 	void successUpdate(void);
 	void successDraw(void);
 	//ゲームオーバー用
-	static const int alphatime = 4 * 60;//アルファ値が元に戻るまでの時間×フレーム数
-	double alpha;
 	void failedUpdate(void);
 	void failedDraw(void);
 };

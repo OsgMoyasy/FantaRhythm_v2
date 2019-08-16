@@ -9,7 +9,7 @@ Game::Game(const String& music, const String& dif) {
 	notes = new NotesManager(subject,difpath);
 	enemy = new Enemy(music);
 	
-	clearflag = true;
+	clearflag = false;
 	
 	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");
 	TextureAsset::Preload(U"back");
@@ -25,6 +25,7 @@ Game::~Game() {
 	delete notes;
 	TextureAsset::UnregisterAll();
 	FontAsset::Unregister(U"font");
+	MusicManager::stopMusicGame();
 }
 
 void Game::update() {

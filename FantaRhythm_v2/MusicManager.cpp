@@ -36,3 +36,7 @@ bool MusicManager::musicEndCheck() {
 	}
 	return false;
 }
+
+void MusicManager::stopMusicGame() {
+	audio->stop();
+}
