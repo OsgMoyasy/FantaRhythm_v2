@@ -3,10 +3,11 @@
 #define CYCLE 3000
 #define TWOPI 6.28318
 
-Result::Result(JUDGE::JudgeCount* judgecnt, int totaldmg, bool cflag) {
+Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
 	judgecount = judgecnt;
 	totaldamage = totaldmg;
 	clearflag = cflag;
+
 	FontAsset::Register(U"font", 50);
 	FontAsset::Preload(U"font");
 	FontAsset::Register(U"subfont", 30);
@@ -47,7 +48,7 @@ void Result::calcScore(void) {//スコア計算
 	constexpr int weight[JUDGE::TYPE_SIZE] = {100, 70, 50, 0};
 	score = 0;
 	for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
-		//score += weight[i] * judgecount->cnt[i];
+		score += weight[i] * judgecount.cnt[i];
 	}
 }
 void Result::successUpdate(void) {
@@ -55,11 +56,11 @@ void Result::successUpdate(void) {
 }
 void Result::successDraw(void) {
 	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
-	FontAsset(U"subfont")(U"Score::"+score).drawAt(Window::Width() / 2 - 100, 150);
-	FontAsset(U"subfont")(U"Perfect::" + judgecount->perfect).drawAt(Window::Width() / 2 - 100, 190);
-	FontAsset(U"subfont")(U"Great  ::" + judgecount->great).drawAt(Window::Width() / 2 - 100, 220);
-	FontAsset(U"subfont")(U"Good   ::" + judgecount->good).drawAt(Window::Width() / 2 - 100, 260);
-	FontAsset(U"subfont")(U"Bad    ::" + judgecount->bad).drawAt(Window::Width() / 2 - 100, 300);
+	FontAsset(U"subfont")(U"Score   ::"+Format(score)).draw(Window::Width() / 2 - 100, 150,Color(0x000000));
+	FontAsset(U"subfont")(U"Perfect ::" + Format(judgecount.cnt[JUDGE::PERFECT])).draw(Window::Width() / 2 - 100, 190, Color(0x000000));
+	FontAsset(U"subfont")(U"Great   ::" + Format(judgecount.cnt[JUDGE::GREAT])).draw(Window::Width() / 2 - 100, 220, Color(0x000000));
+	FontAsset(U"subfont")(U"Good    ::" + Format(judgecount.cnt[JUDGE::GOOD])).draw(Window::Width() / 2 - 100, 260, Color(0x000000));
+	FontAsset(U"subfont")(U"Bad     ::" + Format(judgecount.cnt[JUDGE::BAD])).draw(Window::Width() / 2 - 100, 300, Color(0x000000));
 }
 //ゲームオーバー用
 void Result::failedUpdate(void) {

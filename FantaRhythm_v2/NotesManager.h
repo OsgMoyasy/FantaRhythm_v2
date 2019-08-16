@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 #include <array>
+#include "Judge.h"
 
 constexpr int LANESIZE = 4;		//LANEの数
 constexpr int BAD_RANGE = 200;//判定の最大範囲[ms]÷2
@@ -12,23 +13,7 @@ constexpr int GOOD_RANGE = 100;//GOOD判定範囲[ms]÷2
 constexpr int GREAT_RANGE = 25;//GREAT判定範囲[ms]÷2
 constexpr int PERFECT_RANGE = 5;//PERFECT判定範囲[ms]÷2
 
-namespace JUDGE {
-	enum TYPE {
-		PERFECT,
-		GREAT,
-		GOOD,
-		BAD,
-		TYPE_SIZE,
-	};
-	
-	typedef union _JudgeCount{//判定のカウント数を格納していく
-		int cnt[TYPE::TYPE_SIZE];
-		int perfect;
-		int great;
-		int good;
-		int bad;
-	}JudgeCount;
-}
+
 
 
 /*--------------------------------------------
@@ -59,7 +44,7 @@ private:
 	noteitr checkitr[LANESIZE];		//判定すべきイテレータ保持
 	noteitr displayitr[LANESIZE];	//表示すべきイテレータ保持
 
-	JUDGE::JudgeCount judgeCount;
+	JUDGE::JudgeCount judgecount;
 
 	int nowTime;	//現在時間[ms]
 

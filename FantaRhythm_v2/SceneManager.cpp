@@ -52,8 +52,9 @@ void SceneManager::changeScene() {
 			//判定のカウント数と敵への総ダメージ量を退避
 			int totaldmg = ((Game*)scene)->getTotalDamage();
 			bool clearflag = ((Game*)scene)->getClearFlag();
+			JUDGE::JudgeCount jc = *((Game*)scene)->getJudgeCount();
 			delete scene;
-			scene = new Result(((Game*)scene)->getJudgeCount(), totaldmg, clearflag);
+			scene = new Result(jc, totaldmg, clearflag);
 		}
 		else {
 			nextscene = SCENE_NONE;

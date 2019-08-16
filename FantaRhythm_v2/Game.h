@@ -6,11 +6,8 @@
 #include "Enemy.h"
 #include "SceneManager.h"
 #include "MusicManager.h"
+#include "Judge.h"
 
-namespace JUDGE {
-	union _JudgeCount;
-	typedef _JudgeCount JudgeCount;
-}
 
 class Game : public Scene {
 private:

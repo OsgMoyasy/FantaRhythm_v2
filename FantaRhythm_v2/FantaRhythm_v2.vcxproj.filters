@@ -291,6 +291,9 @@
     <ClInclude Include="Result.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Judge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc">

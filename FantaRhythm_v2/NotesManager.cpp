@@ -38,7 +38,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	note.display = false;
 
 	for (int i = 0; i < JUDGE::TYPE::TYPE_SIZE; i++) {
-		judgeCount.cnt[i] = 0;
+		judgecount.cnt[i] = 0;
 	}
 
 	for (int lane = 0; lane < LANESIZE; lane++) {//レーンごとに到着時間を格納
@@ -151,7 +151,7 @@ void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
 	checkitr[lane]->display = false;//ディスプレイ表示オフ
 	plusItr(checkitr[lane]);//判定対象を次に進める
-	judgeCount.cnt[type]++;//判定をカウントアップ
+	judgecount.cnt[type]++;//判定をカウントアップ
 	if(type == JUDGE::BAD){
 		setEvent(Massage::SMALLDAMAGE, lane);
 	}
@@ -175,13 +175,18 @@ JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 }
 
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
-	return &judgeCount;
+	return &judgecount;
 }
 
 
 
 
 void NotesManager::draw(void){
+	//デバッグ用
+	for (int i = 0; i < 4; i++) {
+		Print << judgecount.cnt[i];
+	}
+	//
 	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);
 	for(int i = 0; i < LANESIZE; i++){
 		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);

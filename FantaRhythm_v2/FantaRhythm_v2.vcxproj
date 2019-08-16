@@ -273,6 +273,7 @@
     <ClInclude Include="FantaRhythm_v2.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameEffect.h" />
+    <ClInclude Include="Judge.h" />
     <ClInclude Include="MusicManager.h" />
     <ClInclude Include="NotesManager.h" />
     <ClInclude Include="Observer.h" />
