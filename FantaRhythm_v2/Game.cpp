@@ -53,4 +53,5 @@ void Game::gameEndCheck(void) {
 	if (MusicManager::musicEndCheck() || clearflag == false) {//曲が終わっている　or ゲーム失敗している
 		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//シーン移行
 	}
+	return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//シーン移行
 }

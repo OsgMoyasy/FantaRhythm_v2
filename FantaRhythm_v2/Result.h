@@ -2,6 +2,7 @@
 #include "FantaRhythm_v2.h"
 #include "Scene.h"
 #include "Judge.h"
+#include <Siv3D.hpp>
 
 
 
@@ -26,10 +27,14 @@ private:
 	void(Result::* stateDraw)(void);//実行する描画処理への関数ポインタ
 
 	//ゲームクリア用
-	int score;
+	String scoreStr;//スコアを数値変換したもの
+	String scoreDraw;//実際に描画するスコア
+
+	void scoreEffect(void);
 
 
-	void calcScore(void);//スコア計算
+
+	int calcScore(JUDGE::JudgeCount &jc);//スコア計算
 	void successUpdate(void);
 	void successDraw(void);
 	//ゲームオーバー用
