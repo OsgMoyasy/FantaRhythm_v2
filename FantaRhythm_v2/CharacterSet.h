@@ -4,6 +4,13 @@
 #include "Observer.h"
 
 #define CHANUMBER 4
+namespace JOB {
+	enum LIST {
+		SOLDIER,
+
+	};
+}
+
 
 class CharacterSet:public Observer{
 public:
@@ -14,6 +21,7 @@ public:
 	void funcEvent(Obj obj);
 
 private:
+
 	class Character* cha[CHANUMBER];
 
 };

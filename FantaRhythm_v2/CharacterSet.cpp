@@ -6,13 +6,23 @@ CharacterSet::CharacterSet(int save[]) {
 	csv.load(U"resources/charadata.csv");
 	
 	for (int i = 0; i < CHANUMBER; i++) {
-		cha[i] = new Soldier(csv,900 + i * 90, 150 + i * 80,i);
+		int initx = 900 + i * 90, inity = 150 + i * 80;//‰ŠúÀ•W‚Ìİ’èŒã‚ÅŒ©’¼‚·
+		switch (save[i]) {
+		case JOB::SOLDIER:
+			cha[i] = new Soldier(csv, initx, inity, i);
+			break;
+		default:
+			//ƒGƒ‰[
+			break;
+		}
 	}
 
 }
 
 CharacterSet::~CharacterSet() {
-
+	for (int i = 0; i < CHANUMBER; i++) {
+		delete cha[i];
+	}
 }
 
 void CharacterSet::draw() {

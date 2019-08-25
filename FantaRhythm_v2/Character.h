@@ -26,5 +26,5 @@ private:
 	int args1, args2;//汎用値
 	double initx, inity;//基本位置
 	double x, y;//現在位置
-	static int count;//上下移動に使うフレームカウント
+	int framecnt;//上下移動に使うフレームカウント
 };
