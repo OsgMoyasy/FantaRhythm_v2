@@ -7,7 +7,8 @@ CharacterSet::CharacterSet(int save[]) {
 	
 	for (int i = 0; i < CHANUMBER; i++) {
 		int initx = 900 + i * 90, inity = 150 + i * 80;//初期座標の設定後で見直す
-		switch (save[i]) {
+		
+		switch (csv.get<int>(save[i], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
 			cha[i] = new Soldier(csv, initx, inity, i);
 			break;
