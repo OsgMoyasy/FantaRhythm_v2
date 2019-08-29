@@ -63,6 +63,9 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//‘¬‚³
 	notespeed = 1.0;
 	timeRequired = 1500 / notespeed;
+	//¬ßü
+	barlineBetween = 364;
+	barlineStart = 5756;
 
 	notewidth = TextureAsset(U"note").width();
 }
@@ -186,10 +189,19 @@ void NotesManager::draw(void){
 	for (int i = 0; i < 4; i++) {
 		Print << judgecount.cnt[i];
 	}
-	//
-	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);
+	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//”»’èü‚Ì•`‰æ
+
+	//¬ßü‚Ì•`‰æ
+	for (int i = nowTime + barlineBetween - ((nowTime+barlineStart) % barlineBetween);i < nowTime + 2000;i += barlineBetween) {
+		double progressRate = progressByAngle(getProgress(i));
+		double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
+		double currentX1 = getCurrentPosition(laneStartX[0],laneJudgeX[0],progressRate);
+		double currentX2 = getCurrentPosition(laneStartX[3],laneJudgeX[3],progressRate);
+		Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
+	}
+
 	for(int i = 0; i < LANESIZE; i++){
-		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);
+		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//ƒŒ[ƒ“‚Ì•`‰æ
 		for (noteitr itr = displayitr[i]; itr != notelist[i].end(); itr++) {
 			if (nowTime < itr->time - timeRequired)//•`‰æ‘O‚È‚ç•`‰æ‘Å‚¿Ø‚è
 				break;
