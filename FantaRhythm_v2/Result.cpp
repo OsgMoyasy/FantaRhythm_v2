@@ -2,7 +2,7 @@
 
 
 #define CYCLE 3000
-#define TWOPI 6.28318
+
 
 Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
 	judgecount = judgecnt;
@@ -83,9 +83,7 @@ void Result::scoreEffect(void) {
 	//もう少し複雑になれば関数化
 	if (cnt % framespace == 0) {//0-9まで間隔空けて変更
 		number++;
-		if (number > 9) {
-			number = 0;
-		}
+		number %= 10;
 		String tmp = Format(number);//要変更
 		scoreDraw.at(wordcnt) = tmp.at(0);
 	}
@@ -105,7 +103,7 @@ void Result::failedUpdate(void) {
 	else {
 		//文字の描画開始
 		const uint64 t = Time::GetMillisec();
-		alphafont = Sin(t % CYCLE / static_cast<double>(CYCLE) * TWOPI) * 0.42 + 0.58;
+		alphafont = Sin(t % CYCLE / static_cast<double>(CYCLE) * Math::TwoPi) * 0.42 + 0.58;
 	}
 }
 void Result::failedDraw(void) {
