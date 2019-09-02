@@ -61,8 +61,8 @@ private:
 	int laneGoalY;		//Goal = 流れ切ったノーツの表示をやめる所
 	float timeRequired;	//ノーツの出現から判定まで流れる時間[ms]
 	float notespeed;	//ノーツ速度の補正倍率
-	int barlineBetween;	//小節線の間隔[ms]
-	int barlineStart;	//小節線の開始時間[ms](現在調整のみに使用)
+	int barBetween;	//小節線の間隔[ms]
+	int barStart;	//小節線の開始時間[ms](現在調整のみに使用)
 
 	void plusItr(noteitr& itr);	//notelistのイテレータを進める
 	void checkAttack(void);		//ボタンの押し状況を確認する

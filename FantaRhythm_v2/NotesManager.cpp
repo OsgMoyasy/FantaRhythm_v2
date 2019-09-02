@@ -64,8 +64,8 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	notespeed = 1.0;
 	timeRequired = 1500 / notespeed;
 	//小節線
-	barlineBetween = 364;
-	barlineStart = 5756;
+	barBetween = 364;
+	barStart = 5756;
 
 	notewidth = TextureAsset(U"note").width();
 }
@@ -192,13 +192,20 @@ void NotesManager::draw(void){
 	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//判定線の描画
 
 	//小節線の描画
-	for (int i = nowTime + barlineBetween - ((nowTime+barlineStart) % barlineBetween);i < nowTime + 2000;i += barlineBetween) {
+	int barStartSurplus = barStart % barBetween;
+	for (int i = nowTime + barBetween - ((nowTime - barStartSurplus) % barBetween);i < nowTime + 2000;i += barBetween) {
 		double progressRate = progressByAngle(getProgress(i));
 		double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
 		double currentX1 = getCurrentPosition(laneStartX[0],laneJudgeX[0],progressRate);
 		double currentX2 = getCurrentPosition(laneStartX[3],laneJudgeX[3],progressRate);
 		Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
 	}
+//デバッグ用小節線
+double progressRate = progressByAngle(getProgress(5938));
+double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
+double currentX1 = getCurrentPosition(laneStartX[0], laneJudgeX[0], progressRate);
+double currentX2 = getCurrentPosition(laneStartX[3], laneJudgeX[3], progressRate);
+Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
 
 	for(int i = 0; i < LANESIZE; i++){
 		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//レーンの描画
