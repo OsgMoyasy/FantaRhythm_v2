@@ -62,7 +62,7 @@ private:
 	float timeRequired;	//ノーツの出現から判定まで流れる時間[ms]
 	float notespeed;	//ノーツ速度の補正倍率
 	int barBetween;	//小節線の間隔[ms]
-	int barStart;	//小節線の開始時間[ms](現在調整のみに使用)
+	int barStart;	//小節線の開始時間[ms]
 
 	void plusItr(noteitr& itr);	//notelistのイテレータを進める
 	void checkAttack(void);		//ボタンの押し状況を確認する
@@ -74,12 +74,14 @@ private:
 	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 
 	void judgeEvent(JUDGE::TYPE type, int lane);
-	void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane);
+	void judgeLongEvent(JUDGE::TYPE type, int lane);
 	
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
 	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
 	double getCurrentPosition(int startPos, int endPos, double progressRate);//現在座標を返す
 	double getScale(double currenty);//拡大率計算
+
+	void displayBarline();//小節線を表示
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示

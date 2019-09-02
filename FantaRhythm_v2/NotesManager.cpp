@@ -65,7 +65,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	timeRequired = 1500 / notespeed;
 	//¬ßü
 	barBetween = 364;
-	barStart = 5756;
+	barStart = 114;
 
 	notewidth = TextureAsset(U"note").width();
 }
@@ -190,22 +190,7 @@ void NotesManager::draw(void){
 		Print << judgecount.cnt[i];
 	}
 	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//”»’èü‚Ì•`‰æ
-
-	//¬ßü‚Ì•`‰æ
-	int barStartSurplus = barStart % barBetween;
-	for (int i = nowTime + barBetween - ((nowTime - barStartSurplus) % barBetween);i < nowTime + 2000;i += barBetween) {
-		double progressRate = progressByAngle(getProgress(i));
-		double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
-		double currentX1 = getCurrentPosition(laneStartX[0],laneJudgeX[0],progressRate);
-		double currentX2 = getCurrentPosition(laneStartX[3],laneJudgeX[3],progressRate);
-		Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
-	}
-//ƒfƒoƒbƒO—p¬ßü
-double progressRate = progressByAngle(getProgress(5938));
-double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
-double currentX1 = getCurrentPosition(laneStartX[0], laneJudgeX[0], progressRate);
-double currentX2 = getCurrentPosition(laneStartX[3], laneJudgeX[3], progressRate);
-Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
+	displayBarline();
 
 	for(int i = 0; i < LANESIZE; i++){
 		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//ƒŒ[ƒ“‚Ì•`‰æ
@@ -252,6 +237,21 @@ double NotesManager::getCurrentPosition(int startPos, int endPos, double progres
 double NotesManager::getScale(double currenty) {
 	double temp = currenty / (laneJudgeY - 100);//­‚µ‘‚ß‚Ék¬—¦‚ğ‚à‚Æ‚É–ß‚·‚½‚ßˆø‚¢‚Ä‚İ‚Ä‚¢‚é
 	return  temp;
+}
+
+void NotesManager::displayBarline() {
+	if (barStart < nowTime) {
+		barStart += barBetween;
+	}
+
+	//¬ßü‚Ì•`‰æ
+	for (int i = barStart;i < nowTime + timeRequired;i += barBetween) {
+		double progressRate = progressByAngle(getProgress(i));
+		double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
+		double currentX1 = getCurrentPosition(laneStartX[0], laneJudgeX[0], progressRate);
+		double currentX2 = getCurrentPosition(laneStartX[3], laneJudgeX[3], progressRate);
+		Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
+	}
 }
 
 void NotesManager::displayNormal(int lane, int time) {
