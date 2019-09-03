@@ -10,40 +10,53 @@ private:
 	Audio* sound;
 };
 
-class mapflip {	//渡されたマップチップ画像からチップ画像を切り出す
+class MapFlip {	//渡された大きい画像から切り出した画像を返す
 public:
-	mapflip(const FilePath& path, int xFlipWidth, int yFlipHeight);
-	~mapflip();
-	bool nextFlip();	//次の位置のチップ画像をセット。次がない(最後)ならfalseを返す
-	TextureRegion getFlip();	//チップ画像を返す
+	MapFlip(Texture map, int xFlipWidth, int yFlipHeight);
+	bool nextFlip();			//次の切り出し画像の位置にセット。次がない(最後)ならfalseを返す
+	TextureRegion getFlip();	//切り出し画像を返す
 private:
-	Texture* flip;
-	int xFlipWidth;
-	int yFlipHeight;
-	int xMapWidth;
-	int yMapHeight;
-	int nowPosX;
-	int nowPosY;
+	Texture map;	//大きい画像
+	int xMapWidth, yMapHeight;		//大きい画像の大きさ
+	int xFlipWidth, yFlipHeight;	//切り出しサイズ
+	int xNowPos, yNowPos;			//現在の画像切り出し位置
 };
 
-struct flipMovie :IEffect {//mapflipを利用してパラパラ漫画を作るエフェクト
-	flipMovie(const FilePath& path, int xFlipWidth, int yFlipHeight, int drawX, int drawY);
-	~flipMovie();
+struct FlipMovie :IEffect {//MapFlipを利用してパラパラ漫画を作るエフェクト
+	FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw);
+	~FlipMovie();
 	bool update(double t);
 private:
-	mapflip* flip;
-	int drawX;
-	int drawY;
+	MapFlip* mapflip;
+	int xDraw, yDraw;			//描画位置
+	double switchTime;	//最後に切り出し画像を切り替えた時間
 };
 
-struct fractal :IEffect {//フラクタル模様を作り出すエフェクト
-	fractal(int size, int x, int y);
+class FlipEffect {//同じFlipMovieエフェクトを繰り返し再生する際のリソースを保持する
+public:
+	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw);
+	void setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight);	//画像をセット("画像パス",切り出しサイズ)
+	void setPos(int xDraw, int yDraw);	//描画位置をセット
+	void draw();						//再生開始
+	void draw(int xDraw, int yDraw);	//再生開始(描画位置)
+	void update();	//描画(フレーム毎に呼び出す必要あり)
+private:
+	Effect effect;
+	Texture map;
+	int xFlipWidth, yFlipHeight;	//切り出しサイズ
+	int xDraw, yDraw;				//描画位置
+};
+
+/*
+struct Fractal :IEffect {//フラクタル模様を作り出すエフェクト
+	Fractal(int size, int x, int y);
 	bool update(double t);
 private:
-	int firstX, firstY;
+	int xFirst, yFirst;
 	int firstSize;
 	int x2, y2;
 
-	void drawTriangle(double t, int posX, int posY, int size, int x2, int y2);
+	void drawTriangle(double t, int xPos, int yPos, int size, int x2, int y2);
 };
+*/
 

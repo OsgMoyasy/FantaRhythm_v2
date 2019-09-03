@@ -1,5 +1,6 @@
 #include "GameEffect.h"
 
+//SE///////////////////////////////////////////////////////////////////////////////////
 SE::SE(FilePath& path) {
 	sound = new Audio(path);
 }
@@ -11,85 +12,119 @@ void SE::play() {
 	sound->play();
 }
 
-
-mapflip::mapflip(const FilePath& path, int xFlipWidth, int yFlipHeight) {
-	flip = new Texture(path);
+//MapFlip///////////////////////////////////////////////////////////////////////////////////
+MapFlip::MapFlip(Texture map, int xFlipWidth, int yFlipHeight) {
+	this->map = map;
 	this->xFlipWidth = xFlipWidth;
 	this->yFlipHeight = yFlipHeight;
-	xMapWidth = flip->width();
-	yMapHeight = flip->height();
-	nowPosX = 0;
-	nowPosY = 0;
+	xMapWidth = map.width();	//大きい画僧の大きさを取得
+	yMapHeight = map.height();	//
+	xNowPos = 0;
+	yNowPos = 0;
 }
-mapflip::~mapflip() {
-	delete flip;
-}
-bool mapflip::nextFlip() {
-	if (nowPosX += xFlipWidth, nowPosX >= xMapWidth) {	//次の列へ
-		nowPosX = 0;
-		if (nowPosY += yFlipHeight, nowPosY >= yMapHeight) {	//次の行の一番左の列へ
-			return false;
+bool MapFlip::nextFlip() {
+	if (xNowPos += xFlipWidth, xNowPos >= xMapWidth) {	//次の列へ
+		xNowPos = 0;
+		if (yNowPos += yFlipHeight, yNowPos >= yMapHeight) {	//次の行の一番左の列へ
+			return false;	//大きい画像の右下(最後)まで達していたらfalse
 		}
 	}
 	return true;
 }
-TextureRegion mapflip::getFlip() {
-	return (*flip)(nowPosX, nowPosY, xFlipWidth, yFlipHeight);
+TextureRegion MapFlip::getFlip() {
+	return map(xNowPos, yNowPos, xFlipWidth, yFlipHeight);	//切り出し画像を返す
 }
 
+//FlipMovie///////////////////////////////////////////////////////////////////////////////////
+FlipMovie::FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw) {
+	mapflip = new MapFlip(map, xFlipWidth, yFlipHeight);
+	this->xDraw = xDraw;
+	this->yDraw = yDraw;
+	switchTime = 0;
+}
+FlipMovie::~FlipMovie() {
+	delete mapflip;
+}
+bool FlipMovie::update(double t) {
+	constexpr double switchBetween = 0.03;	//切り出し画像を切り替える間隔[秒?]
 
-flipMovie::flipMovie(const FilePath& path, int xFlipWidth, int yFlipHeight, int drawX, int drawY) {
-	flip = new mapflip(path, xFlipWidth, yFlipHeight);
-	this->drawX = drawX;
-	this->drawY = drawY;
-}
-flipMovie::~flipMovie() {
-	delete flip;
-}
-bool flipMovie::update(double t) {
-	if (!flip->nextFlip()) {
-		return false;
+	if (switchTime < t) {				//切り替え時間がきたら
+		switchTime += switchBetween;
+		if (!mapflip->nextFlip()) {	//次の画僧に切り替え、大きい画像の最後まで描画していたなら
+			return false;			//エフェクト再生終了
+		}
 	}
-	flip->getFlip().drawAt(drawX, drawY);
-	return true;
+	mapflip->getFlip().drawAt(xDraw, yDraw);	//切り出し画像の描画
+	return true;	//再生継続
 }
 
+//FlipEffect/////////////////////////////////////////////////////////////////////////////////////////////
+FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw)
+	:map(path) {
+	this->xFlipWidth = xFlipWidth;
+	this->yFlipHeight = yFlipHeight;
+	this->xDraw = xDraw;
+	this->yDraw = yDraw;
+}
+void FlipEffect::setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight) {
+	Texture tmp(path);
+	map = tmp;
+	this->xFlipWidth = xFlipWidth;
+	this->yFlipHeight = yFlipHeight;
+}
+void FlipEffect::setPos(int xDraw, int yDraw) {
+	this->xDraw = xDraw;
+	this->yDraw = yDraw;
+}
+void FlipEffect::draw() {
+	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
+}
+void FlipEffect::draw(int xDraw, int yDraw) {
+	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
+}
+void FlipEffect::update() {
+	effect.update();
+}
 
-fractal::fractal(int size, int x, int y) {
+//Fractal/////////////////////////////////////////////////////////////////////////////////////////////
+/*
+Fractal::Fractal(int size, int x, int y) {
 	constexpr int angle = 30;
 	constexpr double PI = 3.1415;
-	firstX = x;
-	firstY = y;
+	xFirst = x;
+	yFirst = y;
 	firstSize = size;
 	x2 = size * cos(angle * (PI / 180));
 	y2 = size * cos((90 - angle) * (PI / 180));
 }
-bool fractal::update(double t) {
+bool Fractal::update(double t) {
 	if (t > 5) {return false;}
-	drawTriangle(t, firstX, firstY, firstSize, x2, y2);
+	drawTriangle(t, xFirst, yFirst, firstSize, x2, y2);
 	return true;
 }
-void fractal::drawTriangle(double t, int posX, int posY, int size, int x2, int y2) {
+void Fractal::drawTriangle(double t, int xPos, int yPos, int size, int x2, int y2) {
 	//コードが汚い(趣味で書いただけなので後回し)
 	if (t > 1) {
-		drawTriangle(t - 1, posX, posY - size / 2, size / 2, x2 / 2, y2 / 2);
-		drawTriangle(t - 1, posX - x2 / 2, posY + y2 / 2, size / 2, x2 / 2, y2 / 2);
-		drawTriangle(t - 1, posX + x2 / 2, posY + y2 / 2, size / 2, x2 / 2, y2 / 2);
+		drawTriangle(t - 1, xPos, yPos - size / 2, size / 2, x2 / 2, y2 / 2);
+		drawTriangle(t - 1, xPos - x2 / 2, yPos + y2 / 2, size / 2, x2 / 2, y2 / 2);
+		drawTriangle(t - 1, xPos + x2 / 2, yPos + y2 / 2, size / 2, x2 / 2, y2 / 2);
 		t = 1.0;
 	}
-	int aX = posX;
-	int aY = posY - size;
-	int bX = posX - x2;
-	int bY = posY + y2;
-	int cX = posX + x2;
-	int cY = posY + y2;
-	int abX = (-x2) * t;
-	int abY = (size + y2) * t;
-	int bcX = (x2 * 2) * t;
-	int bcY = 0;
-	int caX = (-x2) * t;
-	int caY = (-y2 - size) * t;
-	Line(aX, aY, aX + abX, aY + abY).draw(2, Palette::Red);
-	Line(bX, bY, bX + bcX, bY + bcY).draw(2, Palette::Red);
-	Line(cX, cY, cX + caX, cY + caY).draw(2, Palette::Red);
+	int xA = xPos;
+	int yA = yPos - size;
+	int xB = xPos - x2;
+	int yB = yPos + y2;
+	int xC = xPos + x2;
+	int yC = yPos + y2;
+	int xAB = (-x2) * t;
+	int yAB = (size + y2) * t;
+	int xBC = (x2 * 2) * t;
+	int yBC = 0;
+	int xCA = (-x2) * t;
+	int yCA = (-y2 - size) * t;
+	Line(xA, yA, xA + xAB, yA + yAB).draw(2, Palette::Red);
+	Line(xB, yB, xB + xBC, yB + yBC).draw(2, Palette::Red);
+	Line(xC, yC, xC + xCA, yC + yCA).draw(2, Palette::Red);
 }
+*/
+
