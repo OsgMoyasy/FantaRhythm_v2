@@ -1,16 +1,12 @@
 #include "Result.h"
 
-
-#define CYCLE 3000
-
-
 Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
 	judgecount = judgecnt;
 	totaldamage = totaldmg;
 	clearflag = cflag;
 
 	framecnt = 0;
-	alphaBack = 255;
+	alphaBack = 0;
 	alphaFont = 0;
 
 	FontAsset::Register(U"font", 50);
@@ -22,7 +18,6 @@ Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
 		stateUpdate = &Result::successUpdate;
 		stateDraw = &Result::successDraw;
 		int score = calcScore(judgecount);
-		score = 1192;
 		scoreStr = Format(score);
 		scoreDraw = U"               ";
 	}
@@ -44,6 +39,12 @@ void Result::update(void) {
 }
 void Result::draw(void) {
 	(this->*stateDraw)();
+}
+
+void Result::changeFontAlpha(void) {
+	constexpr int CYCLE = 3000;
+	const uint64 t = Time::GetMillisec();
+	alphaFont = Sin(t % CYCLE / static_cast<double>(CYCLE) * Math::TwoPi) * 0.42 + 0.58;
 }
 
 //ゲームクリア用
@@ -94,11 +95,10 @@ void Result::scoreEffect(void) {
 void Result::failedUpdate(void) {
 	//背景や文字を時間経過で表示させるための処理
 	if (framecnt <= alphatime) {
-		alphaBack = (double)framecnt / alphatime * 1;
+		alphaBack = (double)framecnt / alphatime;
 	}
 	else {
-		const uint64 t = Time::GetMillisec();
-		alphaFont = Sin(t % CYCLE / static_cast<double>(CYCLE) * Math::TwoPi) * 0.42 + 0.58;
+		changeFontAlpha();
 	}
 }
 

@@ -25,6 +25,8 @@ private:
 	void(Result::* stateUpdate)(void);//実行する計算処理への関数ポインタ
 	void(Result::* stateDraw)(void);//実行する描画処理への関数ポインタ
 
+	void changeFontAlpha(void);//サイクルの周期でフォントの透明度変更
+
 	//ゲームクリア用
 
 	String scoreStr;//スコアを文字列変換

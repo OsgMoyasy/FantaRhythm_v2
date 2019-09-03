@@ -49,9 +49,7 @@ JUDGE::JudgeCount* Game::getJudgeCount(void) {
 	return notes->getJudgeCount();
 }
 void Game::gameEndCheck(void) {
-	//clearflag = HPが0だったらfalse
 	if (MusicManager::musicEndCheck() || clearflag == false) {//曲が終わっている　or ゲーム失敗している
 		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//シーン移行
 	}
-	return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//シーン移行
 }
