@@ -9,6 +9,10 @@ Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
 	totaldamage = totaldmg;
 	clearflag = cflag;
 
+	framecnt = 0;
+	alphaBack = 255;
+	alphaFont = 0;
+
 	FontAsset::Register(U"font", 50);
 	FontAsset::Preload(U"font");
 	FontAsset::Register(U"subfont", 30);
@@ -26,10 +30,6 @@ Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
 		TextureAsset::Register(U"back", U"resources/images/back/gameOver.jpg");
 		stateUpdate = &Result::failedUpdate;
 		stateDraw = &Result::failedDraw;
-
-		framecnt = 0;
-		alpha = 0;
-		alphafont = 0;
 	}
 	TextureAsset::Preload(U"back");//背景のロード
 }
@@ -39,11 +39,10 @@ Result::~Result(void) {
 	TextureAsset::UnregisterAll();
 }
 void Result::update(void) {
+	framecnt++;
 	(this->*stateUpdate)();
 }
 void Result::draw(void) {
-	
-
 	(this->*stateDraw)();
 }
 
@@ -70,43 +69,40 @@ void Result::successDraw(void) {
 }
 
 void Result::scoreEffect(void) {
-	static int cnt = 0;
+	constexpr int frameend = 60 * 1;//数値を決定するまでのフレーム数
+	constexpr int framespace = 3; //数値が移り変わるフレーム数
+
 	static int wordcnt = scoreStr.size() -1;
-	static int number = 0;
-	constexpr int frameend = 60 * 1;//数値を決定するまでの時間
-	constexpr int framespace = 3;
-	if (wordcnt < 0) {//全て確定しているならば終了
+	static int number = 0;	//移り変わっている数字
+
+	if (wordcnt < 0) {//全て確定しているならば終了させる
 		return;
 	}
-  	cnt++;//フレーム数カウント
 
-	//もう少し複雑になれば関数化
-	if (cnt % framespace == 0) {//0-9まで間隔空けて変更
+	if (framecnt % framespace == 0) {//0-9まで間隔空けて変更
 		number++;
 		number %= 10;
-		String tmp = Format(number);//要変更
+		String tmp = Format(number);//一発で出来る様に要変更
 		scoreDraw.at(wordcnt) = tmp.at(0);
 	}
-	if (cnt % frameend == 0) {//フレーム数が一定に達したら確定
+	if (framecnt % frameend == 0) {//数字を確定させる
 		scoreDraw.at(wordcnt) = scoreStr.at(wordcnt);
 		wordcnt--;
 	}
-
-
 }
 //ゲームオーバー用
 void Result::failedUpdate(void) {
+	//背景や文字を時間経過で表示させるための処理
 	if (framecnt <= alphatime) {
-		alpha = (double)framecnt / alphatime * 1;
-		framecnt++;
+		alphaBack = (double)framecnt / alphatime * 1;
 	}
 	else {
-		//文字の描画開始
 		const uint64 t = Time::GetMillisec();
-		alphafont = Sin(t % CYCLE / static_cast<double>(CYCLE) * Math::TwoPi) * 0.42 + 0.58;
+		alphaFont = Sin(t % CYCLE / static_cast<double>(CYCLE) * Math::TwoPi) * 0.42 + 0.58;
 	}
 }
+
 void Result::failedDraw(void) {
-	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alpha));//背景描画
-	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alphafont));
+	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//背景描画
+	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alphaFont));
 }

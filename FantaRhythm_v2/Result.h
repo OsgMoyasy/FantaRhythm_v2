@@ -5,7 +5,6 @@
 #include <Siv3D.hpp>
 
 
-
 class Result : public Scene {
 public:
 	Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag);
@@ -20,23 +19,22 @@ private:
 
 	int framecnt;
 	static const int alphatime = 3 * 60;//アルファ値が元に戻るまでの時間×フレーム数
-	double alpha;
-	double alphafont;
+	double alphaBack;
+	double alphaFont;
 
 	void(Result::* stateUpdate)(void);//実行する計算処理への関数ポインタ
 	void(Result::* stateDraw)(void);//実行する描画処理への関数ポインタ
 
 	//ゲームクリア用
-	String scoreStr;//スコアを数値変換したもの
+
+	String scoreStr;//スコアを文字列変換
 	String scoreDraw;//実際に描画するスコア
 
-	void scoreEffect(void);
-
-
-
-	int calcScore(JUDGE::JudgeCount &jc);//スコア計算
+	void scoreEffect(void); //スコアを0~9と順番に変わって下位の桁から確定させるようにする
+	int calcScore(JUDGE::JudgeCount &jc);//最終的なスコア計算
 	void successUpdate(void);
 	void successDraw(void);
+
 	//ゲームオーバー用
 	void failedUpdate(void);
 	void failedDraw(void);
