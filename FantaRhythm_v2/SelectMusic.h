@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include <Siv3D.hpp>
 
 
 class SelectMusic:public Scene{

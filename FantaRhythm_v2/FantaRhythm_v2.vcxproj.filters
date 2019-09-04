@@ -87,6 +87,10 @@
     <ClCompile Include="GameEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -254,9 +258,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FantaRhythm_v2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -281,6 +282,16 @@
     <ClInclude Include="GameEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Judge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FantaRhythm_v2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
