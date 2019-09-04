@@ -3,7 +3,6 @@
 #include "SceneManager.h"
 #include "NotesManager.h"
 #include "Observer.h"
-#include "CharacterSet.h"
 #include "Enemy.h"
 #include "SceneManager.h"
 #include "MusicManager.h"
@@ -14,7 +13,7 @@ class Game : public Scene {
 private:
 	String musicpath, difpath;
 	class NotesManager *notes;
-	class CharacterSet* characterm;
+	class CharacterManager* character;
 	class NotesSubject* subject;
 	class Enemy* enemy;
 

@@ -1,18 +1,23 @@
 #pragma once
 #include <list>
 
+/*---------------------------------------------------------
+	Observer パターン 委譲して使うといいらしい？
+	addObserverで観察する人を登録
+
+
+-----------------------------------------------------------*/
 
 enum Massage {//イベント名一覧　そこまで増えそうにないので一括管理
 	NONE,//ない場合
-	UPATTACK,//上ボタン攻撃
-	DOWNATTACK,//下ボタン攻撃
-	SMALLDAMAGE,//小ダメージ
-	BIGDAMAGE,//大ダメージ
+	ATTACK,
+	SMALLDAMAGE,
+	BIGDAMAGE,
 };
 
 typedef struct _Obj {//イベント用オブジェクト　
 	Massage msg;//イベント名
-	int lane;
+	int val;//汎用値
 }Obj;
 
 /*--------------------------------------------------------
