@@ -4,15 +4,15 @@
 #include "NotesManager.h"
 #include "Observer.h"
 #include "CharacterSet.h"
-
-#include "FantaRhythm_v2.h"
+#include "Enemy.h"
 #include "MusicManager.h"
+#include "Judge.h"
 
 class Game : public Scene {
 private:
 	String musicpath, difpath;
 	class NotesManager *notes;
-	class CharacterSet* characterm;
+	class CharacterManager* character;
 	class NotesSubject* subject;
 
 public:
