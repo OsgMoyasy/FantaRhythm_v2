@@ -1,5 +1,4 @@
 #pragma once
-#include "FantaRhythm_v2.h"
 #include "Scene.h"
 #include "Judge.h"
 #include <Siv3D.hpp>

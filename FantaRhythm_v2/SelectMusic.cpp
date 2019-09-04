@@ -1,4 +1,3 @@
-#include "FantaRhythm_v2.h"
 #include "SelectMusic.h"
 #include "SceneManager.h"
 
