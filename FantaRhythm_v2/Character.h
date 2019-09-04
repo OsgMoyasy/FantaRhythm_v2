@@ -1,7 +1,7 @@
 #pragma once
 #include <math.h>
 #include "Observer.h"
-#include "FantaRhythm_v2.h"
+#include <Siv3D.hpp>
 
 class Character {
 public:

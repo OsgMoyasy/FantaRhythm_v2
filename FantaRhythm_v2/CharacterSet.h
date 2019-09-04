@@ -1,5 +1,5 @@
 #pragma once
-#include"FantaRhythm_v2.h"
+#include <Siv3D.hpp>
 #include"Character.h"
 #include "Observer.h"
 
