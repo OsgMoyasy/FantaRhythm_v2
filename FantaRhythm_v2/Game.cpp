@@ -9,12 +9,18 @@ Game::Game(const String& music, const String& dif) {
 	notes = new NotesManager(subject,difpath);
 	enemy = new Enemy(music);
 	
-	clearflag = true;//false‚É‚È‚ê‚ÎƒQ[ƒ€ƒI[ƒo[
+	int tmp[4] = { 0,0,1,1 };//ãƒ†ã‚¹ãƒˆç”¨ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿
+	characterm = new CharacterSet(tmp);
+
+	subject->addObserver(characterm);//ã‚ªãƒ–ã‚¶ãƒ¼ãƒãƒ¼ã¸ç™»éŒ²
+	
+	clearflag = true;//falseã«ãªã‚Œã°ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
 	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");
 	TextureAsset::Preload(U"back");
 
 	FontAsset::Register(U"font", 30);
 	FontAsset::Preload(U"font");
+
 
 	MusicManager::playMusicGame(musicpath);
 
@@ -30,12 +36,16 @@ Game::~Game() {
 void Game::update() {
 	gameEndCheck();
 	notes->update();
+	characterm->update();
 	enemy->update();
 }
+
 void Game::draw() {
-	//”wŒi‰æ‘œ•`‰æ
+	//èƒŒæ™¯ç”»åƒæç”»
 	TextureAsset(U"back").draw();
 	notes->draw();
+	characterm->draw();
+}
 	enemy->draw();
 }
 
@@ -49,7 +59,8 @@ JUDGE::JudgeCount* Game::getJudgeCount(void) {
 	return notes->getJudgeCount();
 }
 void Game::gameEndCheck(void) {
-	if (MusicManager::musicEndCheck() || clearflag == false) {//‹È‚ªI‚í‚Á‚Ä‚¢‚é@or ƒQ[ƒ€¸”s‚µ‚Ä‚¢‚é
-		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//ƒV[ƒ“ˆÚs
+	if (MusicManager::musicEndCheck() || clearflag == false) {//æ›²ãŒçµ‚ã‚ã£ã¦ã„ã‚‹ã€€or ã‚²ãƒ¼ãƒ å¤±æ•—ã—ã¦ã„ã‚‹
+		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//ã‚·ãƒ¼ãƒ³ç§»è¡Œ
 	}
 }
+
