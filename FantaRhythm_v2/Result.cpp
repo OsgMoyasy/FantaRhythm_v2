@@ -1,9 +1,9 @@
 #include "Result.h"
 
-Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
-	judgecount = judgecnt;
-	totaldamage = totaldmg;
-	clearflag = cflag;
+Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool clearflag) {
+	this->judgecnt = judgecnt;
+	this->totaldmg = totaldmg;
+	this->clearflag = clearflag;
 
 	framecnt = 0;
 	alphaBack = 0;
@@ -17,7 +17,7 @@ Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag) {
 		TextureAsset::Register(U"back", U"resources/images/back/BackScreen.jpg");
 		stateUpdate = &Result::successUpdate;
 		stateDraw = &Result::successDraw;
-		int score = calcScore(judgecount);
+		int score = calcScore(this->judgecnt);
 		scoreStr = Format(score);
 		scoreDraw = U"               ";
 	}
@@ -63,10 +63,10 @@ void Result::successUpdate(void) {
 void Result::successDraw(void) {
 	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
 	FontAsset(U"subfont")(U"Score   ::"+ scoreDraw).draw(Window::Width() / 2 - 100, 150,Color(0x000000));
-	FontAsset(U"subfont")(U"Perfect ::" + Format(judgecount.cnt[JUDGE::PERFECT])).draw(Window::Width() / 2 - 100, 190, Color(0x000000));
-	FontAsset(U"subfont")(U"Great   ::" + Format(judgecount.cnt[JUDGE::GREAT])).draw(Window::Width() / 2 - 100, 220, Color(0x000000));
-	FontAsset(U"subfont")(U"Good    ::" + Format(judgecount.cnt[JUDGE::GOOD])).draw(Window::Width() / 2 - 100, 260, Color(0x000000));
-	FontAsset(U"subfont")(U"Bad     ::" + Format(judgecount.cnt[JUDGE::BAD])).draw(Window::Width() / 2 - 100, 300, Color(0x000000));
+	FontAsset(U"subfont")(U"Perfect ::" + Format(this->judgecnt.cnt[JUDGE::PERFECT])).draw(Window::Width() / 2 - 100, 190, Color(0x000000));
+	FontAsset(U"subfont")(U"Great   ::" + Format(this->judgecnt.cnt[JUDGE::GREAT])).draw(Window::Width() / 2 - 100, 220, Color(0x000000));
+	FontAsset(U"subfont")(U"Good    ::" + Format(this->judgecnt.cnt[JUDGE::GOOD])).draw(Window::Width() / 2 - 100, 260, Color(0x000000));
+	FontAsset(U"subfont")(U"Bad     ::" + Format(this->judgecnt.cnt[JUDGE::BAD])).draw(Window::Width() / 2 - 100, 300, Color(0x000000));
 }
 
 void Result::scoreEffect(void) {
