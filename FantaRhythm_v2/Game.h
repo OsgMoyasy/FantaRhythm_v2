@@ -3,17 +3,18 @@
 #include "SceneManager.h"
 #include "NotesManager.h"
 #include "Observer.h"
+#include "CharacterSet.h"
+#include "FantaRhythm_v2.h"
 #include "Enemy.h"
 #include "SceneManager.h"
 #include "MusicManager.h"
-#include "Judge.h"
 
 
 class Game : public Scene {
 private:
 	String musicpath, difpath;
 	class NotesManager *notes;
-	class CharacterManager* character;
+	class CharacterSet* characterm;
 	class NotesSubject* subject;
 	class Enemy* enemy;
 
