@@ -1,5 +1,4 @@
 #pragma once
-#include "FantaRhythm_v2.h"
 #include "Scene.h"
 #include "Judge.h"
 #include <Siv3D.hpp>
@@ -7,14 +6,14 @@
 
 class Result : public Scene {
 public:
-	Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool cflag);
+	Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool clearflag);
 	~Result(void);
 	void update(void);
 	void draw(void);
 
 private:
-	int totaldamage;
-	JUDGE::JudgeCount judgecount;
+	int totaldmg;
+	JUDGE::JudgeCount judgecnt;
 	bool clearflag;
 
 	int framecnt;
@@ -33,7 +32,7 @@ private:
 	String scoreDraw;//実際に描画するスコア
 
 	void scoreEffect(void); //スコアを0~9と順番に変わって下位の桁から確定させるようにする
-	int calcScore(JUDGE::JudgeCount &jc);//最終的なスコア計算
+	int calcScore(JUDGE::JudgeCount &judgecnt);//最終的なスコア計算
 	void successUpdate(void);
 	void successDraw(void);
 
