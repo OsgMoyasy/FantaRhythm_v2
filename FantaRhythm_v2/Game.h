@@ -3,11 +3,10 @@
 #include "SceneManager.h"
 #include "NotesManager.h"
 #include "Observer.h"
+#include "CharacterSet.h"
 #include "Enemy.h"
-#include "SceneManager.h"
 #include "MusicManager.h"
 #include "Judge.h"
-
 
 class Game : public Scene {
 private:
@@ -15,9 +14,6 @@ private:
 	class NotesManager *notes;
 	class CharacterManager* character;
 	class NotesSubject* subject;
-	class Enemy* enemy;
-
-	bool clearflag;
 
 public:
 	
@@ -27,9 +23,5 @@ public:
 
 	void update(void);
 	void draw(void);
-	bool getClearFlag(void);
-	int getTotalDamage(void);
-	JUDGE::JudgeCount* getJudgeCount(void);
-	void gameEndCheck(void);
 
 };

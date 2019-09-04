@@ -1,12 +1,6 @@
 #pragma once
-# include <Siv3D.hpp> // OpenSiv3D v0.3.2
+#include "FantaRhythm_v2.h"
 #include "Scene.h"
-#include "Title.h"
-#include "SelectMusic.h"
-#include "Game.h"
-#include "Result.h"
-#include "NotesManager.h"
-#include "Judge.h"
 
 class SceneManager {
 public:
@@ -14,7 +8,6 @@ public:
 		SCENE_TITLE,
 		SCENE_SELECTMUSIC,
 		SCENE_GAME,
-		SCENE_RESULT,
 		SCENE_NONE
 	};
 	SceneManager() = delete;
