@@ -1,5 +1,5 @@
 #pragma once
-#include <Siv3D.hpp>
+#include "FantaRhythm_v2.h"
 #include "Scene.h"
 class Title : public Scene{
 public:

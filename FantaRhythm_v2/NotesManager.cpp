@@ -1,7 +1,6 @@
 #include "NotesManager.h"
 
 
-
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
@@ -9,18 +8,18 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Preload(U"longef");
 
 
-	CSVData csv;//è­œé¢ã®å–å¾—ã€€å¤šæ¬¡å…ƒé…åˆ—ã§ç®¡ç† 0 åˆ¤å®šæ™‚é–“(ms) 1 é•·ã•ï¼Ÿ 2 æµã™ãƒ¬ãƒ¼ãƒ³[0-3]
+	CSVData csv;//•ˆ–Ê‚Ìæ“¾@‘½ŸŒ³”z—ñ‚ÅŠÇ— 0 ”»’èŠÔ(ms) 1 ’·‚³H 2 —¬‚·ƒŒ[ƒ“[0-3]
 	Print << difpath;
 
-	subject = sub;//ã‚µãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç™»éŒ²
+	subject = sub;
 
-	csv.load(difpath);//è­œé¢ã®ãƒ­ãƒ¼ãƒ‰
+	csv.load(difpath);//•ˆ–Ê‚Ìƒ[ƒh
 	NotesManager::Notes note;
-	for (int row = 0; row < csv.rows(); row++) {
-		note.time = csv.get<int>(row, 0);
-		note.longtime = note.time + csv.get<int>(row, 1);
-		int lane = csv.get<int>(row, 2);
-		switch (csv.get<int>(row, 3)) {
+	for (int j = 0; j < csv.rows(); j++) {
+		int lane = csv.get<int>(j, 2);
+		note.time = csv.get<int>(j, 0);
+		note.longtime = note.time + csv.get<int>(j, 1);
+		switch (csv.get<int>(j, 3)) {
 			case 0:
 				note.type = NORMAL;
 				break;
@@ -32,40 +31,33 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		notelist[lane].push_back(note);
 	}
 
-	note.type = SENTINEL;//ç•ªå…µã®è¿½åŠ 
+	note.type = SENTINEL;
 	note.time = 0;
 	note.longtime = 0;
 	note.display = false;
 
-	for (int i = 0; i < JUDGE::TYPE::TYPE_SIZE; i++) {
-		judgecount.cnt[i] = 0;
-	}
-
-	for (int lane = 0; lane < LANESIZE; lane++) {//ãƒ¬ãƒ¼ãƒ³ã”ã¨ã«åˆ°ç€æ™‚é–“ã‚’æ ¼ç´
-		notelist[lane].push_back(note);//ç•ªå…µã®è¨­ç½®
-		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//ãƒã‚§ãƒƒã‚¯ç”¨ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿åˆæœŸ
+	for (int lane = 0; lane < LANESIZE; lane++) {//ƒŒ[ƒ“‚²‚Æ‚É“’…ŠÔ‚ğŠi”[
+		notelist[lane].push_back(note);//”Ô•º‚Ìİ’u
+		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//ƒ`ƒFƒbƒN—p‚ÌƒCƒeƒŒ[ƒ^‰Šú
 		longflag[lane] = false;
 	}
 
-	//æç”»é–¢ä¿‚ã®å¤‰æ•°ã®åˆæœŸåŒ–
-	//Xåº§æ¨™
-	int Center = Window::Width() / 2;//ãƒ¬ãƒ¼ãƒ³ç¾¤ã®ä¸­å¿ƒ
-	int StartBetween = 80;//ä¸Šç«¯ã§ã®ãƒ¬ãƒ¼ãƒ³é–“ã®è·é›¢
-	int JudgeBetween = 140;//åˆ¤å®šç·šã§ã®ãƒ¬ãƒ¼ãƒ³é–“ã®è·é›¢
+	//•`‰æŠÖŒW‚Ì•Ï”‚Ì‰Šú‰»
+	//XÀ•W
+	int Center = Window::Width() / 2;//ƒŒ[ƒ“ŒQ‚Ì’†S
+	int StartBetween = 80;//ã’[‚Å‚ÌƒŒ[ƒ“ŠÔ‚Ì‹——£
+	int JudgeBetween = 140;//”»’èü‚Å‚ÌƒŒ[ƒ“ŠÔ‚Ì‹——£
 	for (int i = 0;i < LANESIZE;i++) {
 		laneStartX[i] = Center + (int)((i - (LANESIZE - 1) / 2.0) * StartBetween);
 		laneJudgeX[i] = Center + (int)((i - (LANESIZE - 1) / 2.0) * JudgeBetween);
 	}
-	//Yåº§æ¨™
+	//YÀ•W
 	laneStartY = 100;
 	laneJudgeY = 650;
-	laneGoalY = 730;//(ç”»é¢Yåº§æ¨™é™ç•Œ + 10)
-	//é€Ÿã•
+	laneGoalY = 730;//(‰æ–ÊYÀ•WŒÀŠE + 10)
+	//‘¬‚³
 	notespeed = 1.0;
 	timeRequired = 1500 / notespeed;
-	//å°ç¯€ç·š
-	barBetween = 364;
-	barStart = 114;
 
 	notewidth = TextureAsset(U"note").width();
 }
@@ -82,7 +74,7 @@ void NotesManager::update(void)
 }
 
 void NotesManager::plusItr(noteitr& itr) {
-	if (itr->type != SENTINEL)//ç•ªå…µã‹ã©ã†ã‹åˆ¤å®š
+	if (itr->type != SENTINEL)//”Ô•º‚©‚Ç‚¤‚©”»’è
 		itr++;
 }
 
@@ -112,9 +104,11 @@ void NotesManager::controlJudge(void) {
 	}
 }
 void NotesManager::judgeNormal(int lane) {
+	static const int bad = 200;//”»’è‚ÌÅ‘å”ÍˆÍ[ms]€2
+	static const int good = 100;//GOOD”»’è”ÍˆÍ[ms]€2
+	static const int great = 25;//GREAT”»’è”ÍˆÍ[ms]€2
 	int checktime = abs(nowTime - checkitr[lane]->time);
-  
-	if (down[lane] && checktime <= bad) {//æŠ¼ã•ã‚Œã¦ã‚‹ã‹ã¤åˆ¤å®šæ™‚é–“å†…ãªã‚‰åˆ¤å®šå‡¦ç†
+	if (down[lane] && checktime <= bad) {//‰Ÿ‚³‚ê‚Ä‚é‚©‚Â”»’èŠÔ“à‚È‚ç”»’èˆ—
 		if (checktime <= great) {//GREAT
 			setEvent(Massage::UPATTACK, lane);
 		}
@@ -127,101 +121,57 @@ void NotesManager::judgeNormal(int lane) {
 		checkitr[lane]->display = false;
 		plusItr(checkitr[lane]);
 	}
-	else if (nowTime >= checkitr[lane]->time + bad) {//æŠ¼ã•ã‚Œã¦ãªã„ã¾ã¾çµ‚äº†æ™‚
+	else if (nowTime >= checkitr[lane]->time + bad) {//‰Ÿ‚³‚ê‚Ä‚È‚¢‚Ü‚ÜI—¹
 		setEvent(Massage::SMALLDAMAGE, lane);
 		plusItr(checkitr[lane]);
-
 	}
 }
 void NotesManager::judgeLong(int lane) {
+	static const int good = 150;//”»’è‚ÌÅ‘å”ÍˆÍ
 	int checktime = abs(nowTime - checkitr[lane]->time);
 
-	if (down[lane] && checktime <= GOOD_RANGE) {//æŠ¼ã•ã‚ŒãŸã‚‰ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+	if (down[lane] && checktime <= good) {//‰Ÿ‚³‚ê‚½‚çƒtƒ‰ƒO‚ğ—§‚Ä‚é
 		longflag[lane] = true;
 	}
-
-	if (longflag[lane]) {//é›¢ã™ã¨ãã®å‡¦ç†
-		if (press[lane]) {//ãƒœã‚¿ãƒ³æŠ¼ä¸‹ä¸­
-			checkitr[lane]->time = (int)(nowTime);//åˆ¤å®šä½ç½®ä»¥é™ã§ä¸‹å´ã‚’æ­¢ã‚ã‚‹
-			if (nowTime >= checkitr[lane]->longtime) {//æŠ¼ã•ã‚Œã¦ã„ã‚‹ã¾ã¾åˆ¤å®šä½ç½®ã¸æ¥ãŸæ™‚
+	if (longflag[lane]) {
+		if (press[lane]) {//ƒ{ƒ^ƒ“‰Ÿ‰º’†
+			checkitr[lane]->time = (int)(nowTime);//”»’èˆÊ’uˆÈ~‚Å~‚ß‚é
+			if (nowTime >= checkitr[lane]->longtime) {//‰Ÿ‚³‚ê‚Ä‚¢‚é‚Ü‚Ü”»’èˆÊ’u‚Ö—ˆ‚½
 				checkitr[lane]->time = checkitr[lane]->longtime;
-				if (nowTime >= checkitr[lane]->longtime + good) {//æŠ¼ã•ã‚Œã¦ã„ã‚‹é–“ã®åˆ¤å®šæ™‚é–“ã‚‚éããŸã¨ã
+				if (nowTime >= checkitr[lane]->longtime + good) {//‰Ÿ‚³‚ê‚Ä‚¢‚éŠÔ‚Ì”»’èŠÔ‚à‰ß‚¬‚½‚Æ‚«
 					setEvent(Massage::SMALLDAMAGE, lane);
 					longflag[lane] = false;
 					plusItr(checkitr[lane]);
 				}
 			}
 		}
-		else {//é›¢ã—ãŸ
+		else {//—£‚µ‚½
 			if ((abs(nowTime - checkitr[lane]->longtime)) <= good) {
 				setEvent(Massage::UPATTACK, lane);
-				checkitr[lane]->display = false;//æˆåŠŸ
+				checkitr[lane]->display = false;//¬Œ÷
 			}
-			else {//å¤±æ•—
+			else {//¸”s
 				setEvent(Massage::SMALLDAMAGE, lane);
 			}
 			plusItr(checkitr[lane]);
 			longflag[lane] = false;
 		}
 	}
-	else if (nowTime >= checkitr[lane]->longtime) {//æŠ¼ã•ã‚Œã¦ã„ãªã„ã¾ã¾çµ‚äº†æ™‚
+	else if (nowTime >= checkitr[lane]->longtime) {//‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢‚Ü‚ÜI—¹
 		setEvent(Massage::SMALLDAMAGE, lane);
 		plusItr(checkitr[lane]);
 		longflag[lane] = false;
-
 	}
 }
-
-void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
-	judgeEvent(type, lane);
-	longflag[lane] = false;//åˆ¤å®šã—ãŸã®ã§é•·æŠ¼ã—ã®çŠ¶æ…‹ã‚’åˆæœŸåŒ–
-}
-
-void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
-	checkitr[lane]->display = false;//ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤è¡¨ç¤ºã‚ªãƒ•
-	plusItr(checkitr[lane]);//åˆ¤å®šå¯¾è±¡ã‚’æ¬¡ã«é€²ã‚ã‚‹
-	judgecount.cnt[type]++;//åˆ¤å®šã‚’ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
-	if(type == JUDGE::BAD){
-		setEvent(Massage::SMALLDAMAGE, lane);
-	}
-	else {
-		setEvent(Massage::ATTACK, lane);
-	}
-}
-JUDGE::TYPE NotesManager::judgeType(int checktime) {//åˆ¤å®šã®ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™
-	if (checktime <= PERFECT_RANGE) {//PERFECT
-		return JUDGE::PERFECT;
-	}
-	else if (checktime <= GREAT_RANGE) {//GREAT
-		return JUDGE::GREAT;
-	}
-	else if (checktime <= GOOD_RANGE) {//GOOD
-		return JUDGE::GOOD;
-	}
-	else {//BAD
-		return JUDGE::BAD;
-	}
-}
-
-JUDGE::JudgeCount* NotesManager::getJudgeCount() {
-	return &judgecount;
-}
-
 
 
 
 void NotesManager::draw(void){
-	//ãƒ‡ãƒãƒƒã‚°ç”¨
-	for (int i = 0; i < 4; i++) {
-		Print << judgecount.cnt[i];
-	}
-	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//åˆ¤å®šç·šã®æç”»
-	displayBarline();
-
+	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);
 	for(int i = 0; i < LANESIZE; i++){
-		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//ãƒ¬ãƒ¼ãƒ³ã®æç”»
+		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);
 		for (noteitr itr = displayitr[i]; itr != notelist[i].end(); itr++) {
-			if (nowTime < itr->time - timeRequired)//æç”»å‰ãªã‚‰æç”»æ‰“ã¡åˆ‡ã‚Š
+			if (nowTime < itr->time - timeRequired)//•`‰æ‘O‚È‚ç•`‰æ‘Å‚¿Ø‚è
 				break;
 			if (itr->display == false)
 				continue;
@@ -248,8 +198,8 @@ double NotesManager::progressByAngle(double progressRate) {
 	using namespace std;
 	constexpr double PI = 3.1415;
 	constexpr double EYE_HEIGHT = 1.0;
-	constexpr double START_ANGLE = 0.4 * PI;//å˜ä½ã¯ãƒ©ã‚¸ã‚¢ãƒ³(0.5ä»¥ä¸Šã‚’è¨­å®šã—ã¦ã¯ãªã‚‰ãªã„)
-	constexpr double JUDGE_ANGLE = 0.1 * PI;//å˜ä½ã¯ãƒ©ã‚¸ã‚¢ãƒ³
+	constexpr double START_ANGLE = 0.4 * PI;//’PˆÊ‚Íƒ‰ƒWƒAƒ“(0.5ˆÈã‚ğİ’è‚µ‚Ä‚Í‚È‚ç‚È‚¢)
+	constexpr double JUDGE_ANGLE = 0.1 * PI;//’PˆÊ‚Íƒ‰ƒWƒAƒ“
 	const static double START_RANGE = EYE_HEIGHT * tan(START_ANGLE);
 	const static double JUDGE_RANGE = EYE_HEIGHT * tan(JUDGE_ANGLE);
 	double nowRange = START_RANGE - (START_RANGE - JUDGE_RANGE) * progressRate;
@@ -261,23 +211,8 @@ double NotesManager::getCurrentPosition(int startPos, int endPos, double progres
 }
 
 double NotesManager::getScale(double currenty) {
-	double temp = currenty / (laneJudgeY - 100);//å°‘ã—æ—©ã‚ã«ç¸®å°ç‡ã‚’ã‚‚ã¨ã«æˆ»ã™ãŸã‚å¼•ã„ã¦ã¿ã¦ã„ã‚‹
+	double temp = currenty / (laneJudgeY - 100);//­‚µ‘‚ß‚Ék¬—¦‚ğ‚à‚Æ‚É–ß‚·‚½‚ßˆø‚¢‚Ä‚İ‚Ä‚¢‚é
 	return  temp;
-}
-
-void NotesManager::displayBarline() {
-	if (barStart < nowTime) {
-		barStart += barBetween;
-	}
-
-	//å°ç¯€ç·šã®æç”»
-	for (int i = barStart;i < nowTime + timeRequired;i += barBetween) {
-		double progressRate = progressByAngle(getProgress(i));
-		double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
-		double currentX1 = getCurrentPosition(laneStartX[0], laneJudgeX[0], progressRate);
-		double currentX2 = getCurrentPosition(laneStartX[3], laneJudgeX[3], progressRate);
-		Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
-	}
 }
 
 void NotesManager::displayNormal(int lane, int time) {
@@ -291,31 +226,31 @@ void NotesManager::displayNormal(int lane, int time) {
 	TextureAsset(U"note").scaled(getScale(currentY)).drawAt(currentX, currentY);
 }
 void NotesManager::displayLong(int lane, int time, int longtime) {
-	//æç”»ä½ç½®ã®è¨ˆç®—
-	//ä¸Šå´
+	//•`‰æˆÊ’u‚ÌŒvZ
+	//ã‘¤
 	double progressRateEnd = progressByAngle(getProgress(longtime));
-	double currentEndY = getCurrentPosition(laneStartY, laneJudgeY, progressRateEnd);//æç”»ä½ç½®Yåº§æ¨™ã‚’è¨ˆç®—
-	if (currentEndY > laneGoalY) {//æç”»ãŒçµ‚äº†ã—ã¦ã„ã‚‹ãªã‚‰
+	double currentEndY = getCurrentPosition(laneStartY, laneJudgeY, progressRateEnd);//•`‰æˆÊ’uYÀ•W‚ğŒvZ
+	if (currentEndY > laneGoalY) {//•`‰æ‚ªI—¹‚µ‚Ä‚¢‚é‚È‚ç
 		plusItr(displayitr[lane]);
 		return;
 	}
-	double currentEndX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateEnd);//æç”»ä½ç½®Xåº§æ¨™ã‚’è¨ˆç®—
-	if (currentEndY < laneStartY) {//ä¸Šå´ãŒã¾ã æç”»ä½ç½®ã«åˆ°é”ã—ã¦ã„ãªã„ãªã‚‰
+	double currentEndX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateEnd);//•`‰æˆÊ’uXÀ•W‚ğŒvZ
+	if (currentEndY < laneStartY) {//ã‘¤‚ª‚Ü‚¾•`‰æˆÊ’u‚É“’B‚µ‚Ä‚¢‚È‚¢‚È‚ç
 		currentEndX = laneStartX[lane];
-		currentEndY = laneStartY;//åˆæœŸä½ç½®ã¸å›ºå®š
+		currentEndY = laneStartY;//‰ŠúˆÊ’u‚ÖŒÅ’è
 	}
 
-	//ä¸‹å´
+	//‰º‘¤
 	double progressRateBgn = progressByAngle(getProgress(time));
-	double currentBgnY = getCurrentPosition(laneStartY, laneJudgeY, progressRateBgn);//æç”»ä½ç½®Yåº§æ¨™ã‚’è¨ˆç®—
-	double currentBgnX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateBgn);//æç”»ä½ç½®Xåº§æ¨™ã‚’è¨ˆç®—
+	double currentBgnY = getCurrentPosition(laneStartY, laneJudgeY, progressRateBgn);//•`‰æˆÊ’uYÀ•W‚ğŒvZ
+	double currentBgnX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateBgn);//•`‰æˆÊ’uXÀ•W‚ğŒvZ
 
-	//æ‹¡å¤§ç‡è¨ˆç®—
+	//Šg‘å—¦ŒvZ
 	double scaleEnd = getScale(currentEndY);
 	double scaleBgn = getScale(currentBgnY);
 
-	//æç”»å‡¦ç†
-	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
+	//•`‰æˆ—
+	for (int linex = 0; linex <= 25; linex++) {
 		Line(currentEndX + linex * scaleEnd, currentEndY, currentBgnX + linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
 		Line(currentEndX - linex * scaleEnd, currentEndY, currentBgnX - linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
 	}
@@ -325,6 +260,6 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 }
 
 void NotesManager::setEvent(Massage msg, int val) {
-	subject->setEvent(msg, val);//ã‚¤ãƒ™ãƒ³ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚»ãƒƒãƒˆ
-	subject->notifyObservers();//ã‚¤ãƒ™ãƒ³ãƒˆèµ·å‹•
+	subject->setEvent(msg, val);//ƒCƒxƒ“ƒgƒIƒuƒWƒFƒNƒgƒZƒbƒg
+	subject->notifyObservers();//ƒCƒxƒ“ƒg‹N“®
 }

@@ -1,6 +1,8 @@
+#include "FantaRhythm_v2.h"
 #include "SelectMusic.h"
 #include "SceneManager.h"
 
+#define PI 3.141592
 
 #define DEFAULT_ANGLE 120
 #define FORWARD_ANGLE 30
@@ -159,8 +161,8 @@ void SelectMusic::drawMusic(void) {
 	for (int i = 0; i < 5; i++) {
 		//À•W‚ÌŽw’è
 		int angle = DEFAULT_ANGLE + FORWARD_ANGLE * i + musicrotation;
-		int x = (int)(1800 + cos((angle)* Math::Pi / 180.0) * 1000);
-		int y = (int)((Window::Height() / 2) - sin((angle)* Math::Pi / 180.0) * 500);
+		int x = (int)(1800 + cos((angle)* PI / 180.0) * 1000);
+		int y = (int)((Window::Height() / 2) - sin((angle)* PI / 180.0) * 500);
 		//•`‰æ
 		TextureAsset(U"title").drawAt(x, y);
 		FontAsset(U"font")(FileSystem::BaseName(musicarray[(musiccursor - 2 + i + musiccount) % musiccount])).drawAt(x, y, Color(0, 0, 0));
@@ -171,8 +173,8 @@ void SelectMusic::drawDifficulty(void) {
 	for (int i = 0; i < 5; i++) {
 		//À•W‚ÌŽw’è
 		int angle = DEFAULT_ANGLE + FORWARD_ANGLE * i + difrotation;
-		int x = (int)(1800 + cos((angle)* Math::Pi / 180.0) * 1000);
-		int y = (int)((Window::Height() / 2) - sin((angle)* Math::Pi / 180.0) * 500);
+		int x = (int)(1800 + cos((angle)* PI / 180.0) * 1000);
+		int y = (int)((Window::Height() / 2) - sin((angle)* PI / 180.0) * 500);
 		//•`‰æ
 		TextureAsset(U"title").drawAt(x, y);
 		FontAsset(U"font")(FileSystem::BaseName(difarray[(difcursor - 2 + i + difcount) % difcount])).drawAt(x, y, Color(0, 0, 0));
