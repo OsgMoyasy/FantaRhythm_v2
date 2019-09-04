@@ -19,9 +19,13 @@ public:
 	void draw();
 	void update();
 	void funcEvent(Obj obj);
+	void TotalhpDraw();
 
 private:
-
+	int totalhp;
+	int starthp;	//ダメージを受けた時に増やす値
+	int fixedhp;
+	int damage;     //仮のダメージ
 	class Character* cha[CHANUMBER];
 
 };

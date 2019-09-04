@@ -47,3 +47,4 @@ void Soldier::getEvent(Massage msg) {
 		break;
 	}
 }
+
