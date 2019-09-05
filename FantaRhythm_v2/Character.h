@@ -2,10 +2,11 @@
 #include <math.h>
 #include "Observer.h"
 #include <Siv3D.hpp>
+#include "GameEffect.h"
 
 class Character {
 public:
-	Character(CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject);
+	Character(const CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject,const FilePath& effectname);
 	~Character();
 	void chaDraw();
 	virtual void draw()=0;
@@ -18,9 +19,12 @@ public:
 	int getArgs1();
 	int getArgs2();
 	void setAttackEvent(int attack);
+	void playEffect(void);
+	void drawEffect(void);
 
 private:
-	CharacterSubject* csubject;
+	class CharacterSubject* csubject;
+	class FlipEffect* flipeffect;
 	int chnumber;	//キャラの番号
 	String name;	//キャラの名前
 	int hp;			//ヒットポイント
@@ -29,5 +33,7 @@ private:
 	double initx, inity;//基本位置
 	double x, y;//現在位置
 	int framecnt;//上下移動に使うフレームカウント
+	
+	
 	
 };

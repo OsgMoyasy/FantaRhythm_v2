@@ -3,9 +3,11 @@
 
 constexpr int moverange = 70;		//振幅 上下の長さは*2
 constexpr int movefreq = 4 * 60;	//上下する周期	左の値を秒指定
+constexpr int effectsize = 200;
 
-Character::Character(CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject) {
+Character::Character(const CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject, const FilePath& effectname) {
 	this->csubject = csubject;
+	flipeffect = new FlipEffect(U"resources/images/effect/"+ effectname +U".png", effectsize, effectsize, 0, 0);
 	chnumber = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
 	hp = csv.get<int>(row, 3);
@@ -53,6 +55,15 @@ int Character::getArgs2() {
 	return args2;
 }
 void Character::setAttackEvent(int attack) {
+	playEffect();
 	csubject->setEvent(attack);
 	csubject->notifyObservers();//イベント起動
+}
+
+void Character::playEffect(void) {
+	flipeffect->play(x - effectsize /2, y);
+}
+
+void Character::drawEffect(void) {
+	flipeffect->draw();
 }
