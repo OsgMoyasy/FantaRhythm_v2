@@ -1,7 +1,7 @@
 #include "Soldier.h"
 #define CHARGEMAX 10
 
-Soldier::Soldier(CSVData &csv, double ix, double iy, int row) :Character(csv, ix, iy, row) {
+Soldier::Soldier(CSVData& csv, double ix, double iy, int row, CharacterSubject* csubject) :Character(csv, ix, iy, row, csubject) {
 	chargeClear();
 	chargedamage = 0;
 }
@@ -37,12 +37,11 @@ void Soldier::getEvent(Massage msg) {
 	switch (msg) {
 	case Massage::UPATTACK:
 		charge();
+		setAttackEvent(getPower());
 		break;
 	case Massage::DOWNATTACK:
 		chargeAttack();
 		break;
-	case Massage::SMALLDAMAGE:
-	case Massage::BIGDAMAGE:
 		chargeClear();
 		break;
 	}

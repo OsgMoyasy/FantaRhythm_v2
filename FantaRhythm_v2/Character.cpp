@@ -5,8 +5,8 @@
 constexpr int moverange = 150;		//振幅 上下の長さは*2
 constexpr int movefreq = 4 * 60;	//上下する周期	左の値を秒指定
 
-Character::Character(CSVData &csv , double ix, double iy,int row) {
-
+Character::Character(CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject) {
+	this->csubject = csubject;
 	chnumber = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
 	hp = csv.get<int>(row, 3);
@@ -52,4 +52,8 @@ int Character::getArgs1() {
 
 int Character::getArgs2() {
 	return args2;
+}
+void Character::setAttackEvent(int attack) {
+	csubject->setEvent(attack);
+	csubject->notifyObservers();//イベント起動
 }

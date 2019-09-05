@@ -4,7 +4,7 @@
 
 class Soldier :public Character {
 public:	
-	Soldier(CSVData &csv, double ix, double iy, int row);
+	Soldier(CSVData &csv, double ix, double iy, int row, CharacterSubject* csubject);
 	~Soldier();
 	void update();
 	void draw();

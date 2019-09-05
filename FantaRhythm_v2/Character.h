@@ -5,7 +5,7 @@
 
 class Character {
 public:
-	Character(CSVData &csv , double ix, double iy,int row);
+	Character(CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject);
 	~Character();
 	void chaDraw();
 	virtual void draw()=0;
@@ -17,8 +17,10 @@ public:
 	int getPower();
 	int getArgs1();
 	int getArgs2();
+	void setAttackEvent(int attack);
 
 private:
+	CharacterSubject* csubject;
 	int chnumber;	//キャラの番号
 	String name;	//キャラの名前
 	int hp;			//ヒットポイント
@@ -27,4 +29,5 @@ private:
 	double initx, inity;//基本位置
 	double x, y;//現在位置
 	int framecnt;//上下移動に使うフレームカウント
+	
 };

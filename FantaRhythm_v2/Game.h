@@ -5,7 +5,6 @@
 #include "Observer.h"
 #include "CharacterSet.h"
 #include "FantaRhythm_v2.h"
-#include "Enemy.h"
 #include "SceneManager.h"
 #include "MusicManager.h"
 
@@ -16,7 +15,7 @@ private:
 	class NotesManager *notes;
 	class CharacterSet* characterm;
 	class NotesSubject* subject;
-	class Enemy* enemy;
+	
 
 	bool clearflag;
 

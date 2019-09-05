@@ -1,7 +1,12 @@
 #include"CharacterSet.h"
 #include "Soldier.h"
 
-CharacterSet::CharacterSet(int save[]) {
+CharacterSet::CharacterSet(int save[], const String& musicpath) {
+	csubject = new CharacterSubject();
+	
+	enemy = new Enemy(musicpath);
+	csubject->addObserver(enemy);
+
 	CSVData csv;
 	csv.load(U"resources/charadata.csv");
 	totalhp = 0;
@@ -11,7 +16,7 @@ CharacterSet::CharacterSet(int save[]) {
 		
 		switch (csv.get<int>(save[i], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
-			cha[i] = new Soldier(csv, initx, inity, i);
+			cha[i] = new Soldier(csv, initx, inity, i, csubject);
 			break;
 		default:
 			//エラー
@@ -34,23 +39,26 @@ CharacterSet::~CharacterSet() {
 	}
 }
 
+void CharacterSet::update() {
+	for (int i = 0; i < CHANUMBER; i++) {
+		cha[i]->update();
+	}
+	enemy->update();
+}
+
 void CharacterSet::draw() {
 	for (int i = 0; i < CHANUMBER; i++) {
 		cha[i]->draw();
 		TotalhpDraw();
 	}
+	enemy->draw();
 }
 
-void CharacterSet::update() {
-	for (int i = 0; i < CHANUMBER; i++) {
-		cha[i]->update();
 
-	}
-}
 
 void CharacterSet::funcEvent(Obj obj) {//イベントを通達
-	cha[obj.lane]->getEvent(obj.msg);
-	if (obj.msg == SMALLDAMAGE) {
+	cha[obj.val]->getEvent(obj.msg);
+	if (obj.msg == DAMAGE) {
 		starthp += damage;
 		totalhp -= damage;
 	}
@@ -60,4 +68,8 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 void CharacterSet::TotalhpDraw() {		//総HP表示
 	Rect(800, 30, fixedhp, 40).draw(Palette::Red);
 	Rect(starthp, 30, totalhp, 40).draw(Palette::Green);
+}
+
+int CharacterSet::getTotalDamage(void) {
+	return enemy->getTotalDamage();
 }

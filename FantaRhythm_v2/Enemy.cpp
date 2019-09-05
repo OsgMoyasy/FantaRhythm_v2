@@ -3,6 +3,7 @@
 Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(100){
 	TextureAsset::Register(U"enemy", path + U"/enemy.png");
 	TextureAsset::Preload(U"enemy");
+	flipeffect = new FlipEffect(U"resources/images/magic.png", 200, 200, initx, inity);
 	x = initx;
 	y = inity;
 	framecnt = 0;
@@ -13,9 +14,13 @@ Enemy::~Enemy(){
 }
 void Enemy::update() {
 	moveUpDown();
+	
 }
 void Enemy::draw() {
+	Print << U"enemydmg" + Format(totaldmg);
 	TextureAsset(U"enemy").drawAt(x, y);
+	flipeffect->update();
+
 }
 void Enemy::addDamage(int dmg) {
 	totaldmg += dmg;
@@ -27,5 +32,10 @@ int Enemy::getTotalDamage() {
 void Enemy::moveUpDown() {
 	constexpr int movefreq = 240;
 	y = inity + sin(Math::TwoPi / movefreq * framecnt++) * 100;
-	
 } 
+
+void Enemy::funcEvent(Obj obj) {//ダメージを受けるイベント受取
+	addDamage(obj.val);
+
+	flipeffect->draw(x, y);
+}
