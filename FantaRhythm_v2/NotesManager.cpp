@@ -152,7 +152,7 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
 	plusItr(checkitr[lane]);//判定対象を次に進める
 	judgecount.cnt[type]++;//判定をカウントアップ
 	if(type == JUDGE::BAD){
-		setEvent(Massage::SMALLDAMAGE, lane);
+		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
 		setEvent(Massage::UPATTACK, lane);

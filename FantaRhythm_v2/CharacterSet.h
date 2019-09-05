@@ -29,6 +29,7 @@ private:
 	int damage;     //仮のダメージ
 	class Character* cha[CHANUMBER];
 	class Enemy* enemy;
+	class CharacterSubject* csubject;//キャラクター個々からイベントを受け取るために
 	
 
 };

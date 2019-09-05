@@ -6,13 +6,12 @@ enum Massage {//イベント名一覧　そこまで増えそうにないので一括管理
 	NONE,//ない場合
 	UPATTACK,//上ボタン攻撃
 	DOWNATTACK,//下ボタン攻撃
-	SMALLDAMAGE,//小ダメージ
-	BIGDAMAGE,//大ダメージ
+	DAMAGE,//小ダメージ
 };
 
 typedef struct _Obj {//イベント用オブジェクト　
 	Massage msg;//イベント名
-	int lane;
+	int val;
 }Obj;
 
 /*--------------------------------------------------------
@@ -23,7 +22,7 @@ typedef struct _Obj {//イベント用オブジェクト　
 class Observer{
 public:
 	//virtual ~Observer(void); 
-	virtual void funcEvent(Obj o) = 0;
+	virtual void funcEvent(Obj obj) = 0;
 
 	void setObject(class Subject* pSubject){//呼び出されるハンドラ Subject側から呼び出される
 		m_pSubject = pSubject;
@@ -78,7 +77,21 @@ public:
 		return o;
 	}
 	//イベントをセットする
-	void setEvent(Massage msg, int val) {
-		o = {msg,val};
+	void setEvent(Massage msg, int lane) {
+		o = {msg,lane};
+	}
+};
+
+class CharacterSubject : public Subject {
+private:
+	Obj o;
+public:
+	//イベント用のメッセージを返す
+	Obj getMassage() {
+		return o;
+	}
+	//イベントをセットする
+	void setEvent(int attack) {
+		o = { NONE, attack };
 	}
 };

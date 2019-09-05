@@ -15,6 +15,7 @@ void Enemy::update() {
 	moveUpDown();
 }
 void Enemy::draw() {
+	Print << U"enemydmg" + Format(totaldmg);
 	TextureAsset(U"enemy").drawAt(x, y);
 }
 void Enemy::addDamage(int dmg) {
@@ -29,3 +30,7 @@ void Enemy::moveUpDown() {
 	y = inity + sin(Math::TwoPi / movefreq * framecnt++) * 100;
 	
 } 
+
+void Enemy::funcEvent(Obj obj) {//ダメージを受けるイベント受取
+	addDamage(obj.val);
+}

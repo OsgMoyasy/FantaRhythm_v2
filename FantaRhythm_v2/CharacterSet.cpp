@@ -2,7 +2,10 @@
 #include "Soldier.h"
 
 CharacterSet::CharacterSet(int save[], const String& musicpath) {
+	csubject = new CharacterSubject();
+	
 	enemy = new Enemy(musicpath);
+	csubject->addObserver(enemy);
 
 	CSVData csv;
 	csv.load(U"resources/charadata.csv");
@@ -13,7 +16,7 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 		
 		switch (csv.get<int>(save[i], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
-			cha[i] = new Soldier(csv, initx, inity, i);
+			cha[i] = new Soldier(csv, initx, inity, i, csubject);
 			break;
 		default:
 			//エラー
@@ -54,8 +57,8 @@ void CharacterSet::draw() {
 
 
 void CharacterSet::funcEvent(Obj obj) {//イベントを通達
-	cha[obj.lane]->getEvent(obj.msg);
-	if (obj.msg == SMALLDAMAGE) {
+	cha[obj.val]->getEvent(obj.msg);
+	if (obj.msg == DAMAGE) {
 		starthp += damage;
 		totalhp -= damage;
 	}
