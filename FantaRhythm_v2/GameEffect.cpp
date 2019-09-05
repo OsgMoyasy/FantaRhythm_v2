@@ -76,13 +76,13 @@ void FlipEffect::setPos(int xDraw, int yDraw) {
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
 }
+void FlipEffect::play() {
+	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
+}
+void FlipEffect::play(int xDraw, int yDraw) {
+	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
+}
 void FlipEffect::draw() {
-	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
-}
-void FlipEffect::draw(int xDraw, int yDraw) {
-	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
-}
-void FlipEffect::update() {
 	effect.update();
 }
 

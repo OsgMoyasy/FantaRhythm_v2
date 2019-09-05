@@ -1,8 +1,7 @@
 #include"Character.h"
 #include"FantaRhythm_v2.h"
 
-#define PI 3.141592654
-constexpr int moverange = 150;		//U• ã‰º‚Ì’·‚³‚Í*2
+constexpr int moverange = 70;		//U• ã‰º‚Ì’·‚³‚Í*2
 constexpr int movefreq = 4 * 60;	//ã‰º‚·‚éüŠú	¶‚Ì’l‚ğ•bw’è
 
 Character::Character(CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject) {
@@ -30,7 +29,7 @@ void Character::chaDraw() {
 
 
 void Character::moveUpDown() {
-	y = inity + sin(PI * 2.0 / movefreq * framecnt++) * moverange;
+	y = inity + sin(Math::Pi * 2.0 / movefreq * framecnt++) * moverange;
 	x = initx;
 }
 

@@ -4,15 +4,15 @@ Game::Game(const String& music, const String& dif) {
 	musicpath = music;
 	difpath = dif;
 
-	subject = new NotesSubject();
+	notessubject = new NotesSubject();
 	
-	notes = new NotesManager(subject,difpath);
+	notes = new NotesManager(notessubject,difpath);
 	
 	
 	int save[4] = { 0,0,1,1 };//テスト用セーブデータ
 	characterm = new CharacterSet(save,musicpath);
 
-	subject->addObserver(characterm);//オブザーバーへ登録
+	notessubject->addObserver(characterm);//オブザーバーへ登録
 	
 	clearflag = true;//falseになればゲームオーバー
 	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");

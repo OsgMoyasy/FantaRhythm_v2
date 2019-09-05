@@ -3,14 +3,11 @@
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
-	TextureAsset::Register(U"longef", U"resources/images/items/longNortsEffect2.png");
-	TextureAsset::Preload(U"longef");
-
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
 
-	subject = sub;//サブジェクトの登録
+	notessubject = sub;//サブジェクトの登録
 
 	csv.load(difpath);//譜面のロード
 	NotesManager::Notes note;
@@ -296,6 +293,6 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 }
 
 void NotesManager::setEvent(Massage msg, int val) {
-	subject->setEvent(msg, val);//イベントオブジェクトセット
-	subject->notifyObservers();//イベント起動
+	notessubject->setEvent(msg, val);//イベントオブジェクトセット
+	notessubject->notifyObservers();//イベント起動
 }
