@@ -1,13 +1,11 @@
 #include "Enemy.h"
 
-constexpr double PI = 3.14;
-constexpr int initx = 50, inity = 100;
-
-Enemy::Enemy(String path) {
+Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(100){
 	TextureAsset::Register(U"enemy", path + U"/enemy.png");
 	TextureAsset::Preload(U"enemy");
-
-	cnt = 0;
+	x = initx;
+	y = inity;
+	framecnt = 0;
 	totaldmg = 0;
 }
 Enemy::~Enemy(){
@@ -27,6 +25,7 @@ int Enemy::getTotalDamage() {
 }
 
 void Enemy::moveUpDown() {
-	y = inity + sin(3.14 * 2 / 240 * cnt++) * 100;
-	x = initx;
+	constexpr int movefreq = 240;
+	y = inity + sin(Math::TwoPi / movefreq * framecnt++) * 100;
+	
 } 

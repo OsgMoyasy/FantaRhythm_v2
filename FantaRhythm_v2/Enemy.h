@@ -17,7 +17,8 @@ public:
 
 private:
 	void moveUpDown(void);
-	int cnt;
+	int framecnt;
 	int totaldmg;//“G‚É—^‚¦‚½‘ƒ_ƒ[ƒW
+	const int inity, initx;
 	int x, y;
 };
