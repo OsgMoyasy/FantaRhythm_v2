@@ -1,5 +1,5 @@
 #include "Soldier.h"
-#define CHARGEMAX 10
+constexpr int CHARGEMAX = 10;
 
 Soldier::Soldier(const CSVData& csv, double ix, double iy, int row, CharacterSubject* csubject) :Character(csv, ix, iy, row, csubject, U"sol") {
 	chargeClear();
