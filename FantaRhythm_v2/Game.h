@@ -14,14 +14,11 @@ private:
 	String musicpath, difpath;
 	class NotesManager *notes;
 	class CharacterSet* characterm;
-	class NotesSubject* subject;
+	class NotesSubject* notessubject;
 	
-
 	bool clearflag;
 
 public:
-	
-
 	Game(const String& music, const String& dif);
 	~Game();
 

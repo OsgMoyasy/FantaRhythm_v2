@@ -37,7 +37,7 @@ private:
 
 	int notewidth;
 	
-	class NotesSubject* subject;
+	class NotesSubject* notessubject;
 	
 	std::list<Notes> notelist[LANESIZE];
 	using noteitr = std::list<Notes>::iterator;

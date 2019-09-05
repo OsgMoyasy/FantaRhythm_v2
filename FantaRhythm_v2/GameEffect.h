@@ -37,9 +37,9 @@ public:
 	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw);
 	void setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight);	//画像をセット("画像パス",切り出しサイズ)
 	void setPos(int xDraw, int yDraw);	//描画位置をセット
-	void draw();						//再生開始
-	void draw(int xDraw, int yDraw);	//再生開始(描画位置)
-	void update();	//描画(フレーム毎に呼び出す必要あり)
+	void play();						//再生開始
+	void play(int xDraw, int yDraw);	//再生開始(描画位置)
+	void draw();	//描画(フレーム毎に呼び出す必要あり)
 private:
 	Effect effect;
 	Texture map;

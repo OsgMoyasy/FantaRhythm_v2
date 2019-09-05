@@ -19,7 +19,7 @@ void Enemy::update() {
 void Enemy::draw() {
 	Print << U"enemydmg" + Format(totaldmg);
 	TextureAsset(U"enemy").drawAt(x, y);
-	flipeffect->update();
+	flipeffect->draw();
 
 }
 void Enemy::addDamage(int dmg) {
@@ -37,5 +37,5 @@ void Enemy::moveUpDown() {
 void Enemy::funcEvent(Obj obj) {//ダメージを受けるイベント受取
 	addDamage(obj.val);
 
-	flipeffect->draw(x, y);
+	flipeffect->play(x, y);
 }
