@@ -2,6 +2,7 @@
 #include <Siv3D.hpp>
 #include <math.h>
 #include "Observer.h"
+#include "GameEffect.h"
 
 
 //長期的にみるならオブザーバーでやりとり
@@ -18,6 +19,7 @@ public:
 	void funcEvent(Obj obj);
 
 private:
+	FlipEffect* flipeffect;
 	void moveUpDown(void);
 	int framecnt;
 	int totaldmg;//敵に与えた総ダメージ
