@@ -5,8 +5,8 @@
 //ãƒ{ƒ^ƒ“‚Å‹|‚ð’~‚¦‚é(Å‘å5–{)
 //‰ºƒ{ƒ^ƒ“‚ÅŠm—¦UŒ‚
 
-Archer::Archer(CSVData & csv, double ix, double iy, int row, CharacterSubject * csubject) :Character(csv, ix, iy, row, csubject) {
-	arrowsClear();
+Archer::Archer(CharacterSubject* csubject,CSVData & csv, double ix, double iy, int row) :Character(csubject,csv, ix, iy, row ) {
+	arrowscount = 0;
 	arrowsdamage = 0;
 }
 
@@ -30,7 +30,9 @@ void Archer::arrowscharge() {
 }
 
 void Archer::arrowsClear() {
-	chargecount = 0;
+	if (arrowscount > 0) {
+		arrowscount -= 1;
+	}
 }
 
 void Archer::chargeAttack() {
@@ -45,7 +47,6 @@ void Archer::getEvent(Massage msg) {
 		break;
 	case Massage::DOWNATTACK:
 		arrowsAttack();
-		break;
 		arrowsClear();
 		break;
 	}
