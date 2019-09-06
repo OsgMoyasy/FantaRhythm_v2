@@ -4,7 +4,7 @@
 constexpr int HPWIDTH = 400;
 constexpr int HPHEIGHT = 30;
 
-constexpr int HPLEFTX = 400;
+constexpr int HPLEFTX = 800;
 constexpr int HPY = 30;
 
 CharacterSet::CharacterSet(int save[], const String& musicpath) {
@@ -60,7 +60,9 @@ void CharacterSet::draw() {
 void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	cha[obj.val]->getEvent(obj.msg);
 	if (obj.msg == DAMAGE) {
+		enemy->attack();
 		selfDamage();
+		
 	}
 	
 }
@@ -89,4 +91,14 @@ void CharacterSet::selfDamage(void) {
 		currenthp = 0;
 	}
 	calchpx();
+}
+
+int CharacterSet::getCurrentHp(void) {
+	return currenthp;
+}
+
+void CharacterSet::gameEndEffect(void) {
+	for (int i = 0; i < CHANUMBER; i++) {
+		cha[i]->damage();
+	}
 }

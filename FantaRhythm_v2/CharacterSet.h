@@ -23,7 +23,9 @@ public:
 	void funcEvent(Obj obj);
 	void TotalhpDraw();
 	int getTotalDamage(void);
+	int getCurrentHp(void);
 	void selfDamage(void);
+	void gameEndEffect(void);
 private:
 	int totalhp;
 	int currenthp;
