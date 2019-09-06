@@ -90,3 +90,7 @@ void CharacterSet::selfDamage(void) {
 	}
 	calchpx();
 }
+
+int CharacterSet::getCurrentHp(void) {
+	return currenthp;
+}

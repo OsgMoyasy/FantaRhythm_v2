@@ -23,6 +23,7 @@ public:
 	void funcEvent(Obj obj);
 	void TotalhpDraw();
 	int getTotalDamage(void);
+	int getCurrentHp(void);
 	void selfDamage(void);
 private:
 	int totalhp;
