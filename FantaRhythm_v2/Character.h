@@ -15,7 +15,7 @@ namespace EffectType{
 
 class Character {
 public:
-	Character(const CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject,const FilePath& effectname);
+	Character(CharacterSubject* csubject, const FilePath& jobname, const CSVData& csv, double ix, double iy, int row);
 	~Character();
 	void chaDraw();
 	virtual void draw()=0;

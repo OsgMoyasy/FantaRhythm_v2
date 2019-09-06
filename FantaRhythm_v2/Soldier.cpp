@@ -1,7 +1,7 @@
 #include "Soldier.h"
 constexpr int CHARGEMAX = 10;
 
-Soldier::Soldier(const CSVData& csv, double ix, double iy, int row, CharacterSubject* csubject) :Character(csv, ix, iy, row, csubject, U"soldier") {
+Soldier::Soldier(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"soldier", csv, ix, iy, row ) {
 	chargeClear();
 	chargedamage = 0;
 }

@@ -5,7 +5,7 @@ constexpr int moverange = 70;		//U• ã‰º‚Ì’·‚³‚Í*2
 constexpr int movefreq = 4 * 60;	//ã‰º‚·‚éŽüŠú	¶‚Ì’l‚ð•bŽw’è
 constexpr int effectsize = 200;
 
-Character::Character(const CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject, const FilePath& jobname) {
+Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
 	
 	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effect/"+ jobname +U"/attack.png", effectsize, effectsize, 0, 0);
