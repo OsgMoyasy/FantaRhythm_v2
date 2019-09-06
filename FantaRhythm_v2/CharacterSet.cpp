@@ -4,7 +4,7 @@
 constexpr int HPWIDTH = 400;
 constexpr int HPHEIGHT = 30;
 
-constexpr int HPLEFTX = 400;
+constexpr int HPLEFTX = 800;
 constexpr int HPY = 30;
 
 CharacterSet::CharacterSet(int save[], const String& musicpath) {
@@ -60,7 +60,9 @@ void CharacterSet::draw() {
 void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	cha[obj.val]->getEvent(obj.msg);
 	if (obj.msg == DAMAGE) {
+		enemy->attack();
 		selfDamage();
+		
 	}
 	
 }
