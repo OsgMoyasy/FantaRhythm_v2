@@ -4,7 +4,7 @@
 
 class Witch :public Character {
 public:
-	Witch(CSVData& csv, double ix, double iy, int row, CharacterSubject* csubject);
+	Witch(CharacterSubject* csubject, CSVData& csv, double ix, double iy, int row);
 	~Witch();
 	void update();
 	void draw();

@@ -40,7 +40,7 @@ void Archer::getEvent(Massage msg) {
 	switch (msg) {
 	case Massage::UPATTACK:
 		arrowscharge();
-		setAttackEvent(getPower());
+		setAttackEvent(getPower(), EffectType::NOMAL);
 		break;
 	case Massage::DOWNATTACK:
 		arrowsAttack();
@@ -49,3 +49,6 @@ void Archer::getEvent(Massage msg) {
 	}
 }
 
+void Archer::arrowsAttack() {
+
+}

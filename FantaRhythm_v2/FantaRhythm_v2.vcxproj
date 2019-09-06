@@ -197,6 +197,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Archer.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterSet.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -210,6 +211,7 @@
     <ClCompile Include="SelectMusic.cpp" />
     <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Witch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -272,6 +274,7 @@
     <Xml Include="App\example\test.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Archer.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterSet.h" />
     <ClInclude Include="Enemy.h" />
@@ -288,6 +291,7 @@
     <ClInclude Include="SelectMusic.h" />
     <ClInclude Include="Soldier.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Witch.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc" />

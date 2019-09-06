@@ -4,7 +4,7 @@
 
 class Archer :public Character {
 public:
-	Archer(CharacterSubject* csubject, CSVData& csv, double ix, double iy, int row, );
+	Archer(CharacterSubject* csubject, CSVData& csv, double ix, double iy, int row);
 	~Archer();
 	void update();
 	void draw();

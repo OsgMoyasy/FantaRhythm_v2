@@ -4,7 +4,7 @@
 //仕様的にはSoldierと同じ
 //魔女のジョブ
 
-Witch::Witch(CSVData & csv, double ix, double iy, int row, CharacterSubject * csubject) :Character(csv, ix, iy, row, csubject) {
+Witch::Witch(CharacterSubject* csubject, CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
 	chargeClear();
 	chargedamage = 0;
 }
@@ -40,7 +40,7 @@ void Witch::getEvent(Massage msg) {
 	switch (msg) {
 	case Massage::UPATTACK:
 		charge();
-		setAttackEvent(getPower());
+		setAttackEvent(getPower(),EffectType::NOMAL);
 		break;
 	case Massage::DOWNATTACK:
 		chargeAttack();
