@@ -3,9 +3,16 @@
 
 constexpr int moverange = 70;		//振幅 上下の長さは*2
 constexpr int movefreq = 4 * 60;	//上下する周期	左の値を秒指定
+constexpr int effectsize = 200;
 
-Character::Character(CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject) {
+Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
+	
+	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effect/"+ jobname +U"/attack.png", effectsize, effectsize, 0, 0);
+	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effect/" + jobname + U"/ult.png", effectsize, effectsize, 0, 0);
+	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effect/" + jobname + U"/damage.png", effectsize, effectsize, 0, 0);
+
+
 	chnumber = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
 	hp = csv.get<int>(row, 3);
@@ -37,8 +44,8 @@ void Character::moveRigthLight() {
 
 }
 
-void Character::damage(Obj obj) {
-
+void Character::damage() {
+	playEffect(EffectType::DAMAGE, x, y);
 }
 
 int Character::getPower() {
@@ -52,7 +59,22 @@ int Character::getArgs1() {
 int Character::getArgs2() {
 	return args2;
 }
-void Character::setAttackEvent(int attack) {
+void Character::setAttackEvent(int attack, EffectType::Type type) {
+	playEffect(type);
 	csubject->setEvent(attack);
 	csubject->notifyObservers();//イベント起動
+}
+
+void Character::playEffect(EffectType::Type type) {
+	flipeffect[type]->play(x - effectsize / 3, y);
+}
+
+void Character::playEffect(EffectType::Type type, double x, double y) {
+	flipeffect[type]->play(x, y);
+}
+
+void Character::drawEffect(void) {
+	for (FlipEffect* feffect : flipeffect) {
+		feffect->draw();
+	}
 }

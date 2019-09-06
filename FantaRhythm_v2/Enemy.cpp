@@ -3,7 +3,7 @@
 Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(100){
 	TextureAsset::Register(U"enemy", path + U"/enemy.png");
 	TextureAsset::Preload(U"enemy");
-	flipeffect = new FlipEffect(U"resources/images/magic.png", 200, 200, initx, inity);
+	flipeffect = new FlipEffect(U"resources/images/effect/magic.png", 200, 200, initx, inity);
 	x = initx;
 	y = inity;
 	framecnt = 0;

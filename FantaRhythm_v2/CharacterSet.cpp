@@ -16,7 +16,7 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 		
 		switch (csv.get<int>(save[i], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
-			cha[i] = new Soldier(csv, initx, inity, i, csubject);
+			cha[i] = new Soldier(csubject, csv, initx, inity, i);
 			break;
 		default:
 			//エラー
