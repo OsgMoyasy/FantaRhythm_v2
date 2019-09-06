@@ -8,6 +8,8 @@
 namespace JOB {
 	enum LIST {
 		SOLDIER,
+		ARCHER,
+		WITCH,
 	};
 }
 

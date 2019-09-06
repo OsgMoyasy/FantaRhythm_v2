@@ -1,10 +1,10 @@
 #pragma once
-#include "FantaRhythm_v2.h"
+#include <Siv3D.hpp>
 #include "Character.h"
 
 class Archer :public Character {
 public:
-	Archer(CSVData& csv, double ix, double iy, int row, CharacterSubject* csubject);
+	Archer(CharacterSubject* csubject, CSVData& csv, double ix, double iy, int row, );
 	~Archer();
 	void update();
 	void draw();

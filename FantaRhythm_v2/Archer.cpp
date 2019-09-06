@@ -5,7 +5,7 @@
 //上ボタンで弓を蓄える(最大5本)
 //下ボタンで確率攻撃
 
-Archer::Archer(CharacterSubject* csubject,CSVData & csv, double ix, double iy, int row) :Character(csubject,csv, ix, iy, row ) {
+Archer::Archer(CharacterSubject* csubject,CSVData & csv, double ix, double iy, int row) :Character(csubject, U"archer",csv, ix, iy, row ) {
 	arrowscount = 0;
 	arrowsdamage = 0;
 }
@@ -35,9 +35,6 @@ void Archer::arrowsClear() {
 	}
 }
 
-void Archer::chargeAttack() {
-	chargedamage = getPower() * (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
-}
 
 void Archer::getEvent(Massage msg) {
 	switch (msg) {
