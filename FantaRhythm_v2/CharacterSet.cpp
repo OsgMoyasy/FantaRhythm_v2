@@ -94,3 +94,9 @@ void CharacterSet::selfDamage(void) {
 int CharacterSet::getCurrentHp(void) {
 	return currenthp;
 }
+
+void CharacterSet::gameEndEffect(void) {
+	for (int i = 0; i < CHANUMBER; i++) {
+		cha[i]->damage();
+	}
+}
