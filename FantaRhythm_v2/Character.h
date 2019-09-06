@@ -4,6 +4,15 @@
 #include <Siv3D.hpp>
 #include "GameEffect.h"
 
+namespace EffectType{
+	enum Type {
+		NOMAL,
+		ULT,
+		DAMAGE,
+		SIZE,
+	};
+};
+
 class Character {
 public:
 	Character(const CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject,const FilePath& effectname);
@@ -14,17 +23,19 @@ public:
 	virtual void getEvent(Massage msg)=0;
 	void moveUpDown();
 	void moveRigthLight();
-	void damage(Obj obj);
+	void damage();
 	int getPower();
 	int getArgs1();
 	int getArgs2();
-	void setAttackEvent(int attack);
-	void playEffect(void);
+	void setAttackEvent(int attack, EffectType::Type type);
+	void playEffect(EffectType::Type type);
+	void playEffect(EffectType::Type type, double x, double y);
 	void drawEffect(void);
+
 
 private:
 	class CharacterSubject* csubject;
-	class FlipEffect* flipeffect;
+	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3種類
 	int chnumber;	//キャラの番号
 	String name;	//キャラの名前
 	int hp;			//ヒットポイント

@@ -1,7 +1,7 @@
 #include "Soldier.h"
 constexpr int CHARGEMAX = 10;
 
-Soldier::Soldier(const CSVData& csv, double ix, double iy, int row, CharacterSubject* csubject) :Character(csv, ix, iy, row, csubject, U"sol") {
+Soldier::Soldier(const CSVData& csv, double ix, double iy, int row, CharacterSubject* csubject) :Character(csv, ix, iy, row, csubject, U"soldier") {
 	chargeClear();
 	chargedamage = 0;
 }
@@ -20,7 +20,8 @@ void Soldier::update() {
 	Print << U"charge=" << chargecount;
 }
 
-void Soldier::charge() {
+void Soldier::charge() {//小ダメージ　＆　チャージ
+	setAttackEvent(getPower(), EffectType::NOMAL);
 	if (chargecount < CHARGEMAX) {
 		chargecount +=1;
 	}
@@ -32,17 +33,20 @@ void Soldier::chargeClear() {
 
 void Soldier::chargeAttack() {
 	chargedamage=getPower()* (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
+	setAttackEvent(chargedamage, EffectType::ULT);
+	chargeClear();
 }
 
 void Soldier::getEvent(Massage msg) {
 	switch (msg) {
 	case Massage::UPATTACK:
 		charge();
-		setAttackEvent(getPower());
 		break;
 	case Massage::DOWNATTACK:
 		chargeAttack();
 		break;
+	case Massage::DAMAGE:
+		damage();
 		chargeClear();
 		break;
 	}
