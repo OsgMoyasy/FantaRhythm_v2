@@ -23,7 +23,8 @@ public:
 	virtual void getEvent(Massage msg)=0;
 	void moveUpDown();
 	void moveRigthLight();
-	void damage();
+	void damage(int damage);
+	int getHp();
 	int getPower();
 	int getArgs1();
 	int getArgs2();
@@ -32,6 +33,7 @@ public:
 	void playEffect(EffectType::Type type, double x, double y);
 	void drawEffect(void);
 
+	void onGuardFlag(void);
 
 private:
 	class CharacterSubject* csubject;
@@ -44,7 +46,6 @@ private:
 	double initx, inity;//基本位置
 	double x, y;//現在位置
 	int framecnt;//上下移動に使うフレームカウント
-	
-	
-	
+	static bool guardflag;
+	void guard(void);//flagを降ろして防御
 };

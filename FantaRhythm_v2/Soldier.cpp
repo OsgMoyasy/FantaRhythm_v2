@@ -46,7 +46,6 @@ void Soldier::getEvent(Massage msg) {
 		chargeAttack();
 		break;
 	case Massage::DAMAGE:
-		damage();
 		chargeClear();
 		break;
 	}

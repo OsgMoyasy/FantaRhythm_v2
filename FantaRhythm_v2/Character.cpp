@@ -4,6 +4,7 @@
 constexpr int moverange = 70;		//振幅 上下の長さは*2
 constexpr int movefreq = 4 * 60;	//上下する周期	左の値を秒指定
 constexpr int effectsize = 200;
+bool Character::guardflag;
 
 Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
@@ -44,8 +45,19 @@ void Character::moveRigthLight() {
 
 }
 
-void Character::damage() {
-	playEffect(EffectType::DAMAGE, x, y);
+void Character::damage(int damage) {
+	if (guardflag == 1) {
+		//ガードエフェクト
+		guardflag == false;
+	}
+	else {
+		hp -= damage;
+		playEffect(EffectType::DAMAGE, x, y);
+	}
+}
+
+int Character::getHp() {
+	return hp;
 }
 
 int Character::getPower() {
@@ -77,4 +89,12 @@ void Character::drawEffect(void) {
 	for (FlipEffect* feffect : flipeffect) {
 		feffect->draw();
 	}
+}
+
+void Character::onGuardFlag(void) {
+	guardflag = true;
+}
+
+void Character::guard(void) {
+
 }

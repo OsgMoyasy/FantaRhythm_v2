@@ -15,22 +15,21 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 
 	CSVData csv;
 	csv.load(U"resources/charadata.csv");
-	totalhp = 0;
-	for (int i = 0; i < CHANUMBER; i++) {
-		int initx = 900 + i * 90, inity = 250 + i * 80;//初期座標の設定後で見直す
+	for (int lane = 0; lane < CHANUMBER; lane++) {
+		int initx = 900 + lane * 90, inity = 250 + lane * 80;//初期座標の設定後で見直す
 		
-		switch (csv.get<int>(save[i], 1)) {//キャラ番号の行のジョブを取得
+		switch (csv.get<int>(save[lane], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
-			cha[i] = new Soldier(csubject, csv, initx, inity, i);
+			cha[lane] = new Soldier(csubject, csv, initx, inity, lane);
 			break;
 		default:
 			//エラー
 			break;
 		}
-		totalhp += csv.get<int>(save[i], 4);
+		
 	}
-	currenthp = totalhp;
-	calchpx();
+	totalhp = getCurrentHp();
+	calchpx(totalhp);
 	damage = 20;
 }
 
@@ -59,12 +58,13 @@ void CharacterSet::draw() {
 
 void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	cha[obj.val]->getEvent(obj.msg);
-	if (obj.msg == DAMAGE) {
+	if (obj.msg == DAMAGE) {//ダメージイベント
 		enemy->attack();
-		selfDamage();
-		
+		selfDamage(obj.val);
 	}
-	
+	if (obj.msg == GUARD) {
+		cha[obj.val]->onGuardFlag();
+	}
 }
 
 void CharacterSet::TotalhpDraw() {		//総HP表示
@@ -76,29 +76,36 @@ int CharacterSet::getTotalDamage(void) {
 	return enemy->getTotalDamage();
 }
 
-void CharacterSet::calchpx(void) {
+void CharacterSet::calchpx(int currenthp) {
 	double per = (double)currenthp / totalhp;
-
 	hpx = per * HPWIDTH;
 }
 
-void CharacterSet::selfDamage(void) {
-	currenthp -= damage;
+void CharacterSet::selfDamage(int lane) {
+	cha[lane]->damage(damage);
+	int currenthp = getCurrentHp();
+
 	if (currenthp > totalhp) {
 		currenthp = totalhp;
 	}
 	else if (currenthp < 0) {
 		currenthp = 0;
 	}
-	calchpx();
+
+	calchpx(currenthp);
 }
 
 int CharacterSet::getCurrentHp(void) {
+	int currenthp = 0;
+	for (int lane = 0; lane < CHANUMBER; lane++) {
+		currenthp += cha[lane]->getHp();
+	}
 	return currenthp;
 }
 
 void CharacterSet::gameEndEffect(void) {
-	for (int i = 0; i < CHANUMBER; i++) {
-		cha[i]->damage();
+	for (int lane = 0; lane < CHANUMBER; lane++) {
+		cha[lane]->damage(0);
 	}
 }
+

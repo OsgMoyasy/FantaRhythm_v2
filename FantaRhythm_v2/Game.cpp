@@ -57,7 +57,7 @@ JUDGE::JudgeCount* Game::getJudgeCount(void) {
 	return notes->getJudgeCount();
 }
 void Game::gameEndCheck(void) {
-	if (characterm->getCurrentHp() == 0 && clearflag == true) {
+	if (characterm->getCurrentHp() <= 0 && clearflag == true) {
 		MusicManager::stopMusicGame();
 		clearflag = false;
 		characterm->gameEndEffect();
