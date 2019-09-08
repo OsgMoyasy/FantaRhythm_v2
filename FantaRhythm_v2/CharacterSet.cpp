@@ -63,7 +63,7 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 		selfDamage(obj.val);
 	}
 	if (obj.msg == GUARD) {
-		cha[obj.val]->onGuardFlag;
+		cha[obj.val]->onGuardFlag();
 	}
 }
 
