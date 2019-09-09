@@ -1,11 +1,11 @@
 #include "Archer.h"
-#define ARROWSMAX 5
+constexpr int ARROWSMAX = 5;
 
 //弓兵のジョブ
 //上ボタンで弓を蓄える(最大5本)
 //下ボタンで確率攻撃
 
-Archer::Archer(CharacterSubject* csubject,CSVData & csv, double ix, double iy, int row) :Character(csubject, U"archer",csv, ix, iy, row ) {
+Archer::Archer(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) :Character(csubject, U"archer",csv, ix, iy, row ) {
 	arrowscount = 0;
 	arrowsdamage = 0;
 }
@@ -35,6 +35,10 @@ void Archer::arrowsClear() {
 	}
 }
 
+void Archer::arrowsAttack() {
+	arrowsdamage = getPower() * Random(1,20);
+}
+
 
 void Archer::getEvent(Massage msg) {
 	switch (msg) {
@@ -49,6 +53,3 @@ void Archer::getEvent(Massage msg) {
 	}
 }
 
-void Archer::arrowsAttack() {
-
-}

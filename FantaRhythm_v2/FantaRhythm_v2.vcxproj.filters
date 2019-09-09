@@ -102,10 +102,13 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Witch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Archer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Witch.cpp">
+    <ClCompile Include="Sage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -318,10 +321,13 @@
     <ClInclude Include="Judge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Witch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Archer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Witch.h">
+    <ClInclude Include="Sage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
