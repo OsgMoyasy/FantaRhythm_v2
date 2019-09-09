@@ -207,6 +207,7 @@
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Sage.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SelectMusic.cpp" />
     <ClCompile Include="Soldier.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="NotesManager.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="Sage.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectMusic.h" />

@@ -78,3 +78,7 @@ void Character::drawEffect(void) {
 		feffect->draw();
 	}
 }
+
+int Character::getHp() {
+	return hp;
+}

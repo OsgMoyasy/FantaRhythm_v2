@@ -33,6 +33,7 @@ public:
 	void drawEffect(void);
 
 
+
 private:
 	class CharacterSubject* csubject;
 	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3種類
@@ -44,7 +45,6 @@ private:
 	double initx, inity;//基本位置
 	double x, y;//現在位置
 	int framecnt;//上下移動に使うフレームカウント
-	
-	
+	int getHp();
 	
 };
