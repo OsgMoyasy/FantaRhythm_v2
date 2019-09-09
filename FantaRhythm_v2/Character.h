@@ -23,7 +23,8 @@ public:
 	virtual void getEvent(Massage msg)=0;
 	void moveUpDown();
 	void moveRigthLight();
-	void damage();
+	void damage(int damage);
+	int getHp();
 	int getPower();
 	int getArgs1();
 	int getArgs2();
@@ -32,19 +33,20 @@ public:
 	void playEffect(EffectType::Type type, double x, double y);
 	void drawEffect(void);
 
+	void onGuardFlag(void);
 
 
 private:
 	class CharacterSubject* csubject;
-	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3í—Ş
-	int chnumber;	//ƒLƒƒƒ‰‚Ì”Ô†
-	String name;	//ƒLƒƒƒ‰‚Ì–¼‘O
-	int hp;			//ƒqƒbƒgƒ|ƒCƒ“ƒg
-	int power;		//UŒ‚—Íƒx[ƒX
-	int args1, args2;//”Ä—p’l
-	double initx, inity;//Šî–{ˆÊ’u
-	double x, y;//Œ»İˆÊ’u
-	int framecnt;//ã‰ºˆÚ“®‚Ég‚¤ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg
-	int getHp();
-	
+	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3ç¨®é¡
+	int chnumber;	//ã‚­ãƒ£ãƒ©ã®ç•ªå·
+	String name;	//ã‚­ãƒ£ãƒ©ã®åå‰
+	int hp;			//ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆ
+	int power;		//æ”»æ’ƒåŠ›ãƒ™ãƒ¼ã‚¹
+	int args1, args2;//æ±ç”¨å€¤
+	double initx, inity;//åŸºæœ¬ä½ç½®
+	double x, y;//ç¾åœ¨ä½ç½®
+	int framecnt;//ä¸Šä¸‹ç§»å‹•ã«ä½¿ã†ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆ
+	static bool guardflag;
+	void guard(void);//flagã‚’é™ã‚ã—ã¦é˜²å¾¡
 };

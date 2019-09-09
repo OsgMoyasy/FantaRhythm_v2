@@ -1,9 +1,10 @@
 #include"Character.h"
 #include"FantaRhythm_v2.h"
 
-constexpr int moverange = 70;		//U• ã‰º‚Ì’·‚³‚Í*2
-constexpr int movefreq = 4 * 60;	//ã‰º‚·‚éŽüŠú	¶‚Ì’l‚ð•bŽw’è
+constexpr int moverange = 70;		//æŒ¯å¹… ä¸Šä¸‹ã®é•·ã•ã¯*2
+constexpr int movefreq = 4 * 60;	//ä¸Šä¸‹ã™ã‚‹å‘¨æœŸ	å·¦ã®å€¤ã‚’ç§’æŒ‡å®š
 constexpr int effectsize = 200;
+bool Character::guardflag;
 
 Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
@@ -44,8 +45,19 @@ void Character::moveRigthLight() {
 
 }
 
-void Character::damage() {
-	playEffect(EffectType::DAMAGE, x, y);
+void Character::damage(int damage) {
+	if (guardflag == 1) {
+		//ã‚¬ãƒ¼ãƒ‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+		guardflag == false;
+	}
+	else {
+		hp -= damage;
+		playEffect(EffectType::DAMAGE, x, y);
+	}
+}
+
+int Character::getHp() {
+	return hp;
 }
 
 int Character::getPower() {
@@ -62,7 +74,7 @@ int Character::getArgs2() {
 void Character::setAttackEvent(int attack, EffectType::Type type) {
 	playEffect(type);
 	csubject->setEvent(attack);
-	csubject->notifyObservers();//ƒCƒxƒ“ƒg‹N“®
+	csubject->notifyObservers();//ã‚¤ãƒ™ãƒ³ãƒˆèµ·å‹•
 }
 
 void Character::playEffect(EffectType::Type type) {
@@ -79,6 +91,11 @@ void Character::drawEffect(void) {
 	}
 }
 
-int Character::getHp() {
-	return hp;
+
+void Character::onGuardFlag(void) {
+	guardflag = true;
+}
+
+void Character::guard(void) {
+
 }

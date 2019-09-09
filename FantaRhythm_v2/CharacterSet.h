@@ -24,12 +24,16 @@ public:
 	void funcEvent(Obj obj);
 	void TotalhpDraw();
 	int getTotalDamage(void);
+	int getCurrentHp(void);
+	void selfDamage(int lane);
+	void gameEndEffect(void);
 private:
 	int totalhp;
-	int starthp;	//ダメージを受けた時に増やす値
-	int fixedhp;
-	int damage;     //仮のダメージ
+	int hpx;
+	int damage;
 	class Character* cha[CHANUMBER];
 	class Enemy* enemy;
 	class CharacterSubject* csubject;//キャラクター個々からイベントを受け取るために
+
+	void calchpx(int currenthp);
 };

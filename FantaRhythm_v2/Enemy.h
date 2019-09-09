@@ -3,6 +3,8 @@
 #include <math.h>
 #include "Observer.h"
 #include "GameEffect.h"
+#include "Character.h"
+
 
 class Enemy :public Observer{
 public:
@@ -13,9 +15,9 @@ public:
 	void addDamage(int dmg);
 	int getTotalDamage(void);
 	void funcEvent(Obj obj);
-
+	void attack(void);
 private:
-	FlipEffect* flipeffect;
+	FlipEffect* flipeffect[EffectType::SIZE];
 	int framecnt;
 	int totaldmg;//“G‚É—^‚¦‚½‘ƒ_ƒ[ƒW
 	const int inity, initx;

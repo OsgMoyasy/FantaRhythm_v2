@@ -38,5 +38,5 @@ bool MusicManager::musicEndCheck() {
 }
 
 void MusicManager::stopMusicGame() {
-	audio->stop();
+	audio->setPosSec(audio->lengthSec());
 }
