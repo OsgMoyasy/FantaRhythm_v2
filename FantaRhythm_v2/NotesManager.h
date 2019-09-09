@@ -1,11 +1,12 @@
 #pragma once
 # include <Siv3D.hpp> // OpenSiv3D v0.3.2
-#include "Game.h"
-#include "Observer.h"
 #include <vector>
 #include <list>
 #include <array>
+#include "Observer.h"
 #include "Judge.h"
+#include "GameEffect.h"
+#include "MusicManager.h"
 
 constexpr int LANESIZE = 4;		//LANEの数
 constexpr int BAD_RANGE = 200;//判定の最大範囲[ms]÷2
@@ -16,24 +17,18 @@ constexpr int PERFECT_RANGE = 5;//PERFECT判定範囲[ms]÷2
 
 
 
-/*--------------------------------------------
-
-
------------------------------------------------*/
 class NotesManager {
 private:
-	enum NOTESTYPE {
-		NORMAL,
-		LONG,
-		SENTINEL,
+	enum class NOTESTYPE;
+	struct _Notes;
+	typedef struct _Notes Notes;
+	class Update {
+
 	};
-	
-	typedef struct _Notes {
-		NOTESTYPE type;
-		int time;
-		int longtime;
-		bool display;
-	}Notes;
+
+	class Draw {
+
+	};
 
 	int notewidth;
 	
@@ -81,6 +76,11 @@ private:
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
+
+	enum USE_EFFECT;//useFlipEffectの添字に使用
+	Array<FlipEffect> useFlipEffect;
+//	void effectInit();//使用するエフェクトを登録
+//	void drawAllEffect();//再生中の全てのFlipEffectを描画
 
 	void setEvent(Massage msg, int val);
 	

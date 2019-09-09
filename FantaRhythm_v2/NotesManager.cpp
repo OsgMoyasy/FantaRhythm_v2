@@ -1,8 +1,23 @@
 #include "NotesManager.h"
 
+
+enum class NotesManager::NOTESTYPE {
+	NORMAL,
+	LONG,
+	SENTINEL,
+};
+
+struct NotesManager::_Notes {
+	NOTESTYPE type;
+	int time;
+	int longtime;
+	bool display;
+};
+
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
+//	effectInit();
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
@@ -17,16 +32,16 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
 			case 0:
-				note.type = NORMAL;
+				note.type = NOTESTYPE::NORMAL;
 				break;
 			case 1:
-				note.type = LONG;
+				note.type = NOTESTYPE::LONG;
 				break;
 		}
 		note.display = true;
 		notelist[lane].push_back(note);
 	}
-	note.type = SENTINEL;//番兵の追加
+	note.type = NOTESTYPE::SENTINEL;//番兵の追加
 	note.time = 0;
 	note.longtime = 0;
 	note.display = false;
@@ -72,7 +87,7 @@ void NotesManager::update(void)
 }
 
 void NotesManager::plusItr(noteitr& itr) {
-	if (itr->type != SENTINEL)//番兵かどうか判定
+	if (itr->type != NOTESTYPE::SENTINEL)//番兵かどうか判定
 		itr++;
 }
 
@@ -90,10 +105,10 @@ void NotesManager::checkAttack(void) {
 void NotesManager::controlJudge(void) {
 	for (int i = 0;i < LANESIZE;i++) {
 		switch (checkitr[i]->type) {
-		case NORMAL:
+		case NOTESTYPE::NORMAL:
 			judgeNormal(i);
 			break;
-		case LONG:
+		case NOTESTYPE::LONG:
 			judgeLong(i);
 			break;
 		default:
@@ -191,10 +206,10 @@ void NotesManager::draw(void){
 				continue;
 
 			switch (itr->type){
-			case NORMAL:
+			case NOTESTYPE::NORMAL:
 				displayNormal(i, itr->time);
 				break;
-			case LONG:
+			case NOTESTYPE::LONG:
 				displayLong(i, itr->time, itr->longtime);
 				break;
 			default:
@@ -202,6 +217,7 @@ void NotesManager::draw(void){
 			}
 		}	
 	}
+//	drawAllEffect();
 }
 
 double NotesManager::getProgress(int time) {
@@ -210,10 +226,9 @@ double NotesManager::getProgress(int time) {
 
 double NotesManager::progressByAngle(double progressRate) {
 	using namespace std;
-	constexpr double PI = 3.1415;
 	constexpr double EYE_HEIGHT = 1.0;
-	constexpr double START_ANGLE = 0.4 * PI;//単位はラジアン(0.5以上を設定してはならない)
-	constexpr double JUDGE_ANGLE = 0.1 * PI;//単位はラジアン
+	constexpr double START_ANGLE = 0.4_pi;//単位はラジアン(0.5以上を設定してはならない)
+	constexpr double JUDGE_ANGLE = 0.1_pi;//単位はラジアン
 	const static double START_RANGE = EYE_HEIGHT * tan(START_ANGLE);
 	const static double JUDGE_RANGE = EYE_HEIGHT * tan(JUDGE_ANGLE);
 	double nowRange = START_RANGE - (START_RANGE - JUDGE_RANGE) * progressRate;
@@ -273,7 +288,25 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	TextureAsset(U"note").scaled(scaleBgn).drawAt(currentBgnX, currentBgnY);
 }
 
+/*
+void NotesManager::effectInit() {
+	enum USE_EFFECT {
+		NORMAL,
+		PARFECT
+	};
+	FlipEffect effectNormal(U"resources/images/effect/sol.png", 43, 43, 0, 0);
+	FlipEffect effectParfect(U"resources/images/effect/magic.png", 43, 43, 0, 0);
+	useFlipEffect.push_back(effectNormal);
+	useFlipEffect.push_back(effectParfect);
+}
+void NotesManager::drawAllEffect() {
+	for (auto& flip : useFlipEffect) {
+		flip.draw();
+	}
+}
+*/
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット
 	notessubject->notifyObservers();//イベント起動
 }
+
