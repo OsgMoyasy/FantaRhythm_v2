@@ -7,7 +7,14 @@ enum class NotesManager::NOTESTYPE {
 	SENTINEL,
 };
 
-struct NotesManager::_Notes {
+namespace JUDGE_RANGE{
+	constexpr int BAD = 200;//判定の最大範囲[ms]÷2
+	constexpr int GOOD = 100;//GOOD判定範囲[ms]÷2
+	constexpr int GREAT = 25;//GREAT判定範囲[ms]÷2
+	constexpr int PERFECT = 5;//PERFECT判定範囲[ms]÷2
+}
+
+struct NotesManager::Notes {
 	NOTESTYPE type;
 	int time;
 	int longtime;
@@ -15,6 +22,9 @@ struct NotesManager::_Notes {
 };
 
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
+	Update* update = new Update;
+	Draw* draw = new Draw;
+
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
 //	effectInit();
@@ -119,17 +129,17 @@ void NotesManager::controlJudge(void) {
 void NotesManager::judgeNormal(int lane) {
 	int checktime = abs(nowTime - checkitr[lane]->time);
 
-	if (down[lane] && checktime <= BAD_RANGE) {//押されてるかつ判定時間内なら判定処理
+	if (down[lane] && checktime <= JUDGE_RANGE::BAD) {//押されてるかつ判定時間内なら判定処理
 		return judgeEvent(judgeType(checktime), lane);
 	}
-	else if (nowTime >= checkitr[lane]->time + BAD_RANGE) {//押されてないまま終了時
+	else if (nowTime >= checkitr[lane]->time + JUDGE_RANGE::BAD) {//押されてないまま終了時
 		return judgeEvent(JUDGE::BAD, lane);
 	}
 }
 void NotesManager::judgeLong(int lane) {
 	int checktime = abs(nowTime - checkitr[lane]->time);
 
-	if (down[lane] && checktime <= GOOD_RANGE) {//押されたらフラグを立てる
+	if (down[lane] && checktime <= JUDGE_RANGE::GOOD) {//押されたらフラグを立てる
 		longflag[lane] = true;
 	}
 
@@ -146,7 +156,7 @@ void NotesManager::judgeLong(int lane) {
 		}
 	}
 	
-	if (nowTime >= checkitr[lane]->longtime + GOOD_RANGE) {//判定を超えた時
+	if (nowTime >= checkitr[lane]->longtime + JUDGE_RANGE::GOOD) {//判定を超えた時
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
@@ -168,13 +178,13 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
 	}
 }
 JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
-	if (checktime <= PERFECT_RANGE) {//PERFECT
+	if (checktime <= JUDGE_RANGE::PERFECT) {//PERFECT
 		return JUDGE::PERFECT;
 	}
-	else if (checktime <= GREAT_RANGE) {//GREAT
+	else if (checktime <= JUDGE_RANGE::GREAT) {//GREAT
 		return JUDGE::GREAT;
 	}
-	else if (checktime <= GOOD_RANGE) {//GOOD
+	else if (checktime <= JUDGE_RANGE::GOOD) {//GOOD
 		return JUDGE::GOOD;
 	}
 	else {//BAD
@@ -304,6 +314,7 @@ void NotesManager::drawAllEffect() {
 		flip.draw();
 	}
 }
+useFlipEffect[NORMAL].update();.
 */
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット

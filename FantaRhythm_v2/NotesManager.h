@@ -8,26 +8,28 @@
 #include "GameEffect.h"
 #include "MusicManager.h"
 
-constexpr int LANESIZE = 4;		//LANE‚Ì”
-constexpr int BAD_RANGE = 200;//”»’è‚ÌÅ‘å”ÍˆÍ[ms]€2
-constexpr int GOOD_RANGE = 100;//GOOD”»’è”ÍˆÍ[ms]€2
-constexpr int GREAT_RANGE = 25;//GREAT”»’è”ÍˆÍ[ms]€2
-constexpr int PERFECT_RANGE = 5;//PERFECT”»’è”ÍˆÍ[ms]€2
-
-
-
-
 class NotesManager {
 private:
+	static constexpr int LANESIZE = 4;
 	enum class NOTESTYPE;
-	struct _Notes;
-	typedef struct _Notes Notes;
-	class Update {
+	struct Notes;
 
+	class Update {
+	public:
+		Update();
+		~Update();
+		void update();
+		void operator()() { update(); }
+	private:
 	};
 
 	class Draw {
-
+	public:
+		Draw();
+		~Draw();
+		void draw();
+		void operator()() { draw(); }
+	private:
 	};
 
 	int notewidth;
