@@ -2,10 +2,20 @@
 #include <math.h>
 #include "Observer.h"
 #include <Siv3D.hpp>
+#include "GameEffect.h"
+
+namespace EffectType{
+	enum Type {
+		NOMAL,
+		ULT,
+		DAMAGE,
+		SIZE,
+	};
+};
 
 class Character {
 public:
-	Character(CSVData &csv , double ix, double iy,int row, CharacterSubject* csubject);
+	Character(CharacterSubject* csubject, const FilePath& jobname, const CSVData& csv, double ix, double iy, int row);
 	~Character();
 	void chaDraw();
 	virtual void draw()=0;
@@ -13,14 +23,21 @@ public:
 	virtual void getEvent(Massage msg)=0;
 	void moveUpDown();
 	void moveRigthLight();
-	void damage(Obj obj);
+	void damage(int damage);
+	int getHp();
 	int getPower();
 	int getArgs1();
 	int getArgs2();
-	void setAttackEvent(int attack);
+	void setAttackEvent(int attack, EffectType::Type type);
+	void playEffect(EffectType::Type type);
+	void playEffect(EffectType::Type type, double x, double y);
+	void drawEffect(void);
+
+	void onGuardFlag(void);
 
 private:
-	CharacterSubject* csubject;
+	class CharacterSubject* csubject;
+	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3種類
 	int chnumber;	//キャラの番号
 	String name;	//キャラの名前
 	int hp;			//ヒットポイント
@@ -29,5 +46,6 @@ private:
 	double initx, inity;//基本位置
 	double x, y;//現在位置
 	int framecnt;//上下移動に使うフレームカウント
-	
+	static bool guardflag;
+	void guard(void);//flagを降ろして防御
 };
