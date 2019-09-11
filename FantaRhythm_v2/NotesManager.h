@@ -14,6 +14,7 @@ private:
 	enum class NOTESTYPE;
 	struct Notes;
 
+	/*
 	class Update {
 	public:
 		Update();
@@ -31,7 +32,7 @@ private:
 		void operator()() { draw(); }
 	private:
 	};
-
+	*/
 	int notewidth;
 	
 	class NotesSubject* notessubject;
@@ -43,12 +44,16 @@ private:
 
 	JUDGE::JudgeCount judgecount;
 
-	int nowTime;	//現在時間[ms]
+	int nowtime;	//現在時間[ms]
 
-	bool down[LANESIZE];	//将来的にはboolではなくなり押された瞬間、離された瞬間の再生時刻が入る
-	bool press[LANESIZE];	//ここはboolで押されてる状態離されてる状態を管理
+	//ボタン関係の変数
+	bool down[LANESIZE][2];		//将来的にはboolではなくなり押された瞬間、離された瞬間の再生時刻が入る
+	bool press[LANESIZE][2];	//ここはboolで押されてる状態離されてる状態を管理。[2]は縦に並んだ2つのボタンを表し、[0]は上、[1]は下である。
+	enum class PSHBTN;		//縦列のボタンの押し状況(無し,上,下,同時)
 
+	//ロングノーツ用
 	bool longflag[LANESIZE];//押されているかどうか状態を保持
+	PSHBTN pressedkey[LANESIZE];//押されたボタンを保持
 
 	//描画関係の変数
 	int laneStartX[LANESIZE];	//Start = レーンの上端
@@ -60,13 +65,17 @@ private:
 	float notespeed;	//ノーツ速度の補正倍率
 
 	void plusItr(noteitr& itr);	//notelistのイテレータを進める
+
 	void checkAttack(void);		//ボタンの押し状況を確認する
+	struct ButtonandJudge;		//NoteisHit関数の応答用
+	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
+	ButtonandJudge NoteisHit(int lane, int judgetime);
+	bool NoteisPress(int lane, PSHBTN button);//上下ボタンを指定して
 
 	void controlJudge(void);	//ノーツの種類毎に判定用関数を呼び出し
 	void judgeNormal(int lane);	//ノーマルノーツを判定
 	void judgeLong(int lane);	//ロングノーツを判定
 
-	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 
 	void judgeEvent(JUDGE::TYPE type, int lane);
 	void judgeLongEvent(JUDGE::TYPE type, int lane);
