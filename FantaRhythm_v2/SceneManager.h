@@ -5,7 +5,6 @@
 #include "SelectMusic.h"
 #include "Game.h"
 #include "Result.h"
-#include "NotesManager.h"
 #include "Judge.h"
 
 class SceneManager {

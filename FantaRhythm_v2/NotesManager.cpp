@@ -1,8 +1,45 @@
 #include "NotesManager.h"
 
+
+enum class NotesManager::NOTESTYPE {
+	NORMAL,
+	LONG,
+	SENTINEL,
+};
+
+namespace JUDGE_RANGE{
+	constexpr int BAD = 200;//判定の最大範囲[ms]÷2
+	constexpr int GOOD = 100;//GOOD判定範囲[ms]÷2
+	constexpr int GREAT = 25;//GREAT判定範囲[ms]÷2
+	constexpr int PERFECT = 5;//PERFECT判定範囲[ms]÷2
+}
+
+struct NotesManager::Notes {
+	NOTESTYPE type;
+	int time;
+	int longtime;
+	bool display;
+};
+
+enum class NotesManager::PSHBTN {
+	NONE,
+	UP,
+	DOWN,
+	BOTH,
+};
+
+struct NotesManager::ButtonandJudge {
+	PSHBTN button;
+	JUDGE::TYPE judge;
+};
+
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
+//	Update* update = new Update;
+//	Draw* draw = new Draw;
+
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
+//	effectInit();
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
@@ -17,16 +54,16 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
 			case 0:
-				note.type = NORMAL;
+				note.type = NOTESTYPE::NORMAL;
 				break;
 			case 1:
-				note.type = LONG;
+				note.type = NOTESTYPE::LONG;
 				break;
 		}
 		note.display = true;
 		notelist[lane].push_back(note);
 	}
-	note.type = SENTINEL;//番兵の追加
+	note.type = NOTESTYPE::SENTINEL;//番兵の追加
 	note.time = 0;
 	note.longtime = 0;
 	note.display = false;
@@ -56,9 +93,6 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//速さ
 	notespeed = 1.0;
 	timeRequired = 1500 / notespeed;
-	//小節線
-	barBetween = 364;
-	barStart = 114;
 
 	notewidth = TextureAsset(U"note").width();
 }
@@ -69,34 +103,84 @@ NotesManager::~NotesManager() {
 
 void NotesManager::update(void)
 {
-	nowTime = (int)(MusicManager::getMusicTime());
+	nowtime = (int)(MusicManager::getMusicTime());
 	checkAttack();
 	controlJudge();
 }
 
 void NotesManager::plusItr(noteitr& itr) {
-	if (itr->type != SENTINEL)//番兵かどうか判定
+	if (itr->type != NOTESTYPE::SENTINEL)//番兵かどうか判定
 		itr++;
 }
 
 
 void NotesManager::checkAttack(void) {
-	 down[0] = KeyA.down();
-	press[0] = KeyA.pressed();
-	 down[1] = KeyS.down();
-	press[1] = KeyS.pressed();
-	 down[2] = KeyD.down();
-	press[2] = KeyD.pressed();
-	 down[3] = KeyF.down();
-	press[3] = KeyF.pressed();
+	down[0][0] = KeyQ.down();press[0][0] = KeyQ.pressed();
+	down[0][1] = KeyA.down();press[0][1] = KeyA.pressed();
+
+	down[1][0] = KeyW.down();press[1][0] = KeyW.pressed();
+	down[1][1] = KeyS.down();press[1][1] = KeyS.pressed();
+
+	down[2][0] = KeyE.down();press[2][0] = KeyE.pressed();
+	down[2][1] = KeyD.down();press[2][1] = KeyD.pressed();
+
+	down[3][0] = KeyR.down();press[3][0] = KeyR.pressed();
+	down[3][1] = KeyF.down();press[3][1] = KeyF.pressed();
 }
+JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
+	if (checktime <= JUDGE_RANGE::PERFECT) {//PERFECT
+		return JUDGE::PERFECT;
+	}
+	else if (checktime <= JUDGE_RANGE::GREAT) {//GREAT
+		return JUDGE::GREAT;
+	}
+	else if (checktime <= JUDGE_RANGE::GOOD) {//GOOD
+		return JUDGE::GOOD;
+	}
+	else if (checktime <= JUDGE_RANGE::BAD) {//BAD
+		return JUDGE::BAD;
+	}
+	else {//NONE
+		return JUDGE::NONE;
+	}
+}
+NotesManager::ButtonandJudge NotesManager::NoteisHit(int lane, int judgetime) {
+	constexpr int BUTTONSIZE = 2;//一列のボタンの個数
+	int keysum = 0;//押されたキー
+	JUDGE::TYPE tmp = JUDGE::NONE;
+	JUDGE::TYPE judge = JUDGE::NONE;
+	int checktime = abs(nowtime - judgetime);
+
+	for (int i = 0;i < BUTTONSIZE;i++) {
+		if (
+			down[lane][i] == true&&//ボタンが押された且つ
+			(tmp = judgeType(checktime)) < JUDGE::NONE//判定時間内なら
+			) {
+			keysum += i+1;//ボタンの上下に対応した数を足す。
+			judge = tmp < judge ? tmp : judge;//より判定の良い方を格納
+		}
+	}
+	return { (PSHBTN)keysum,judge };//PSHBTNenumの並び順に依存している。
+}
+bool NotesManager::NoteisPress(int lane, PSHBTN button) {
+	constexpr int BUTTONSIZE = 2;//一列のボタンの個数
+	int keysum = (int)button;
+	
+	for (int i = BUTTONSIZE;i >= 1;i--) {
+		if (i <= keysum&&press[lane][i-1]) {
+			keysum -= i;
+		}
+	}
+	return !keysum;//keysumが残っていたらfalse(指定されたボタンが押されていない)
+}
+
 void NotesManager::controlJudge(void) {
 	for (int i = 0;i < LANESIZE;i++) {
 		switch (checkitr[i]->type) {
-		case NORMAL:
+		case NOTESTYPE::NORMAL:
 			judgeNormal(i);
 			break;
-		case LONG:
+		case NOTESTYPE::LONG:
 			judgeLong(i);
 			break;
 		default:
@@ -105,40 +189,41 @@ void NotesManager::controlJudge(void) {
 	}
 }
 void NotesManager::judgeNormal(int lane) {
-	int checktime = abs(nowTime - checkitr[lane]->time);
+	ButtonandJudge bandj = NoteisHit(lane, checkitr[lane]->time);
 
-	if (down[lane] && checktime <= BAD_RANGE) {//押されてるかつ判定時間内なら判定処理
-		return judgeEvent(judgeType(checktime), lane);
+	if (bandj.button != PSHBTN::NONE) {//押されてるかつ判定時間内なら判定処理
+		return judgeEvent(bandj.judge, lane);
 	}
-	else if (nowTime >= checkitr[lane]->time + BAD_RANGE) {//押されてないまま終了時
+	else if (nowtime >= checkitr[lane]->time + JUDGE_RANGE::BAD) {//押されてないまま終了時
 		return judgeEvent(JUDGE::BAD, lane);
 	}
 }
 void NotesManager::judgeLong(int lane) {
-	int checktime = abs(nowTime - checkitr[lane]->time);
-
-	if (down[lane] && checktime <= GOOD_RANGE) {//押されたらフラグを立てる
-		longflag[lane] = true;
+	if (longflag[lane] == false) {
+		ButtonandJudge bandj = NoteisHit(lane, checkitr[lane]->time);
+		if (bandj.judge <= JUDGE::GOOD) {//下端で押されたら(この判定はJUDGEenumの並び順に依存している)
+			longflag[lane] = true;//そのロングノーツの判定を有効化
+			pressedkey[lane] = bandj.button;//その時押されたボタンを記憶
+		}
 	}
 
-	if (longflag[lane]) {//離すときの処理
-		if (press[lane]) {//ボタン押下中
-			checkitr[lane]->time = (int)(nowTime);//判定位置以降で下側を止める
-			if (nowTime >= checkitr[lane]->longtime) {//押されているまま判定位置へ来た時
-				checkitr[lane]->time = checkitr[lane]->longtime;//上側を判定位置に止める
+	if (longflag[lane] == true) {//離すときの処理
+		if (NoteisPress(lane, pressedkey[lane]) == true) {//ボタン押下中
+			checkitr[lane]->time = (int)(nowtime);//判定位置以降で下側を止める
+			if (nowtime >= checkitr[lane]->longtime) {//押されているままノーツの上端を過ぎた時
+				return judgeLongEvent(JUDGE::GOOD, lane);//強制的に次のノーツへ処理を移行
 			}
 		}
 		else {//離した
-			checktime = abs(nowTime - checkitr[lane]->longtime);
-			return judgeLongEvent(judgeType(checktime), lane);			
+			ButtonandJudge bandj = NoteisHit(lane, checkitr[lane]->longtime);
+			return judgeLongEvent(bandj.judge, lane);
 		}
 	}
 	
-	if (nowTime >= checkitr[lane]->longtime + GOOD_RANGE) {//判定を超えた時
+	if (nowtime >= checkitr[lane]->longtime + JUDGE_RANGE::GOOD) {//判定を超えた時
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
-
 void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	judgeEvent(type, lane);
 	longflag[lane] = false;//判定したので長押しの状態を初期化
@@ -155,26 +240,9 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
 		setEvent(Massage::UPATTACK, lane);
 	}
 }
-JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
-	if (checktime <= PERFECT_RANGE) {//PERFECT
-		return JUDGE::PERFECT;
-	}
-	else if (checktime <= GREAT_RANGE) {//GREAT
-		return JUDGE::GREAT;
-	}
-	else if (checktime <= GOOD_RANGE) {//GOOD
-		return JUDGE::GOOD;
-	}
-	else {//BAD
-		return JUDGE::BAD;
-	}
-}
-
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
 	return &judgecount;
 }
-
-
 
 
 void NotesManager::draw(void){
@@ -184,21 +252,20 @@ void NotesManager::draw(void){
 		Print << judgecount.cnt[i];
 	}
 	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//判定線の描画
-	displayBarline();
 
 	for(int i = 0; i < LANESIZE; i++){
 		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//レーンの描画
 		for (noteitr itr = displayitr[i]; itr != notelist[i].end(); itr++) {
-			if (nowTime < itr->time - timeRequired)//描画前なら描画打ち切り
+			if (nowtime < itr->time - timeRequired)//描画前なら描画打ち切り
 				break;
 			if (itr->display == false)
 				continue;
 
 			switch (itr->type){
-			case NORMAL:
+			case NOTESTYPE::NORMAL:
 				displayNormal(i, itr->time);
 				break;
-			case LONG:
+			case NOTESTYPE::LONG:
 				displayLong(i, itr->time, itr->longtime);
 				break;
 			default:
@@ -206,18 +273,18 @@ void NotesManager::draw(void){
 			}
 		}	
 	}
+//	drawAllEffect();
 }
 
 double NotesManager::getProgress(int time) {
-	return (timeRequired - (time - nowTime)) / timeRequired;
+	return (timeRequired - (time - nowtime)) / timeRequired;
 }
 
 double NotesManager::progressByAngle(double progressRate) {
 	using namespace std;
-	constexpr double PI = 3.1415;
 	constexpr double EYE_HEIGHT = 1.0;
-	constexpr double START_ANGLE = 0.4 * PI;//単位はラジアン(0.5以上を設定してはならない)
-	constexpr double JUDGE_ANGLE = 0.1 * PI;//単位はラジアン
+	constexpr double START_ANGLE = 0.4_pi;//単位はラジアン(0.5以上を設定してはならない)
+	constexpr double JUDGE_ANGLE = 0.1_pi;//単位はラジアン
 	const static double START_RANGE = EYE_HEIGHT * tan(START_ANGLE);
 	const static double JUDGE_RANGE = EYE_HEIGHT * tan(JUDGE_ANGLE);
 	double nowRange = START_RANGE - (START_RANGE - JUDGE_RANGE) * progressRate;
@@ -231,21 +298,6 @@ double NotesManager::getCurrentPosition(int startPos, int endPos, double progres
 double NotesManager::getScale(double currenty) {
 	double temp = currenty / (laneJudgeY - 100);//少し早めに縮小率をもとに戻すため引いてみている
 	return  temp;
-}
-
-void NotesManager::displayBarline() {
-	if (barStart < nowTime) {
-		barStart += barBetween;
-	}
-
-	//小節線の描画
-	for (int i = barStart;i < nowTime + timeRequired;i += barBetween) {
-		double progressRate = progressByAngle(getProgress(i));
-		double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
-		double currentX1 = getCurrentPosition(laneStartX[0], laneJudgeX[0], progressRate);
-		double currentX2 = getCurrentPosition(laneStartX[3], laneJudgeX[3], progressRate);
-		Line(currentX1, currentY, currentX2, currentY).draw(progressRate * 4, Palette::Red);
-	}
 }
 
 void NotesManager::displayNormal(int lane, int time) {
@@ -292,7 +344,26 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	TextureAsset(U"note").scaled(scaleBgn).drawAt(currentBgnX, currentBgnY);
 }
 
+/*
+void NotesManager::effectInit() {
+	enum USE_EFFECT {
+		NORMAL,
+		PARFECT
+	};
+	FlipEffect effectNormal(U"resources/images/effect/sol.png", 43, 43, 0, 0);
+	FlipEffect effectParfect(U"resources/images/effect/magic.png", 43, 43, 0, 0);
+	useFlipEffect.push_back(effectNormal);
+	useFlipEffect.push_back(effectParfect);
+}
+void NotesManager::drawAllEffect() {
+	for (auto& flip : useFlipEffect) {
+		flip.draw();
+	}
+}
+useFlipEffect[NORMAL].update();.
+*/
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット
 	notessubject->notifyObservers();//イベント起動
 }
+
