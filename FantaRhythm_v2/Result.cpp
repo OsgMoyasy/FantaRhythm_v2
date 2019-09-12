@@ -17,7 +17,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool clearFlag) {
 		//テクスチャ初期化
 		TextureAsset::Register(U"back", U"resources/images/back/BackScreen.jpg");
 		imNumberInit();
-		feffect = new FlipEffect(U"resources/images/effects/num2.png", 180, 215, 0, 0);
+		feffect = new FlipEffect(U"resources/images/effect/num2.png", 180, 213, 0, 0, 0.2);
 		//効果音初期化
 		se = new SE(U"resources/musics/effects/Congratulations.wav");
 		se->play();

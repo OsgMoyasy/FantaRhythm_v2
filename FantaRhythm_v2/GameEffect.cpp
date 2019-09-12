@@ -36,18 +36,19 @@ TextureRegion MapFlip::getFlip() {
 }
 
 //FlipMovie///////////////////////////////////////////////////////////////////////////////////
-FlipMovie::FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw) {
+FlipMovie::FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween) {
 	mapflip = new MapFlip(map, xFlipWidth, yFlipHeight);
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
 	switchTime = 0;
+	this->switchBetween = switchBetween;//Ø‚èo‚µ‰æ‘œ‚ğØ‚è‘Ö‚¦‚éŠÔŠu[•b?]
 }
+
+
 FlipMovie::~FlipMovie() {
 	delete mapflip;
 }
 bool FlipMovie::update(double t) {
-	constexpr double switchBetween = 0.03;	//Ø‚èo‚µ‰æ‘œ‚ğØ‚è‘Ö‚¦‚éŠÔŠu[•b?]
-
 	if (switchTime < t) {				//Ø‚è‘Ö‚¦ŠÔ‚ª‚«‚½‚ç
 		switchTime += switchBetween;
 		if (!mapflip->nextFlip()) {	//Ÿ‚Ì‰æ‘m‚ÉØ‚è‘Ö‚¦A‘å‚«‚¢‰æ‘œ‚ÌÅŒã‚Ü‚Å•`‰æ‚µ‚Ä‚¢‚½‚È‚ç
@@ -59,12 +60,13 @@ bool FlipMovie::update(double t) {
 }
 
 //FlipEffect/////////////////////////////////////////////////////////////////////////////////////////////
-FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw)
+FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween)
 	:map(path) {
 	this->xFlipWidth = xFlipWidth;
 	this->yFlipHeight = yFlipHeight;
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
+	this->switchBetween = switchBetween;
 }
 void FlipEffect::setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight) {
 	Texture tmp(path);
@@ -77,10 +79,10 @@ void FlipEffect::setPos(int xDraw, int yDraw) {
 	this->yDraw = yDraw;
 }
 void FlipEffect::play() {
-	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
+	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw, switchBetween);
 }
 void FlipEffect::play(int xDraw, int yDraw) {
-	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw);
+	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw, switchBetween);
 }
 void FlipEffect::draw() {
 	effect.update();
