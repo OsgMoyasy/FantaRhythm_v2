@@ -1,7 +1,7 @@
 #include "GameEffect.h"
 
 //SE///////////////////////////////////////////////////////////////////////////////////
-SE::SE(FilePath& path) {
+SE::SE(const FilePath& path) {
 	sound = new Audio(path);
 }
 SE::~SE() {

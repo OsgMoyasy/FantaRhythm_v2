@@ -1,9 +1,9 @@
 #include "Result.h"
 
-Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool clearflag) {
-	this->judgecnt = judgecnt;
-	this->totaldmg = totaldmg;
-	this->clearflag = clearflag;
+Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool clearFlag) {
+	this->judgeCnt = judgeCnt;
+	this->totalDamage = totalDamage;
+	this->clearFlag = clearFlag;
 
 	framecnt = 0;
 	alphaBack = 0;
@@ -13,13 +13,21 @@ Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool clearflag) {
 	FontAsset::Preload(U"font");
 	FontAsset::Register(U"subfont", 30);
 	FontAsset::Preload(U"subfont");
-	if (clearflag) {//ゲームクリア
+	if (!clearFlag) {//ゲームクリア
+		//テクスチャ初期化
 		TextureAsset::Register(U"back", U"resources/images/back/BackScreen.jpg");
+		imNumberInit();
+		feffect = new FlipEffect(U"resources/images/effects/num2.png", 180, 215, 0, 0);
+		//効果音初期化
+		se = new SE(U"resources/musics/effects/Congratulations.wav");
+		se->play();
+
 		stateUpdate = &Result::successUpdate;
 		stateDraw = &Result::successDraw;
-		int score = calcScore(this->judgecnt);
+		int score = calcScore(this->judgeCnt);
 		scoreStr = Format(score);
 		scoreDraw = U"               ";
+		feffect->play(100,100);
 	}
 	else {//ゲームオーバー
 		TextureAsset::Register(U"back", U"resources/images/back/gameOver.jpg");
@@ -48,6 +56,19 @@ void Result::changeFontAlpha(void) {
 }
 
 //ゲームクリア用
+void Result::imNumberInit() {
+	constexpr int w = 180, h = 215;
+	Image numberBase = Image(U"resources/images/effect/num2.png");
+	int wc = numberBase.width() / w;
+	int wh = numberBase.height() / h;
+	for (int y = 0; y < wh; y++) {
+		for (int x = 0; x < wc; x++) {
+			imNumber[x + wc * y] = Texture(numberBase.clipped(x * wc, y * wh, w, h));
+		}
+	}
+	
+}
+
 int Result::calcScore(JUDGE::JudgeCount &jc) {//スコア計算
 	constexpr int weight[JUDGE::TYPE_SIZE] = {100, 70, 50, 0};
 	int score = 0;
@@ -58,15 +79,15 @@ int Result::calcScore(JUDGE::JudgeCount &jc) {//スコア計算
 }
 void Result::successUpdate(void) {
 	scoreEffect();
-
 }
 void Result::successDraw(void) {
 	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
 	FontAsset(U"subfont")(U"Score   ::"+ scoreDraw).draw(Window::Width() / 2 - 100, 150,Color(0x000000));
-	FontAsset(U"subfont")(U"Perfect ::" + Format(this->judgecnt.cnt[JUDGE::PERFECT])).draw(Window::Width() / 2 - 100, 190, Color(0x000000));
-	FontAsset(U"subfont")(U"Great   ::" + Format(this->judgecnt.cnt[JUDGE::GREAT])).draw(Window::Width() / 2 - 100, 220, Color(0x000000));
-	FontAsset(U"subfont")(U"Good    ::" + Format(this->judgecnt.cnt[JUDGE::GOOD])).draw(Window::Width() / 2 - 100, 260, Color(0x000000));
-	FontAsset(U"subfont")(U"Bad     ::" + Format(this->judgecnt.cnt[JUDGE::BAD])).draw(Window::Width() / 2 - 100, 300, Color(0x000000));
+	FontAsset(U"subfont")(U"Perfect ::" + Format(this->judgeCnt.cnt[JUDGE::PERFECT])).draw(Window::Width() / 2 - 100, 190, Color(0x000000));
+	FontAsset(U"subfont")(U"Great   ::" + Format(this->judgeCnt.cnt[JUDGE::GREAT])).draw(Window::Width() / 2 - 100, 220, Color(0x000000));
+	FontAsset(U"subfont")(U"Good    ::" + Format(this->judgeCnt.cnt[JUDGE::GOOD])).draw(Window::Width() / 2 - 100, 260, Color(0x000000));
+	FontAsset(U"subfont")(U"Bad     ::" + Format(this->judgeCnt.cnt[JUDGE::BAD])).draw(Window::Width() / 2 - 100, 300, Color(0x000000));
+	feffect->draw();
 }
 
 void Result::scoreEffect(void) {

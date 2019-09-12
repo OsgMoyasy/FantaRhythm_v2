@@ -3,7 +3,7 @@
 
 class SE {
 public:
-	SE(FilePath& path);
+	SE(const FilePath& path);
 	~SE();
 	void play();//SE‚ğÄ¶‚·‚éBd•¡‚µ‚ÄÄ¶‚³‚ê‚æ‚¤‚Æ‚µ‚½AÅ‰‚©‚çÄ¶‚µ‚È‚¨‚·
 private:
