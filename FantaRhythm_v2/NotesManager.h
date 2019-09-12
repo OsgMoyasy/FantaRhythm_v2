@@ -14,25 +14,7 @@ private:
 	enum class NOTESTYPE;
 	struct Notes;
 
-	/*
-	class Update {
-	public:
-		Update();
-		~Update();
-		void update();
-		void operator()() { update(); }
-	private:
-	};
 
-	class Draw {
-	public:
-		Draw();
-		~Draw();
-		void draw();
-		void operator()() { draw(); }
-	private:
-	};
-	*/
 	int notewidth;
 	
 	class NotesSubject* notessubject;
@@ -47,13 +29,13 @@ private:
 	int nowtime;	//現在時間[ms]
 
 	//ボタン関係の変数
-	bool down[LANESIZE][2];		//将来的にはboolではなくなり押された瞬間、離された瞬間の再生時刻が入る
-	bool press[LANESIZE][2];	//ここはboolで押されてる状態離されてる状態を管理。[2]は縦に並んだ2つのボタンを表し、[0]は上、[1]は下である。
-	enum class PSHBTN;		//縦列のボタンの押し状況(無し,上,下,同時)
+    int down[LANESIZE];
+	int press[LANESIZE];
+	double bothtime[LANESIZE];			//同時押し(同時離し)された時の時間を保持
 
 	//ロングノーツ用
-	bool longflag[LANESIZE];//押されているかどうか状態を保持
-	PSHBTN pressedkey[LANESIZE];//押されたボタンを保持
+	//bool longflag[LANESIZE];//押されているかどうか状態を保持
+	int pressedkey[LANESIZE];//押されたボタンを保持
 
 	//描画関係の変数
 	int laneStartX[LANESIZE];	//Start = レーンの上端
@@ -69,8 +51,7 @@ private:
 	void checkAttack(void);		//ボタンの押し状況を確認する
 	struct ButtonandJudge;		//NoteisHit関数の応答用
 	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
-	ButtonandJudge NoteisHit(int lane, int judgetime);
-	bool NoteisPress(int lane, PSHBTN button);//上下ボタンを指定して
+	JUDGE::TYPE NoteisHit(int judgetime);
 
 	void controlJudge(void);	//ノーツの種類毎に判定用関数を呼び出し
 	void judgeNormal(int lane);	//ノーマルノーツを判定
