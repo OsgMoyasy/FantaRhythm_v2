@@ -48,7 +48,7 @@ void Character::moveRigthLight() {
 void Character::damage(int damage) {
 	if (guardflag == 1) {
 		//ガードエフェクト
-		guardflag == false;
+		guardflag = false;
 	}
 	else {
 		hp -= damage;
@@ -78,11 +78,11 @@ void Character::setAttackEvent(int attack, EffectType::Type type) {
 }
 
 void Character::playEffect(EffectType::Type type) {
-	flipeffect[type]->play(x - effectsize / 3, y);
+	flipeffect[type]->play((int)(x - effectsize / 3), (int)y);
 }
 
 void Character::playEffect(EffectType::Type type, double x, double y) {
-	flipeffect[type]->play(x, y);
+	flipeffect[type]->play((int)x, (int)y);
 }
 
 void Character::drawEffect(void) {
