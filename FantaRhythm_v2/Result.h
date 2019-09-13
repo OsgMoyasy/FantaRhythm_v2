@@ -13,9 +13,11 @@ public:
 	void draw(void);
 
 private:
+	Stopwatch stopwatch;
 	class SE* se;
-	class FlipEffect* feffect;
-	Texture imNumber[10];
+	class FlipEffect* numEffect;
+	class ImageNumber* imnumber;
+	
 
 	int totalDamage;
 	JUDGE::JudgeCount judgeCnt;
@@ -45,4 +47,25 @@ private:
 	//ゲームオーバー用
 	void failedUpdate(void);
 	void failedDraw(void);
+};
+
+
+class ImageNumber {
+private:
+	Texture imNumber[10];
+	
+
+	typedef struct _NumPoint {
+		int x, y;
+		int num;
+	}NumPoint;
+
+	std::vector<NumPoint> numberp;
+
+public:
+	ImageNumber(FilePath path, int w, int h);
+	~ImageNumber();
+	void add(int num, int x, int y);
+	void draw();
+
 };

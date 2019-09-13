@@ -59,6 +59,7 @@ bool FlipMovie::update(double t) {
 	return true;	//çƒê∂åpë±
 }
 
+
 //FlipEffect/////////////////////////////////////////////////////////////////////////////////////////////
 FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween)
 	:map(path) {

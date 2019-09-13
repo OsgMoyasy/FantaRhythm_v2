@@ -24,8 +24,8 @@ void Enemy::update() {
 void Enemy::draw() {
 	Print << U"enemydmg" + Format(totalDamage);
 	TextureAsset(U"enemy").drawAt(x, y);
-	for (FlipEffect* feffect : flipeffect) {
-		feffect->draw();
+	for (FlipEffect* numEffect : flipeffect) {
+		numEffect->draw();
 	}
 
 }

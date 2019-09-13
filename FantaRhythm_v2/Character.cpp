@@ -86,8 +86,8 @@ void Character::playEffect(EffectType::Type type, double x, double y) {
 }
 
 void Character::drawEffect(void) {
-	for (FlipEffect* feffect : flipeffect) {
-		feffect->draw();
+	for (FlipEffect* numEffect : flipeffect) {
+		numEffect->draw();
 	}
 }
 
