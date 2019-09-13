@@ -2,23 +2,23 @@
 #include <list>
 
 
-enum Massage {//ã‚¤ãƒ™ãƒ³ãƒˆåä¸€è¦§ã€€ãã“ã¾ã§å¢—ãˆãã†ã«ãªã„ã®ã§ä¸€æ‹¬ç®¡ç†
-	NONE,//ãªã„å ´åˆ
-	UPATTACK,//ä¸Šãƒœã‚¿ãƒ³æ”»æ’ƒ
-	DOWNATTACK,//ä¸‹ãƒœã‚¿ãƒ³æ”»æ’ƒ
-	BOTHATTACK,//ä¸Šä¸‹ãƒœã‚¿ãƒ³æ”»æ’ƒ
+enum Massage {//ƒCƒxƒ“ƒg–¼ˆê——@‚»‚±‚Ü‚Å‘‚¦‚»‚¤‚É‚È‚¢‚Ì‚ÅˆêŠ‡ŠÇ—
+	NONE,//‚È‚¢ê‡
+	UPATTACK,//ãƒ{ƒ^ƒ“UŒ‚
+	DOWNATTACK,//‰ºƒ{ƒ^ƒ“UŒ‚
+	BOTHATTACK,//ã‰ºƒ{ƒ^ƒ“UŒ‚
 	GUARD,
-	DAMAGE,//å°ãƒ€ãƒ¡ãƒ¼ã‚¸
+	DAMAGE,//¬ƒ_ƒ[ƒW
 };
 
-typedef struct _Obj {//ã‚¤ãƒ™ãƒ³ãƒˆç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€€
-	Massage msg;//ã‚¤ãƒ™ãƒ³ãƒˆå
+typedef struct _Obj {//ƒCƒxƒ“ƒg—pƒIƒuƒWƒFƒNƒg@
+	Massage msg;//ƒCƒxƒ“ƒg–¼
 	int val;
 }Obj;
 
 /*--------------------------------------------------------
-	ã‚¯ãƒ©ã‚¹åï¼šObserver
-	æ©Ÿèƒ½ï¼šè¦³å¯Ÿè€…
+	ƒNƒ‰ƒX–¼FObserver
+	‹@”\FŠÏ@Ò
 
 ---------------------------------------------------------*/
 class Observer{
@@ -26,39 +26,39 @@ public:
 	//virtual ~Observer(void); 
 	virtual void funcEvent(Obj obj) = 0;
 
-	void setObject(class Subject* pSubject){//å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒãƒ³ãƒ‰ãƒ© Subjectå´ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹
+	void setObject(class Subject* pSubject){//ŒÄ‚Ño‚³‚ê‚éƒnƒ“ƒhƒ‰ Subject‘¤‚©‚çŒÄ‚Ño‚³‚ê‚é
 		m_pSubject = pSubject;
 	}
-protected://æ´¾ç”Ÿå…ˆã®privateãƒ¡ãƒ³ãƒã«ãªã‚‹protected
+protected://”h¶æ‚Ìprivateƒƒ“ƒo‚É‚È‚éprotected
 	class Subject* m_pSubject;
 
 };
 
 /*--------------------------------------------------------
-	ã‚¯ãƒ©ã‚¹åï¼šSubject
-	æ©Ÿèƒ½ï¼šè¦³å¯Ÿå¯¾è±¡ é€šçŸ¥ã™ã‚‹å´
-		  ã‚ªãƒ–ã‚¶ãƒ¼ãƒã®ãƒªã‚¹ãƒˆã‚’ä¿æŒ
-		ã€€è‡ªåˆ†ã«çŠ¶æ…‹ã®å¤‰åŒ–ãŒã‚ã‚‹ã¨ä¿æŒã—ã¦ã„ã‚‹ã‚ªãƒ–ã‚¶ãƒ¼ãƒé”ã«é€šçŸ¥ã‚’é€ã‚‹
+	ƒNƒ‰ƒX–¼FSubject
+	‹@”\FŠÏ@‘ÎÛ ’Ê’m‚·‚é‘¤
+		  ƒIƒuƒU[ƒo‚ÌƒŠƒXƒg‚ğ•Û
+		@©•ª‚Éó‘Ô‚Ì•Ï‰»‚ª‚ ‚é‚Æ•Û‚µ‚Ä‚¢‚éƒIƒuƒU[ƒo’B‚É’Ê’m‚ğ‘—‚é
 
 
 -----------------------------------------------------------*/
 class Subject {
 public:
-	//Observerå…¨ã¦å‰Šé™¤
+	//Observer‘S‚Äíœ
 	virtual ~Subject(void) {
 		std::list<Observer*>::iterator it;
 		for (it = m_observers.begin(); it != m_observers.end(); it++) {
 			(*it)->setObject(NULL);
 		}
 	}
-	//ç™»éŒ²ã•ã‚ŒãŸObserverã®ãƒãƒ³ãƒ‰ãƒ©ã‚’å‘¼ã³å‡ºã™
+	//“o˜^‚³‚ê‚½Observer‚Ìƒnƒ“ƒhƒ‰‚ğŒÄ‚Ño‚·
 	virtual void notifyObservers(void) {
 		std::list<Observer*>::iterator it;
 		for (it = m_observers.begin(); it != m_observers.end(); it++) {
 			(*it)->funcEvent(getMassage());
 		}
 	}
-	//Observerã‚’ç™»éŒ²
+	//Observer‚ğ“o˜^
 	virtual void addObserver(class Observer* pObserver) {
 		m_observers.push_back(pObserver);
 		pObserver->setObject(this);
@@ -67,18 +67,18 @@ public:
 
 
 protected:
-	std::list<class Observer*> m_observers;//ã‚ªãƒ–ã‚¶ãƒ¼ãƒã‚’ä¿æŒ
+	std::list<class Observer*> m_observers;//ƒIƒuƒU[ƒo‚ğ•Û
 };
 
 class NotesSubject : public Subject {
 private:
 	Obj o;
 public:
-	//ã‚¤ãƒ™ãƒ³ãƒˆç”¨ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™
+	//ƒCƒxƒ“ƒg—p‚ÌƒƒbƒZ[ƒW‚ğ•Ô‚·
 	Obj getMassage() {
 		return o;
 	}
-	//ã‚¤ãƒ™ãƒ³ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+	//ƒCƒxƒ“ƒg‚ğƒZƒbƒg‚·‚é
 	void setEvent(Massage msg, int lane) {
 		o = {msg,lane};
 	}
@@ -88,11 +88,11 @@ class CharacterSubject : public Subject {
 private:
 	Obj o;
 public:
-	//ã‚¤ãƒ™ãƒ³ãƒˆç”¨ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™
+	//ƒCƒxƒ“ƒg—p‚ÌƒƒbƒZ[ƒW‚ğ•Ô‚·
 	Obj getMassage() {
 		return o;
 	}
-	//ã‚¤ãƒ™ãƒ³ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+	//ƒCƒxƒ“ƒg‚ğƒZƒbƒg‚·‚é
 	void setEvent(int attack) {
 		o = { NONE, attack };
 	}

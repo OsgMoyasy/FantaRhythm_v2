@@ -25,6 +25,7 @@ struct NotesManager::Notes {
 	NOTESTYPE type;
 	int time;
 	int longtime;
+	int judgetime;
 	bool display;
 };
 
@@ -48,11 +49,13 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		note.longtime = note.time + csv.get<int>(row, 1);
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
-			case 0:
+		case 0:
 				note.type = NOTESTYPE::NORMAL;
+				note.judgetime = note.time;
 				break;
-			case 1:
+		case 1:
 				note.type = NOTESTYPE::LONG;
+				note.judgetime = note.longtime;
 				break;
 		}
 		note.display = true;
@@ -201,17 +204,21 @@ void NotesManager::judgeLong(int lane) {
 	if (pressedkey[lane] > 0) {//離すときの処理
 		if (press[lane] == pressedkey[lane]) {//ボタン押下中
 			checkitr[lane]->time = (int)(nowtime);//判定位置以降で下側を止める
-			if (nowtime >= checkitr[lane]->longtime) {//押されているままノーツの上端を過ぎた時
-				return judgeLongEvent(JUDGE::BAD, lane);//強制的に次のノーツへ処理を移行
+			if (nowtime >= checkitr[lane]->judgetime) {//押されているままノーツの上端を過ぎた時
+				checkitr[lane]->longtime = (int)(nowtime);//判定位置以降で上側を止める
+				if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//過ぎたときの判定も取るため
+					return judgeLongEvent(JUDGE::BAD, lane);//強制的に次のノーツへ処理を移行
+				}
+				
 			}
 		}
 		else {//離した
-			JUDGE::TYPE type = NoteisHit(checkitr[lane]->longtime);
+			JUDGE::TYPE type = NoteisHit(checkitr[lane]->judgetime);
 			return judgeLongEvent(type, lane);
 		}
 	}
 	
-	if (nowtime >= checkitr[lane]->longtime + JUDGE_RANGE::GOOD) {//判定を超えた時
+	if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//判定を超えた時
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
