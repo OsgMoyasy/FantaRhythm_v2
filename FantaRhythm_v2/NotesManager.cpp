@@ -202,7 +202,7 @@ void NotesManager::judgeLong(int lane) {
 	}
 
 	if (pressedkey[lane] > 0) {//離すときの処理
-		if (press[lane] == pressedkey[lane]) {//ボタン押下中
+		if ((press[lane] & pressedkey[lane]) == pressedkey[lane]) {//ボタン押下中
 			checkitr[lane]->time = (int)(nowtime);//判定位置以降で下側を止める
 			if (nowtime >= checkitr[lane]->judgetime) {//押されているままノーツの上端を過ぎた時
 				checkitr[lane]->longtime = (int)(nowtime);//判定位置以降で上側を止める
