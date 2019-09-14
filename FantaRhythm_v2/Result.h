@@ -18,7 +18,7 @@ private:
 	class FlipEffect* numEffect;
 	class ImageNumber* imnumber;
 	
-
+	int score;
 	int totalDamage;
 	JUDGE::JudgeCount judgeCnt;
 	bool clearFlag;
@@ -36,10 +36,12 @@ private:
 	//ゲームクリア用
 
 	String scoreStr;//スコアを文字列変換
-	String scoreDraw;//実際に描画するスコア
+	String damageStr;//ダメージを文字列変換
 
 	void imNumberInit(void);
-	void scoreEffect(void); //スコアを0~9と順番に変わって下位の桁から確定させるようにする
+	bool scoreEffect(); //スコアを0~9と順番に変わって下位の桁から確定させるようにする
+	bool damageEffect();
+	bool judgeEffect();
 	int calcScore(JUDGE::JudgeCount &judgeCnt);//最終的なスコア計算
 	void successUpdate(void);
 	void successDraw(void);
@@ -53,7 +55,7 @@ private:
 class ImageNumber {
 private:
 	Texture imNumber[10];
-	
+	int imw, imh;
 
 	typedef struct _NumPoint {
 		int x, y;
@@ -62,10 +64,12 @@ private:
 
 	std::vector<NumPoint> numberp;
 
+
 public:
 	ImageNumber(FilePath path, int w, int h);
 	~ImageNumber();
-	void add(int num, int x, int y);
+	void addOne(int num, int x, int y);
+	void ImageNumber::addMulti(int num, int x, int y);
 	void draw();
 
 };

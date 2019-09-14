@@ -1,9 +1,11 @@
 #include "Result.h"
 #include <vector>
-constexpr double NUMBER_SWTIME = 0.1;
+constexpr double NUMBER_SWTIME = 0.05;
 constexpr double NUM_ENDTIME = NUMBER_SWTIME * 9 * 1000;
-constexpr int NUMIM_WIDTH = 100, NUMIM_HEIGHT = 150;
-constexpr int SCOREX =300, SCOREY = 200;
+constexpr int NUMIM_WIDTH = 50, NUMIM_HEIGHT = 75;
+constexpr int SCOREX = 800, SCOREY = 130;
+
+constexpr int JUDGEXY[4][2] = { {50,100,} };
 
 Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool clearFlag) {
 	this->judgeCnt = judgeCnt;
@@ -20,7 +22,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool clearFlag) {
 	FontAsset::Preload(U"subfont");
 	if (!clearFlag) {//ゲームクリア
 		//テクスチャ初期化
-		TextureAsset::Register(U"back", U"resources/images/back/BackScreen.jpg");
+		TextureAsset::Register(U"back", U"resources/images/back/result.png");
 		imNumberInit();
 		//効果音初期化
 		se = new SE(U"resources/musics/effects/Congratulations.wav");
@@ -30,7 +32,9 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool clearFlag) {
 		stateDraw = &Result::successDraw;
 		int score = calcScore(this->judgeCnt);
 		scoreStr = Format(score);
-		scoreDraw = U"               ";
+		damageStr = Format(totalDamage);
+		
+
 	}
 	else {//ゲームオーバー
 		TextureAsset::Register(U"back", U"resources/images/back/gameOver.jpg");
@@ -60,8 +64,8 @@ void Result::changeFontAlpha(void) {
 
 //ゲームクリア用
 void Result::imNumberInit() {
-	imnumber = new ImageNumber(U"resources/images/items/num/num.png", NUMIM_WIDTH, NUMIM_HEIGHT);
-	numEffect = new FlipEffect(U"resources/images/items/num/num.png", NUMIM_WIDTH, NUMIM_HEIGHT, 0, 0, NUMBER_SWTIME);
+	imnumber = new ImageNumber(U"resources/images/items/num/num2.png", NUMIM_WIDTH, NUMIM_HEIGHT);
+	numEffect = new FlipEffect(U"resources/images/items/num/num2.png", NUMIM_WIDTH, NUMIM_HEIGHT, 0, 0, NUMBER_SWTIME);
 }
 
 int Result::calcScore(JUDGE::JudgeCount &jc) {//スコア計算
@@ -73,7 +77,13 @@ int Result::calcScore(JUDGE::JudgeCount &jc) {//スコア計算
 	return score;
 }
 void Result::successUpdate(void) {
-	scoreEffect();
+	if (scoreEffect() == false) {
+		if (damageEffect() == false) {
+			if (judgeEffect() == false) {
+
+			}
+		}
+	}
 }
 void Result::successDraw(void) {
 	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
@@ -81,35 +91,67 @@ void Result::successDraw(void) {
 	numEffect->draw();
 }
 
-void Result::scoreEffect(void) {
-	static int canChange = 2;
-	static int wordCnt = scoreStr.size() -1;
+
+bool Result::scoreEffect() {
+	static int canChange = 1;
+	static int currentWord = scoreStr.size() -1;//現在確定させようとしている数字
 	static double prevtime = -100;
 
-	if (wordCnt < 0) {//全て確定しているならば終了させる
-		return;
+	if (currentWord < 0) {//全て確定しているならばダメージ以下の描画に入る
+		return false;
 	}
 	if (stopwatch.msF() - prevtime >= NUM_ENDTIME) {
 		if (canChange == 0) {
-			imnumber->add(scoreStr.at(wordCnt) - U'0', SCOREX + wordCnt * NUMIM_WIDTH, SCOREY);
-			wordCnt--;
-			canChange = 2;
+			imnumber->addOne(scoreStr.at(currentWord) - U'0', (SCOREX - scoreStr.size() * NUMIM_WIDTH) + currentWord * NUMIM_WIDTH, SCOREY);
+			currentWord--;
+			canChange = 1;
 		}
 		else if (canChange > 0) {
-			numEffect->play(SCOREX + wordCnt * NUMIM_WIDTH, SCOREY);
+			numEffect->play((SCOREX - scoreStr.size() * NUMIM_WIDTH) + currentWord * NUMIM_WIDTH, SCOREY);
 			canChange--;
 			prevtime = stopwatch.msF();
 		}
 	}
-
-	//メモ　ゲームエフェクトで生存判定をとれるように変更する　生存何回で確定にする
-	/*
-	if (framecnt % frameend == 0) {//数字を確定させる
-		scoreDraw.at(wordCnt) = scoreStr.at(wordCnt);
-		wordCnt--;
-	}
-	*/
+	return true;
 }
+
+bool Result::damageEffect() {
+	static int canChange = 1;
+	static int currentWord = damageStr.size() - 1;//現在確定させようとしている数字
+	static double prevtime = -100;
+
+	if (currentWord < 0) {//全て確定しているならばダメージ以下の描画に入る
+		return false;
+	}
+	if (stopwatch.msF() - prevtime >= NUM_ENDTIME) {
+		if (canChange == 0) {
+			imnumber->addOne(damageStr.at(currentWord) - U'0', (SCOREX - damageStr.size() * NUMIM_WIDTH) + currentWord * NUMIM_WIDTH, SCOREY + NUMIM_HEIGHT);
+			currentWord--;
+			canChange = 1;
+		}
+		else if (canChange > 0) {
+			numEffect->play((SCOREX - damageStr.size() * NUMIM_WIDTH) + currentWord * NUMIM_WIDTH, SCOREY + NUMIM_HEIGHT);
+			canChange--;
+			prevtime = stopwatch.msF();
+		}
+	}
+	return true;
+}
+
+bool Result::judgeEffect() {
+	static int row = 0;//1 = damage 2 = parfect・・・
+	static double prevtime = stopwatch.msF();
+	if (row >= 4) {
+		return false;
+	}
+	if (stopwatch.msF() - prevtime >= NUM_ENDTIME && row < 4) {
+		imnumber->addMulti(judgeCnt.cnt[row], SCOREX, SCOREY + NUMIM_HEIGHT * (row + 2));
+		prevtime = stopwatch.msF();
+		row++;
+	}
+	return true;
+}
+
 //ゲームオーバー用
 void Result::failedUpdate(void) {
 	//背景や文字を時間経過で表示させるための処理
@@ -130,22 +172,32 @@ void Result::failedDraw(void) {
 
 ImageNumber::ImageNumber(FilePath path, int w, int h) {//横一列に並んでいる画像
 	Image numberBase = Image(path);
-	int wc = numberBase.width() / w;
-	int wh = numberBase.height() / h;
 	for (int i = 0; i < 10; i++) {
 		imNumber[i] = Texture(numberBase.clipped(i * w, 0, w, h));
 	}
+	imw = w;
+	imh = h;
 }
 ImageNumber::~ImageNumber() {
 
 }
-void ImageNumber::add(int num, int x, int y) {
+void ImageNumber::addOne(int num, int x, int y) {
 	NumPoint tmp;
 	tmp.num = num;
 	tmp.x = x;
 	tmp.y = y;
 	numberp.push_back(tmp);
 }
+
+void ImageNumber::addMulti(int num, int x, int y) {
+	constexpr char32_t zero = U'0';
+	String nums = Format(num);
+	for (int i = 0; i < nums.size(); i++) {
+		int n = nums.at(i) - zero;
+		addOne(n, (x - nums.size() * NUMIM_WIDTH) + imw * i, y);
+	}
+}
+
 void ImageNumber::draw() {
 	for (int i = 0; i < numberp.size(); i++) {
 		imNumber[numberp.at(i).num].drawAt(numberp.at(i).x, numberp.at(i).y);
