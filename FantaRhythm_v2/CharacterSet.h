@@ -11,6 +11,9 @@ namespace JOB {
 		ARCHER,
 		WITCH,
 		SAGE,
+		BERSERKER,
+		COMBOSTAR,
+		TANKER,
 	};
 }
 

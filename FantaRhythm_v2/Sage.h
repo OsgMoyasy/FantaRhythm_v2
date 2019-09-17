@@ -12,9 +12,10 @@ public:
 	void getEvent(Massage msg);
 
 private:
+	int heal();
 	int recoverycount;
 	int curehp;
 	void recoverycharge();
-	void Qrecovery();
+	void recoveryClear();
 
 };

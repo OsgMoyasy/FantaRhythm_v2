@@ -45,14 +45,15 @@ void Character::moveRigthLight() {
 
 }
 
-void Character::damage(int damage) {
+void Character::damage(int damage) {		//ダメージ食らうだけの関数
+		hp -= damage;
+		playEffect(EffectType::DAMAGE, x, y);
+}
+
+void Character::cheakdamage(int damage) {		//タンク用
 	if (guardflag == 1) {
 		//ガードエフェクト
 		guardflag == false;
-	}
-	else {
-		hp -= damage;
-		playEffect(EffectType::DAMAGE, x, y);
 	}
 }
 
@@ -98,4 +99,14 @@ void Character::onGuardFlag(void) {
 
 void Character::guard(void) {
 
+}
+
+int Character::heal() {			//オーバーライド用
+	return 0;
+}
+
+void Character::recovery() {			//一人ひとりの回復量
+	if (heal() > 0) {
+		hp += heal();
+	}
 }

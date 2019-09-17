@@ -23,7 +23,6 @@ public:
 	virtual void getEvent(Massage msg)=0;
 	void moveUpDown();
 	void moveRigthLight();
-	void damage(int damage);
 	int getHp();
 	int getPower();
 	int getArgs1();
@@ -32,8 +31,11 @@ public:
 	void playEffect(EffectType::Type type);
 	void playEffect(EffectType::Type type, double x, double y);
 	void drawEffect(void);
-
+	int heal();			//ジョブクラスでオーバーライド
+	void recovery();	//回復
 	void onGuardFlag(void);
+	void cheakdamage(int damage);
+	void damage(int damage);
 
 
 private:
@@ -49,4 +51,5 @@ private:
 	int framecnt;//上下移動に使うフレームカウント
 	static bool guardflag;
 	void guard(void);//flagを降ろして防御
+
 };

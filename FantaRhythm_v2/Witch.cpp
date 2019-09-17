@@ -22,7 +22,7 @@ void Witch::update() {
 	Print << U"charge=" << chargecount;
 }
 
-void Witch::charge() {
+void Witch::charge() {				//Witchは基本チャージだけ
 	if (chargecount < CHARGEMAX) {
 		chargecount += 1;
 	}
@@ -34,6 +34,8 @@ void Witch::chargeClear() {
 
 void Witch::chargeAttack() {
 	chargedamage = getPower() * (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
+	setAttackEvent(chargedamage, EffectType::NOMAL);
+	chargeClear();
 }
 
 void Witch::getEvent(Massage msg) {
@@ -44,7 +46,6 @@ void Witch::getEvent(Massage msg) {
 		break;
 	case Massage::DOWNATTACK:
 		chargeAttack();
-		chargeClear();
 		break;
 	}
 }

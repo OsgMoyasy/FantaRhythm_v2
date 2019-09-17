@@ -23,20 +23,27 @@ void Archer::update() {
 	Print << U"Having arrows=" << arrowscount;			//持っている矢の数、名前は仮
 }
 
-void Archer::arrowscharge() {
+void Archer::arrowscharge() {		//矢のチャージ(5本まで)
 	if (arrowscount < ARROWSMAX) {
 		arrowscount += 1;
 	}
 }
 
-void Archer::arrowsClear() {
+void Archer::arrowsClear() {		//攻撃した後、矢が正の整数ならば減らす
 	if (arrowscount > 0) {
 		arrowscount -= 1;
 	}
 }
 
 void Archer::arrowsAttack() {
-	arrowsdamage = getPower() * Random(1,20);
+	if (arrowscount > 0) {			//矢の数があればランダムでダメージ、なければ常に1ダメージ
+		arrowsdamage = getPower() * Random(1, 20);
+	}
+	else {
+		arrowsdamage = 1;
+	}
+	setAttackEvent(arrowsdamage, EffectType::ULT);
+	arrowsClear();
 }
 
 
@@ -44,11 +51,9 @@ void Archer::getEvent(Massage msg) {
 	switch (msg) {
 	case Massage::UPATTACK:
 		arrowscharge();
-		setAttackEvent(getPower(), EffectType::NOMAL);
 		break;
 	case Massage::DOWNATTACK:
 		arrowsAttack();
-		arrowsClear();
 		break;
 	}
 }

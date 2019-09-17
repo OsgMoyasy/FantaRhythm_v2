@@ -111,6 +111,15 @@
     <ClCompile Include="Sage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Berserker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Combostar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -328,6 +337,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Berserker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Combostar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

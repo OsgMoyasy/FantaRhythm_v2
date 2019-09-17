@@ -6,7 +6,7 @@ constexpr int RECOVERYMAX = 15;
 //下ボタンである一定のチャージ量があれば回復
 
 Sage::Sage(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"sage", csv, ix, iy, row) {
-	recoverycount = 0;
+	recoveryClear();
 }
 
 Sage::~Sage() {
@@ -19,7 +19,7 @@ void Sage::draw() {
 
 void Sage::update() {
 	moveUpDown();
-	Print << U"recovery count=" << recoverycount;			//持っている矢の数、名前は仮
+	Print << U"recovery count=" << recoverycount;			
 }
 
 void Sage::recoverycharge() {
@@ -28,13 +28,18 @@ void Sage::recoverycharge() {
 	}
 }
 
+void Sage::recoveryClear() {
+	recoverycount = 0;
+}
 
-void Sage::Qrecovery() {
+int Sage::heal() {
 	if (recoverycount > 5) {
 		curehp = getPower() * recoverycount;
+		return curehp;
 	}
-
+	return 0;
 }
+
 
 void Sage::getEvent(Massage msg) {
 	switch (msg) {
@@ -43,8 +48,8 @@ void Sage::getEvent(Massage msg) {
 		setAttackEvent(getPower(), EffectType::NOMAL);
 		break;
 	case Massage::DOWNATTACK:
-		Qrecovery();
+		heal();
+		recoveryClear();
 		break;
 	}
 }
-

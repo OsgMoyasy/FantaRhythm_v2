@@ -65,6 +65,12 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	if (obj.msg == GUARD) {
 		cha[obj.val]->onGuardFlag();
 	}
+	for (int i = 0; i < CHANUMBER; i++) {
+		cha[i]->heal();
+		for (int j = 0; j < CHANUMBER; j++) {
+			cha[i]->recovery();
+		}
+	}
 }
 
 void CharacterSet::TotalhpDraw() {		//総HP表示

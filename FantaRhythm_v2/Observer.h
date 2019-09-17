@@ -3,11 +3,11 @@
 
 
 enum Massage {//イベント名一覧　そこまで増えそうにないので一括管理
-	NONE,//ない場合
-	UPATTACK,//上ボタン攻撃
-	DOWNATTACK,//下ボタン攻撃
+	NONE,		//ない場合
+	UPATTACK,	//上ボタン攻撃
+	DOWNATTACK,	//下ボタン攻撃
 	GUARD,
-	DAMAGE,//小ダメージ
+	DAMAGE,		//小ダメージ
 };
 
 typedef struct _Obj {//イベント用オブジェクト　
