@@ -1,8 +1,11 @@
 #pragma once
-
 #include <Siv3D.hpp>
 #include <vector>
 #include "GameEffect.h"
+
+//数字を画像表示するためのヘッダー
+//ImageNumber 数字を画像表示
+//NumWithEffect エフェクト付き数字画像表示
 
 class ImageNumber {
 private:

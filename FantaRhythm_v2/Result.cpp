@@ -4,7 +4,7 @@ constexpr double NUMBER_SWTIME = 0.05;						//êîéöÉGÉtÉFÉNÉgÇ™êÿÇËë÷ÇÌÇÈéûä‘
 constexpr double NUM_MAXTIME = NUMBER_SWTIME * 9 * 1000;	//êîéöÇ™ämíËÇ∑ÇÈÇ‹Ç≈ÇÃéûä‘
 constexpr int NUMIM_WIDTH = 50, NUMIM_HEIGHT = 75;
 constexpr int SCOREX = 800, SCOREY = 130;
-
+const String numberImPath = U"resources/images/items/num/num2.png";
 
 
 Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
@@ -18,21 +18,24 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 
 	FontAsset::Register(U"font", 50);
 	FontAsset::Preload(U"font");
-	FontAsset::Register(U"subfont", 30);
-	FontAsset::Preload(U"subfont");
+
 	if (!isClear) {//ÉQÅ[ÉÄÉNÉäÉA
 		//ÉeÉNÉXÉ`ÉÉèâä˙âª
 		TextureAsset::Register(U"back", U"resources/images/back/result.png");
+
 		//å¯â âπèâä˙âª
 		se = new SE(U"resources/musics/effects/Congratulations.wav");
 		se->play();
+
 		//ÉNÉäÉAópÉ|ÉCÉìÉ^äÑÇËìñÇƒ
 		stateUpdate = &Result::successUpdate;
 		stateDraw = &Result::successDraw;
+
 		//ÉXÉRÉAåvéZÅ@ï∂éöóÒïœä∑
 		score = calcScore(this->judgeCnt);
 		scoreStr = Format(score);
 		damageStr = Format(totalDamage);
+
 		//ï∂éöóÒÇâÊëúïœä∑
 		imNumberInit();
 	}
@@ -46,7 +49,6 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 }
 Result::~Result(void) {
 	FontAsset::Unregister(U"font");
-	FontAsset::Unregister(U"subfont");
 	TextureAsset::UnregisterAll();
 }
 void Result::update(void) {
@@ -55,6 +57,7 @@ void Result::update(void) {
 }
 void Result::draw(void) {
 	(this->*stateDraw)();
+	
 }
 
 void Result::changeFontAlpha(void) {
@@ -71,6 +74,7 @@ void Result::successUpdate(void) {
 		if (damageNumEffect->update(msF) == false) {
 			if (judgeUpdate() == false) {
 				//ëSÇƒÇÃï`âÊÇ™èIóπ
+				changeFontAlpha();//EscÇ≈èIóπÇÃÉÅÉbÉZÅ[ÉWï\é¶äJén
 			}
 		}
 	}
@@ -80,11 +84,11 @@ void Result::successDraw(void) {
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
 	judgeImNum->draw();
-
+	FontAsset(U"font")(U"Å` EscÉLÅ[Ç≈èIóπ Å`").drawAt(Window::Width() / 2, Window::Height() - 100, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//ÉXÉRÉAåvéZ îªíËÇÃêîÇ∆èdÇ›Çä|ÇØÇΩëçòaÇÉXÉRÉAÇ∆Ç∑ÇÈ
-	constexpr int weight[JUDGE::TYPE_SIZE] = { 100, 70, 50, 0 };//èdÇ›
+	constexpr int weight[JUDGE::TYPE_SIZE] = { 100, 70, 50, 0 };//èdÇ› [perfect, great, good, bad]
 	int score = 0;
 	for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
 		score += weight[i] * jc.cnt[i];
@@ -93,9 +97,9 @@ int Result::calcScore(JUDGE::JudgeCount& jc) {//ÉXÉRÉAåvéZ îªíËÇÃêîÇ∆èdÇ›Çä|ÇØÇ
 }
 
 void Result::imNumberInit() {
-	judgeImNum = new ImageNumber(U"resources/images/items/num/num2.png", NUMIM_WIDTH, NUMIM_HEIGHT);
-	scoreNumEffect = new NumWithEffect(U"resources/images/items/num/num2.png", scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT,NUMBER_SWTIME);
-	damageNumEffect = new NumWithEffect(U"resources/images/items/num/num2.png", damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT,NUMBER_SWTIME);
+	judgeImNum = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
+	scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT,NUMBER_SWTIME);
+	damageNumEffect = new NumWithEffect(numberImPath, damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT,NUMBER_SWTIME);
 }
 
 bool Result::judgeUpdate() {
@@ -104,7 +108,7 @@ bool Result::judgeUpdate() {
 	if (row >= JUDGE::TYPE_SIZE) {//ëSÇƒí«â¡ÇµèIÇÌÇ¡ÇΩÇÁ
 		return false;
 	}
-	if (stopwatch.msF() - prevtime >= NUM_MAXTIME && row < 4) {//í«â¡Ç≥ÇπÇÈéûä‘Ç™óàÇΩÇÁêîéöÇí«â¡Çµâ∫ï˚å¸Ç÷
+	if (stopwatch.msF() - prevtime >= NUM_MAXTIME) {//í«â¡Ç≥ÇπÇÈéûä‘Ç™óàÇΩÇÁêîéöÇí«â¡Çµâ∫ï˚å¸Ç÷
 		judgeImNum->addMulti(judgeCnt.cnt[row], SCOREX, SCOREY + NUMIM_HEIGHT * (row + 2));
 		prevtime = stopwatch.msF();
 		row++;
@@ -125,7 +129,7 @@ void Result::failedUpdate(void) {
 
 void Result::failedDraw(void) {
 	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//îwåiï`âÊ
-	FontAsset(U"font")(U"Å` EscÉLÅ[Ç≈èIóπ Å`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alphaFont));
+	FontAsset(U"font")(U"Å` EscÉLÅ[Ç≈èIóπ Å`").drawAt(Window::Width() / 2, Window::Height() - 100, AlphaF(alphaFont));
 }
 
 
