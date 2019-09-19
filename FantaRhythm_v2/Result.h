@@ -16,9 +16,9 @@ public:
 private:
 	Stopwatch stopwatch;
 	class SE* se;
-	class ImageNumber* judgeImNum;
 	class NumWithEffect* scoreNumEffect;
 	class NumWithEffect* damageNumEffect;
+	class ImageNumber* judgeImNum;
 	
 	int score;
 	int totalDamage;

@@ -97,9 +97,9 @@ int Result::calcScore(JUDGE::JudgeCount& jc) {//ÉXÉRÉAåvéZ îªíËÇÃêîÇ∆èdÇ›Çä|ÇØÇ
 }
 
 void Result::imNumberInit() {
+	scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
+	damageNumEffect = new NumWithEffect(numberImPath, damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
 	judgeImNum = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
-	scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT,NUMBER_SWTIME);
-	damageNumEffect = new NumWithEffect(numberImPath, damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT,NUMBER_SWTIME);
 }
 
 bool Result::judgeUpdate() {
