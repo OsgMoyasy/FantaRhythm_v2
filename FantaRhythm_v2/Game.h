@@ -16,7 +16,7 @@ private:
 	class CharacterSet* characterm;
 	class NotesSubject* notessubject;
 	
-	bool clearFlag;
+	bool isClear;
 
 public:
 	Game(const String& music, const String& dif);

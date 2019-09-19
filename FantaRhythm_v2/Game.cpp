@@ -14,7 +14,7 @@ Game::Game(const String& music, const String& dif) {
 
 	notessubject->addObserver(characterm);//オブザーバーへ登録
 	
-	clearFlag = true;//falseになればゲームオーバー
+	isClear = true;//falseになればゲームオーバー
 	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");
 	TextureAsset::Preload(U"back");
 
@@ -48,7 +48,7 @@ void Game::draw() {
 }
 
 bool Game::getClearFlag(void) {
-	return clearFlag;
+	return isClear;
 }
 int Game::getTotalDamage(void) {
 	return characterm->getTotalDamage();
@@ -57,9 +57,9 @@ JUDGE::JudgeCount* Game::getJudgeCount(void) {
 	return notes->getJudgeCount();
 }
 void Game::gameEndCheck(void) {
-	if (characterm->getCurrentHp() <= 0 && clearFlag == true) {
+	if (characterm->getCurrentHp() <= 0 && isClear == true) {
 		MusicManager::stopMusicGame();
-		clearFlag = false;
+		isClear = false;
 		characterm->gameEndEffect();
 	}
 	if (MusicManager::musicEndCheck() ) {//曲が終わっている　or ゲーム失敗している

@@ -7,7 +7,7 @@
 
 class Result : public Scene {
 public:
-	Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool clearFlag);
+	Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear);
 	~Result(void);
 	void update(void);
 	void draw(void);
@@ -15,13 +15,14 @@ public:
 private:
 	Stopwatch stopwatch;
 	class SE* se;
-	class FlipEffect* numEffect;
-	class ImageNumber* imnumber;
+	class ImageNumber* judgeImNum;
+	class NumWithEffect* scoreNumEffect;
+	class NumWithEffect* damageNumEffect;
 	
 	int score;
 	int totalDamage;
 	JUDGE::JudgeCount judgeCnt;
-	bool clearFlag;
+	bool isClear;
 
 	int framecnt;
 	static const int alphatime = 3 * 60;//アルファ値が元に戻るまでの時間×フレーム数
@@ -38,13 +39,13 @@ private:
 	String scoreStr;//スコアを文字列変換
 	String damageStr;//ダメージを文字列変換
 
-	void imNumberInit(void);
-	bool scoreEffect(); //スコアを0~9と順番に変わって下位の桁から確定させるようにする
-	bool damageEffect();
-	bool judgeEffect();
-	int calcScore(JUDGE::JudgeCount &judgeCnt);//最終的なスコア計算
 	void successUpdate(void);
 	void successDraw(void);
+
+	int calcScore(JUDGE::JudgeCount& judgeCnt);//スコア計算
+	void imNumberInit(void);//画像の数字に関する初期化　※使用する文字列の初期化より後に呼び出すこと
+	bool judgeUpdate();//判定数を順番に下方向に描画していくための関数
+	
 
 	//ゲームオーバー用
 	void failedUpdate(void);
@@ -62,14 +63,30 @@ private:
 		int num;
 	}NumPoint;
 
-	std::vector<NumPoint> numberp;
+	std::vector<NumPoint> numberp;//追加された数字を全て保持
 
 
 public:
 	ImageNumber(FilePath path, int w, int h);
 	~ImageNumber();
-	void addOne(int num, int x, int y);
-	void ImageNumber::addMulti(int num, int x, int y);
+	void addOne(int num, int x, int y);//数字を１文字追加する
+	void ImageNumber::addMulti(int num, int x, int y);//数字列を追加する
 	void draw();
 
+};
+
+class NumWithEffect {
+private:
+	String numStr;
+	class FlipEffect* numEffect;
+	int fixedAtTime;
+	int currentWord;//現在確定させようとしている数字
+	double prevtime;
+	ImageNumber* imnumber;
+	int x, y, w, h;
+public:
+	NumWithEffect(FilePath path,String numStr, int fixedAtTime, int x, int y, int w, int h);
+	~NumWithEffect(void);
+	bool update(double msF);
+	void draw(void);
 };
