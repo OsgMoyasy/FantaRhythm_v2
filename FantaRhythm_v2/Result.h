@@ -25,8 +25,7 @@ private:
 	JUDGE::JudgeCount judgeCnt;
 	bool isClear;
 
-	int framecnt;
-	static const int alphatime = 3 * 60;//アルファ値が元に戻るまでの時間×フレーム数
+	
 	double alphaBack;
 	double alphaFont;
 

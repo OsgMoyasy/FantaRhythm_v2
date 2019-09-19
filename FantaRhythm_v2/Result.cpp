@@ -12,14 +12,13 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	this->totalDamage = totalDamage;
 	this->isClear = isClear;
 	stopwatch.start();
-	framecnt = 0;
 	alphaBack = 0;
 	alphaFont = 0;
 
 	FontAsset::Register(U"font", 50);
 	FontAsset::Preload(U"font");
 
-	if (!isClear) {//ゲームクリア
+	if (isClear) {//ゲームクリア
 		//テクスチャ初期化
 		TextureAsset::Register(U"back", U"resources/images/back/result.png");
 
@@ -52,7 +51,6 @@ Result::~Result(void) {
 	TextureAsset::UnregisterAll();
 }
 void Result::update(void) {
-	framecnt++;
 	(this->*stateUpdate)();
 }
 void Result::draw(void) {
@@ -118,9 +116,10 @@ bool Result::judgeUpdate() {
 
 //ゲームオーバー用
 void Result::failedUpdate(void) {
+	constexpr int alphaBackMaxMs = 3000;//背景画像のアルファ値が元に戻るまでの時間
 	//背景や文字を時間経過で表示させるための処理
-	if (framecnt <= alphatime) {
-		alphaBack = (double)framecnt / alphatime;
+	if (stopwatch.ms() <= alphaBackMaxMs) {
+		alphaBack = (double)stopwatch.ms() / alphaBackMaxMs;
 	}
 	else {
 		changeFontAlpha();
