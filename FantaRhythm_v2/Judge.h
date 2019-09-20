@@ -6,8 +6,8 @@ namespace JUDGE {
 		GREAT,
 		GOOD,
 		BAD,
-		NONE,
 		TYPE_SIZE,
+		NONE,
 	};
 
 	typedef struct _JudgeCount {//”»’è‚ÌƒJƒEƒ“ƒg”‚ğŠi”[‚µ‚Ä‚¢‚­

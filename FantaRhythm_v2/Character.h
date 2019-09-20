@@ -17,7 +17,7 @@ class Character {
 public:
 	Character(CharacterSubject* csubject, const FilePath& jobname, const CSVData& csv, double ix, double iy, int row);
 	~Character();
-	void chaDraw();
+	void characterDraw();
 	virtual void draw()=0;
 	virtual void update()=0;
 	virtual void getEvent(Massage msg)=0;
@@ -41,7 +41,7 @@ public:
 private:
 	class CharacterSubject* csubject;
 	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3種類
-	int chnumber;	//キャラの番号
+	int characterNum;	//キャラの番号
 	String name;	//キャラの名前
 	int hp;			//ヒットポイント
 	int power;		//攻撃力ベース
@@ -49,7 +49,7 @@ private:
 	double initx, inity;//基本位置
 	double x, y;//現在位置
 	int framecnt;//上下移動に使うフレームカウント
-	static bool guardflag;
+	static bool isGuard;
 	void guard(void);//flagを降ろして防御
 
 };

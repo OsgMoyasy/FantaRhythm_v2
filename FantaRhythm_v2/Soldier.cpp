@@ -11,7 +11,7 @@ Soldier::~Soldier() {
 }
 
 void Soldier::draw() {
-	Character::chaDraw();
+	Character::characterDraw();
 	drawEffect();
 }
 

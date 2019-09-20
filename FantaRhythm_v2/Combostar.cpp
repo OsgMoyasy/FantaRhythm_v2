@@ -11,7 +11,7 @@ Combostar::~Combostar() {
 }
 
 void Combostar::draw() {
-	Character::chaDraw();
+	Character::characterDraw();
 	drawEffect();
 }
 

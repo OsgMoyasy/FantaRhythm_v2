@@ -12,7 +12,7 @@ Berserker::~Berserker() {
 }
 
 void Berserker::draw() {
-	Character::chaDraw();
+	Character::characterDraw();
 	drawEffect();
 }
 

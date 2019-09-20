@@ -82,7 +82,7 @@ void Result::successDraw(void) {
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
 	judgeImNum->draw();
-	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 100, ColorF(0.0, 0.0, 0.0, alphaFont));
+	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//スコア計算 判定の数と重みを掛けた総和をスコアとする
@@ -106,7 +106,7 @@ bool Result::judgeUpdate() {
 	if (row >= JUDGE::TYPE_SIZE) {//全て追加し終わったら
 		return false;
 	}
-	if (stopwatch.msF() - prevtime >= NUM_MAXTIME) {//追加させる時間が来たら数字を追加し下方向へ
+	if (stopwatch.msF() - prevtime >= NUM_MAXTIME ) {//追加させる時間が来たら数字を追加し下方向へ
 		judgeImNum->addMulti(judgeCnt.cnt[row], SCOREX, SCOREY + NUMIM_HEIGHT * (row + 2));
 		prevtime = stopwatch.msF();
 		row++;

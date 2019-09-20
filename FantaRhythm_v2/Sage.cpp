@@ -14,7 +14,7 @@ Sage::~Sage() {
 }
 
 void Sage::draw() {
-	Character::chaDraw();
+	Character::characterDraw();
 }
 
 void Sage::update() {
