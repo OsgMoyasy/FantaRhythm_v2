@@ -300,10 +300,6 @@ double NotesManager::getCurrentPosition(double startPos, double endPos, double p
 	return startPos + (endPos - startPos) * progressRate;
 }
 
-double NotesManager::getScale(double currenty) {
-	double temp = currenty / (laneJudgeY - 100);//­‚µ‘‚ß‚Ék¬—¦‚ğ‚à‚Æ‚É–ß‚·‚½‚ßˆø‚¢‚Ä‚İ‚Ä‚¢‚é
-	return  temp;
-}
 NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
 	double progressRate = progressByAngle(getProgress(time));
 	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);

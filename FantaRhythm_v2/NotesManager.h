@@ -62,7 +62,6 @@ private:
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
 	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
 	double getCurrentPosition(double startPos, double endPos, double progressRate);//現在座標を返す
-	double getScale(double currenty);//拡大率計算
 	struct ProPos;//progressRateと現在座標(X,Y)
 	ProPos getProPos(int lane, int time);//progressRateと現在座標(X,Y)を返す
 
