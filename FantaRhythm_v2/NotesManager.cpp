@@ -11,7 +11,6 @@ namespace PSHBTN {
 	constexpr int NONE = 0;
 	constexpr int UP = 1;
 	constexpr int DOWN = 2;
-	constexpr int BOTH = 3;
 }
 
 namespace JUDGE_RANGE{
@@ -30,12 +29,8 @@ struct NotesManager::Notes {
 };
 
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
-//	Update* update = new Update;
-//	Draw* draw = new Draw;
-
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
-//	effectInit();
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
@@ -73,7 +68,6 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		notelist[lane].push_back(note);//番兵の設置
 		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//チェック用のイテレータ初期
 		pressedkey[lane] = 0;
-		bothtime[lane] = 0;
 	}
 
 	//描画関係の変数の初期化
@@ -142,12 +136,6 @@ void NotesManager::checkAttack(void) {
 
 	down[3] += KeyF.down() ? PSHBTN::DOWN : 0;
 	press[3] += KeyF.pressed() ? PSHBTN::DOWN : 0;
-
-	for (int i = 0; i < LANESIZE; i++) {
-		if (down[i] == PSHBTN::BOTH && bothtime[i] == 0) {//同時押しされているなら現在時刻格納
-			bothtime[i] = nowtime;
-		}
-	}
 }
 JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 	if (checktime <= JUDGE_RANGE::PERFECT) {//PERFECT
@@ -198,6 +186,7 @@ void NotesManager::judgeLong(int lane) {
 		JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
 		if (type <= JUDGE::GOOD) {//下端で押されたら(この判定はJUDGEenumの並び順に依存している)
 			pressedkey[lane] = down[lane];//そのロングノーツの判定を有効化
+			return judgeEvent(type, lane, false);
 		}
 	}
 
@@ -226,12 +215,13 @@ void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	down[lane] = pressedkey[lane];
 	judgeEvent(type, lane);
 	pressedkey[lane] = 0;//判定したので長押しの状態を初期化
-	bothtime[lane] = 0;
 }
 
-void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
-	checkitr[lane]->display = false;//ディスプレイ表示オフ
-	plusItr(checkitr[lane]);//判定対象を次に進める
+void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
+	if (next) {
+		checkitr[lane]->display = false;//ディスプレイ表示オフ
+		plusItr(checkitr[lane]);//判定対象を次に進める
+	}
 	judgecount.cnt[type]++;//判定をカウントアップ
 	if(type == JUDGE::BAD){
 		setEvent(Massage::DAMAGE, lane);
@@ -244,11 +234,7 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
 		case PSHBTN::DOWN:
 			setEvent(Massage::DOWNATTACK, lane);
 			break;
-		case PSHBTN::BOTH:
-			setEvent(Massage::GUARD, lane);
-			break;
 		}
-		
 	}
 }
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
@@ -284,7 +270,6 @@ void NotesManager::draw(void){
 			}
 		}	
 	}
-//	drawAllEffect();
 }
 
 double NotesManager::getProgress(int time) {
@@ -354,25 +339,6 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	TextureAsset(U"note").scaled(scaleEnd).drawAt(currentEndX, currentEndY);
 	TextureAsset(U"note").scaled(scaleBgn).drawAt(currentBgnX, currentBgnY);
 }
-
-/*
-void NotesManager::effectInit() {
-	enum USE_EFFECT {
-		NORMAL,
-		PARFECT
-	};
-	FlipEffect effectNormal(U"resources/images/effect/sol.png", 43, 43, 0, 0);
-	FlipEffect effectParfect(U"resources/images/effect/magic.png", 43, 43, 0, 0);
-	useFlipEffect.push_back(effectNormal);
-	useFlipEffect.push_back(effectParfect);
-}
-void NotesManager::drawAllEffect() {
-	for (auto& flip : useFlipEffect) {
-		flip.draw();
-	}
-}
-useFlipEffect[NORMAL].update();.
-*/
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット
 	notessubject->notifyObservers();//イベント起動
