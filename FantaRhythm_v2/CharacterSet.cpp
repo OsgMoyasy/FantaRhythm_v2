@@ -3,7 +3,7 @@
 constexpr int HPWIDTH = 400;
 constexpr int HPHEIGHT = 30;
 
-constexpr int HPLEFTX = 800;
+constexpr int HPX = 800;//HPゲージ左上の位置
 constexpr int HPY = 30;
 
 CharacterSet::CharacterSet(int save[], const String& musicpath) {
@@ -91,8 +91,8 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 }
 
 void CharacterSet::TotalhpDraw() {		//総HP表示
-	Rect(HPLEFTX, HPY, HPWIDTH, HPHEIGHT).draw(Palette::Red);
-	Rect(HPLEFTX, HPY, hpx, HPHEIGHT).draw(Palette::Green);
+	Rect(HPX, HPY, HPWIDTH, HPHEIGHT).draw(Palette::Red);
+	Rect(HPX, HPY, hpx, HPHEIGHT).draw(Palette::Green);
 }
 
 int CharacterSet::getTotalDamage(void) {
