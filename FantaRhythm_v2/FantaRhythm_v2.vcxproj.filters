@@ -120,6 +120,9 @@
     <ClCompile Include="Tanker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ImageNumber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -346,6 +349,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tanker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageNumber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

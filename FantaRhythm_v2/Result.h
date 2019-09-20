@@ -1,23 +1,31 @@
 #pragma once
 #include "Scene.h"
 #include "Judge.h"
+#include "ImageNumber.h"
+#include "GameEffect.h"
 #include <Siv3D.hpp>
 
 
 class Result : public Scene {
 public:
-	Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool clearflag);
+	Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear);
 	~Result(void);
 	void update(void);
 	void draw(void);
 
 private:
-	int totaldmg;
-	JUDGE::JudgeCount judgecnt;
-	bool clearflag;
+	Stopwatch stopwatch;
+	class SE* se;
+	class NumWithEffect* scoreNumEffect;
+	class NumWithEffect* damageNumEffect;
+	class ImageNumber* judgeImNum;
+	
+	int score;
+	int totalDamage;
+	JUDGE::JudgeCount judgeCnt;
+	bool isClear;
 
-	int framecnt;
-	static const int alphatime = 3 * 60;//アルファ値が元に戻るまでの時間×フレーム数
+	
 	double alphaBack;
 	double alphaFont;
 
@@ -29,14 +37,19 @@ private:
 	//ゲームクリア用
 
 	String scoreStr;//スコアを文字列変換
-	String scoreDraw;//実際に描画するスコア
+	String damageStr;//ダメージを文字列変換
 
-	void scoreEffect(void); //スコアを0~9と順番に変わって下位の桁から確定させるようにする
-	int calcScore(JUDGE::JudgeCount &judgecnt);//最終的なスコア計算
 	void successUpdate(void);
 	void successDraw(void);
+
+	int calcScore(JUDGE::JudgeCount& judgeCnt);//スコア計算
+	void imNumberInit(void);//画像の数字に関する初期化　※使用する文字列の初期化より後に呼び出すこと
+	bool judgeUpdate();//判定数を順番に下方向に描画していくための関数
+	
 
 	//ゲームオーバー用
 	void failedUpdate(void);
 	void failedDraw(void);
 };
+
+

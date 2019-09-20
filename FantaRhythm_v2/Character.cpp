@@ -1,8 +1,8 @@
 #include"Character.h"
 #include"FantaRhythm_v2.h"
 
-constexpr int moverange = 70;		//振幅 上下の長さは*2
-constexpr int movefreq = 4 * 60;	//上下する周期	左の値を秒指定
+constexpr int moverange = 70;		//謖ｯ蟷 荳贋ｸ九�髟ｷ縺輔�*2
+constexpr int movefreq = 4 * 60;	//荳贋ｸ九☆繧句捉譛	蟾ｦ縺ｮ蛟､繧堤ｧ呈欠螳
 constexpr int effectsize = 200;
 bool Character::guardflag;
 
@@ -45,14 +45,14 @@ void Character::moveRigthLight() {
 
 }
 
-void Character::damage(int damage) {		//ダメージ食らうだけの関数
+void Character::damage(int damage) {		//繝繝｡繝ｼ繧ｸ鬟溘ｉ縺�□縺代�髢｢謨ｰ
 		hp -= damage;
 		playEffect(EffectType::DAMAGE, x, y);
 }
 
-void Character::cheakdamage(int damage) {		//タンク用
+void Character::cheakdamage(int damage) {		//繧ｿ繝ｳ繧ｯ逕ｨ
 	if (guardflag == 1) {
-		//ガードエフェクト
+		//繧ｬ繝ｼ繝峨お繝輔ぉ繧ｯ繝
 		guardflag == false;
 	}
 }
@@ -75,20 +75,20 @@ int Character::getArgs2() {
 void Character::setAttackEvent(int attack, EffectType::Type type) {
 	playEffect(type);
 	csubject->setEvent(attack);
-	csubject->notifyObservers();//イベント起動
+	csubject->notifyObservers();//繧､繝吶Φ繝郁ｵｷ蜍
 }
 
 void Character::playEffect(EffectType::Type type) {
-	flipeffect[type]->play(x - effectsize / 3, y);
+	flipeffect[type]->play((int)(x - effectsize / 3), (int)y);
 }
 
 void Character::playEffect(EffectType::Type type, double x, double y) {
-	flipeffect[type]->play(x, y);
+	flipeffect[type]->play((int)x, (int)y);
 }
 
 void Character::drawEffect(void) {
-	for (FlipEffect* feffect : flipeffect) {
-		feffect->draw();
+	for (FlipEffect* numEffect : flipeffect) {
+		numEffect->draw();
 	}
 }
 
@@ -101,11 +101,11 @@ void Character::guard(void) {
 
 }
 
-int Character::heal() {			//オーバーライド用
+int Character::heal() {			//繧ｪ繝ｼ繝舌�繝ｩ繧､繝臥畑
 	return 0;
 }
 
-void Character::recovery() {			//一人ひとりの回復量
+void Character::recovery() {			//荳莠ｺ縺ｲ縺ｨ繧翫�蝗槫ｾｩ驥
 	if (heal() > 0) {
 		hp += heal();
 	}

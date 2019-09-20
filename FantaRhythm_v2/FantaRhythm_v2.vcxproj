@@ -205,6 +205,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameEffect.cpp" />
+    <ClCompile Include="ImageNumber.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="FantaRhythm_v2.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameEffect.h" />
+    <ClInclude Include="ImageNumber.h" />
     <ClInclude Include="Judge.h" />
     <ClInclude Include="MusicManager.h" />
     <ClInclude Include="NotesManager.h" />

@@ -6,6 +6,7 @@ namespace JUDGE {
 		GREAT,
 		GOOD,
 		BAD,
+		NONE,
 		TYPE_SIZE,
 	};
 
