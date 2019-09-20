@@ -31,10 +31,8 @@ private:
 	//ボタン関係の変数
     int down[LANESIZE];
 	int press[LANESIZE];
-	double bothtime[LANESIZE];			//同時押し(同時離し)された時の時間を保持
 
 	//ロングノーツ用
-	//bool longflag[LANESIZE];//押されているかどうか状態を保持
 	int pressedkey[LANESIZE];//押されたボタンを保持
 
 	//描画関係の変数
@@ -58,7 +56,7 @@ private:
 	void judgeLong(int lane);	//ロングノーツを判定
 
 
-	void judgeEvent(JUDGE::TYPE type, int lane);
+	void judgeEvent(JUDGE::TYPE type, int lane, bool next = true);
 	void judgeLongEvent(JUDGE::TYPE type, int lane);
 	
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
@@ -69,10 +67,6 @@ private:
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
 
-	enum USE_EFFECT;//useFlipEffectの添字に使用
-	Array<FlipEffect> useFlipEffect;
-//	void effectInit();//使用するエフェクトを登録
-//	void drawAllEffect();//再生中の全てのFlipEffectを描画
 
 	void setEvent(Massage msg, int val);
 	
