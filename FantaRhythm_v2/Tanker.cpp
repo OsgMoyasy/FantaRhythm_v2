@@ -14,7 +14,7 @@ Tanker::~Tanker() {
 }
 
 void Tanker::draw() {
-	Character::chaDraw();
+	Character::characterDraw();
 	drawEffect();
 }
 

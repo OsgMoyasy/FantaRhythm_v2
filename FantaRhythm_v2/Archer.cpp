@@ -15,7 +15,7 @@ Archer::~Archer() {
 }
 
 void Archer::draw() {
-	Character::chaDraw();
+	Character::characterDraw();
 }
 
 void Archer::update() {

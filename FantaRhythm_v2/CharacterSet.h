@@ -28,7 +28,6 @@ public:
 	void TotalhpDraw();
 	int getTotalDamage(void);
 	int getCurrentHp(void);
-	void addDamage(int lane);
 	void gameEndEffect(void);
 private:
 	int totalhp;
@@ -37,6 +36,7 @@ private:
 	class Character* cha[CHANUMBER];
 	class Enemy* enemy;
 	class CharacterSubject* csubject;//キャラクター個々からイベントを受け取るために
+	void damageToSelves(int lane);
 
 	void calchpx(int currenthp);
 };

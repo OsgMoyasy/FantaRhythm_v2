@@ -14,7 +14,7 @@ Witch::~Witch() {
 }
 
 void Witch::draw() {
-	Character::chaDraw();
+	Character::characterDraw();
 }
 
 void Witch::update() {
