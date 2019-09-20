@@ -78,7 +78,7 @@ int CharacterSet::getTotalDamage(void) {
 
 void CharacterSet::calchpx(int currenthp) {
 	double per = (double)currenthp / totalhp;
-	hpx = per * HPWIDTH;
+	hpx = (int)(per * HPWIDTH);
 }
 
 void CharacterSet::selfDamage(int lane) {
@@ -91,7 +91,6 @@ void CharacterSet::selfDamage(int lane) {
 	else if (currenthp < 0) {
 		currenthp = 0;
 	}
-
 	calchpx(currenthp);
 }
 

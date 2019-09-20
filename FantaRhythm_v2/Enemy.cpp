@@ -38,7 +38,7 @@ int Enemy::getTotalDamage() {
 
 void Enemy::moveUpDown() {
 	constexpr int movefreq = 240;
-	y = inity + sin(Math::TwoPi / movefreq * framecnt++) * 100;
+	y = (int)(inity + sin(Math::TwoPi / movefreq * framecnt++) * 100);
 } 
 
 void Enemy::funcEvent(Obj obj) {//ダメージを受けるイベント受取

@@ -7,6 +7,13 @@ enum class NotesManager::NOTESTYPE {
 	SENTINEL,
 };
 
+namespace PSHBTN {
+	constexpr int NONE = 0;
+	constexpr int UP = 1;
+	constexpr int DOWN = 2;
+	constexpr int BOTH = 3;
+}
+
 namespace JUDGE_RANGE{
 	constexpr int BAD = 200;//判定の最大範囲[ms]÷2
 	constexpr int GOOD = 100;//GOOD判定範囲[ms]÷2
@@ -18,19 +25,8 @@ struct NotesManager::Notes {
 	NOTESTYPE type;
 	int time;
 	int longtime;
+	int judgetime;
 	bool display;
-};
-
-enum class NotesManager::PSHBTN {
-	NONE,
-	UP,
-	DOWN,
-	BOTH,
-};
-
-struct NotesManager::ButtonandJudge {
-	PSHBTN button;
-	JUDGE::TYPE judge;
 };
 
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
@@ -53,11 +49,13 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		note.longtime = note.time + csv.get<int>(row, 1);
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
-			case 0:
+		case 0:
 				note.type = NOTESTYPE::NORMAL;
+				note.judgetime = note.time;
 				break;
-			case 1:
+		case 1:
 				note.type = NOTESTYPE::LONG;
+				note.judgetime = note.longtime;
 				break;
 		}
 		note.display = true;
@@ -74,7 +72,8 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	for (int lane = 0; lane < LANESIZE; lane++) {//レーンごとに到着時間を格納
 		notelist[lane].push_back(note);//番兵の設置
 		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//チェック用のイテレータ初期
-		longflag[lane] = false;
+		pressedkey[lane] = 0;
+		bothtime[lane] = 0;
 	}
 
 	//描画関係の変数の初期化
@@ -95,6 +94,10 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	timeRequired = 1500 / notespeed;
 
 	notewidth = TextureAsset(U"note").width();
+	for (int i = 0; i < LANESIZE; i++) {
+		down[i] = 0;
+		press[i] = 0;
+	}
 }
 NotesManager::~NotesManager() {
 	TextureAsset::UnregisterAll();
@@ -115,17 +118,36 @@ void NotesManager::plusItr(noteitr& itr) {
 
 
 void NotesManager::checkAttack(void) {
-	down[0][0] = KeyQ.down();press[0][0] = KeyQ.pressed();
-	down[0][1] = KeyA.down();press[0][1] = KeyA.pressed();
+	down[0] = KeyQ.down() ? PSHBTN::UP : 0;
+	press[0] = KeyQ.pressed() ? PSHBTN::UP : 0;
 
-	down[1][0] = KeyW.down();press[1][0] = KeyW.pressed();
-	down[1][1] = KeyS.down();press[1][1] = KeyS.pressed();
+	down[1] = KeyW.down() ? PSHBTN::UP : 0;
+	press[1] = KeyW.pressed() ? PSHBTN::UP : 0;
 
-	down[2][0] = KeyE.down();press[2][0] = KeyE.pressed();
-	down[2][1] = KeyD.down();press[2][1] = KeyD.pressed();
+	down[2] = KeyE.down() ? PSHBTN::UP : 0;
+	press[2] = KeyE.pressed() ? PSHBTN::UP : 0;
 
-	down[3][0] = KeyR.down();press[3][0] = KeyR.pressed();
-	down[3][1] = KeyF.down();press[3][1] = KeyF.pressed();
+	down[3] = KeyR.down() ? PSHBTN::UP : 0;
+	press[3] = KeyR.pressed() ? PSHBTN::UP : 0;
+
+
+	down[0] += KeyA.down() ? PSHBTN::DOWN : 0;
+	press[0] += KeyA.pressed() ? PSHBTN::DOWN : 0;
+
+	down[1] += KeyS.down() ? PSHBTN::DOWN : 0;
+	press[1] += KeyS.pressed() ? PSHBTN::DOWN : 0;
+
+	down[2] += KeyD.down() ? PSHBTN::DOWN : 0;
+	press[2] += KeyD.pressed() ? PSHBTN::DOWN : 0;
+
+	down[3] += KeyF.down() ? PSHBTN::DOWN : 0;
+	press[3] += KeyF.pressed() ? PSHBTN::DOWN : 0;
+
+	for (int i = 0; i < LANESIZE; i++) {
+		if (down[i] == PSHBTN::BOTH && bothtime[i] == 0) {//同時押しされているなら現在時刻格納
+			bothtime[i] = nowtime;
+		}
+	}
 }
 JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 	if (checktime <= JUDGE_RANGE::PERFECT) {//PERFECT
@@ -144,35 +166,6 @@ JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 		return JUDGE::NONE;
 	}
 }
-NotesManager::ButtonandJudge NotesManager::NoteisHit(int lane, int judgetime) {
-	constexpr int BUTTONSIZE = 2;//一列のボタンの個数
-	int keysum = 0;//押されたキー
-	JUDGE::TYPE tmp = JUDGE::NONE;
-	JUDGE::TYPE judge = JUDGE::NONE;
-	int checktime = abs(nowtime - judgetime);
-
-	for (int i = 0;i < BUTTONSIZE;i++) {
-		if (
-			down[lane][i] == true&&//ボタンが押された且つ
-			(tmp = judgeType(checktime)) < JUDGE::NONE//判定時間内なら
-			) {
-			keysum += i+1;//ボタンの上下に対応した数を足す。
-			judge = tmp < judge ? tmp : judge;//より判定の良い方を格納
-		}
-	}
-	return { (PSHBTN)keysum,judge };//PSHBTNenumの並び順に依存している。
-}
-bool NotesManager::NoteisPress(int lane, PSHBTN button) {
-	constexpr int BUTTONSIZE = 2;//一列のボタンの個数
-	int keysum = (int)button;
-	
-	for (int i = BUTTONSIZE;i >= 1;i--) {
-		if (i <= keysum&&press[lane][i-1]) {
-			keysum -= i;
-		}
-	}
-	return !keysum;//keysumが残っていたらfalse(指定されたボタンが押されていない)
-}
 
 void NotesManager::controlJudge(void) {
 	for (int i = 0;i < LANESIZE;i++) {
@@ -189,44 +182,51 @@ void NotesManager::controlJudge(void) {
 	}
 }
 void NotesManager::judgeNormal(int lane) {
-	ButtonandJudge bandj = NoteisHit(lane, checkitr[lane]->time);
-
-	if (bandj.button != PSHBTN::NONE) {//押されてるかつ判定時間内なら判定処理
-		return judgeEvent(bandj.judge, lane);
+	JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
+	if (down[lane] && type != JUDGE::NONE) {//判定時間過ぎるか判定可能でボタンが押されている時
+		return judgeEvent(type, lane);
 	}
-	else if (nowtime >= checkitr[lane]->time + JUDGE_RANGE::BAD) {//押されてないまま終了時
+	else if(nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD){
 		return judgeEvent(JUDGE::BAD, lane);
 	}
 }
+JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {
+	return judgeType(abs(nowtime - judgetime));
+}
 void NotesManager::judgeLong(int lane) {
-	if (longflag[lane] == false) {
-		ButtonandJudge bandj = NoteisHit(lane, checkitr[lane]->time);
-		if (bandj.judge <= JUDGE::GOOD) {//下端で押されたら(この判定はJUDGEenumの並び順に依存している)
-			longflag[lane] = true;//そのロングノーツの判定を有効化
-			pressedkey[lane] = bandj.button;//その時押されたボタンを記憶
+	if (pressedkey[lane] == false && down[lane]) {
+		JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
+		if (type <= JUDGE::GOOD) {//下端で押されたら(この判定はJUDGEenumの並び順に依存している)
+			pressedkey[lane] = down[lane];//そのロングノーツの判定を有効化
 		}
 	}
 
-	if (longflag[lane] == true) {//離すときの処理
-		if (NoteisPress(lane, pressedkey[lane]) == true) {//ボタン押下中
+	if (pressedkey[lane] > 0) {//離すときの処理
+		if ((press[lane] & pressedkey[lane]) == pressedkey[lane]) {//ボタン押下中
 			checkitr[lane]->time = (int)(nowtime);//判定位置以降で下側を止める
-			if (nowtime >= checkitr[lane]->longtime) {//押されているままノーツの上端を過ぎた時
-				return judgeLongEvent(JUDGE::GOOD, lane);//強制的に次のノーツへ処理を移行
+			if (nowtime >= checkitr[lane]->judgetime) {//押されているままノーツの上端を過ぎた時
+				checkitr[lane]->longtime = (int)(nowtime);//判定位置以降で上側を止める
+				if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//過ぎたときの判定も取るため
+					return judgeLongEvent(JUDGE::BAD, lane);//強制的に次のノーツへ処理を移行
+				}
+				
 			}
 		}
 		else {//離した
-			ButtonandJudge bandj = NoteisHit(lane, checkitr[lane]->longtime);
-			return judgeLongEvent(bandj.judge, lane);
+			JUDGE::TYPE type = NoteisHit(checkitr[lane]->judgetime);
+			return judgeLongEvent(type, lane);
 		}
 	}
 	
-	if (nowtime >= checkitr[lane]->longtime + JUDGE_RANGE::GOOD) {//判定を超えた時
+	if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//判定を超えた時
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
 void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
+	down[lane] = pressedkey[lane];
 	judgeEvent(type, lane);
-	longflag[lane] = false;//判定したので長押しの状態を初期化
+	pressedkey[lane] = 0;//判定したので長押しの状態を初期化
+	bothtime[lane] = 0;
 }
 
 void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
@@ -237,7 +237,18 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane) {
 		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
-		setEvent(Massage::UPATTACK, lane);
+		switch (down[lane]) {
+		case PSHBTN::UP:
+			setEvent(Massage::UPATTACK, lane);
+			break;
+		case PSHBTN::DOWN:
+			setEvent(Massage::DOWNATTACK, lane);
+			break;
+		case PSHBTN::BOTH:
+			setEvent(Massage::GUARD, lane);
+			break;
+		}
+		
 	}
 }
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
