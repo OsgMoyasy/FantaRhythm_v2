@@ -1,10 +1,9 @@
 #include"CharacterSet.h"
-#include "Soldier.h"
-
+#include "Jobs.h"
 constexpr int HPWIDTH = 400;
 constexpr int HPHEIGHT = 30;
 
-constexpr int HPLEFTX = 800;
+constexpr int HPX = 800;//HPゲージ左上の位置
 constexpr int HPY = 30;
 
 CharacterSet::CharacterSet(int save[], const String& musicpath) {
@@ -14,13 +13,31 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	csubject->addObserver(enemy);
 
 	CSVData csv;
-	csv.load(U"resources/charadata.csv");
+	csv.load(U"resources/testcharadata.csv");
 	for (int lane = 0; lane < CHANUMBER; lane++) {
 		int initx = 900 + lane * 90, inity = 250 + lane * 80;//初期座標の設定後で見直す
 		
 		switch (csv.get<int>(save[lane], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
 			cha[lane] = new Soldier(csubject, csv, initx, inity, lane);
+			break;
+		case JOB::ARCHER:
+			cha[lane] = new Archer(csubject, csv, initx, inity, lane);
+			break;
+		case JOB::WITCH:
+			cha[lane] = new Witch(csubject, csv, initx, inity, lane);
+			break;
+		case JOB::SAGE:
+			cha[lane] = new Sage(csubject, csv, initx, inity, lane);
+			break;
+		case JOB::BERSERKER:
+			cha[lane] = new Berserker(csubject, csv, initx, inity, lane);
+			break;
+		case JOB::COMBOSTAR:
+			cha[lane] = new Combostar(csubject, csv, initx, inity, lane);
+			break;
+		case JOB::TANKER:
+			cha[lane] = new Tanker(csubject, csv, initx, inity, lane);
 			break;
 		default:
 			//エラー
@@ -74,8 +91,8 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 }
 
 void CharacterSet::TotalhpDraw() {		//総HP表示
-	Rect(HPLEFTX, HPY, HPWIDTH, HPHEIGHT).draw(Palette::Red);
-	Rect(HPLEFTX, HPY, hpx, HPHEIGHT).draw(Palette::Green);
+	Rect(HPX, HPY, HPWIDTH, HPHEIGHT).draw(Palette::Red);
+	Rect(HPX, HPY, hpx, HPHEIGHT).draw(Palette::Green);
 }
 
 int CharacterSet::getTotalDamage(void) {

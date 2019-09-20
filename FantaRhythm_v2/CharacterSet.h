@@ -5,17 +5,7 @@
 #include "Enemy.h"
 
 #define CHANUMBER 4
-namespace JOB {
-	enum LIST {
-		SOLDIER,
-		ARCHER,
-		WITCH,
-		SAGE,
-		BERSERKER,
-		COMBOSTAR,
-		TANKER,
-	};
-}
+
 
 
 class CharacterSet:public Observer{
