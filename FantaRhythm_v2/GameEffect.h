@@ -49,6 +49,18 @@ private:
 	double switchBetween;
 };
 
+template<typename T>
+class FlipMap {//FlipEffectをunordered_mapで管理する為のクラス。キーに使う型は自由。
+public:
+	~FlipMap();
+	void set(T name, const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw = 0, int yDraw = 0);	//使用するエフェクトを登録
+	FlipEffect* get(T name);	//エフェクトを指定して取得
+	void draw();					//再生中の全てのエフェクトを描画
+private:
+	std::unordered_map<T, FlipEffect*> usingEffect;
+};
+#include"FlipSet.h"
+
 /*
 struct Fractal :IEffect {//フラクタル模様を作り出すエフェクト
 	Fractal(int size, int x, int y);

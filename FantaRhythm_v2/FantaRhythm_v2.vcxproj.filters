@@ -363,6 +363,9 @@
     <ClInclude Include="Jobs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FlipSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc">
