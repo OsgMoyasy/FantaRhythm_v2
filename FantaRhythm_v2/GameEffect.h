@@ -3,7 +3,7 @@
 
 class SE {
 public:
-	SE(FilePath& path);
+	SE(const FilePath& path);
 	~SE();
 	void play();//SEを再生する。重複して再生されようとした時、最初から再生しなおす
 private:
@@ -23,18 +23,19 @@ private:
 };
 
 struct FlipMovie :IEffect {//MapFlipを利用してパラパラ漫画を作るエフェクト
-	FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw);
+	FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween = 0.03);
 	~FlipMovie();
 	bool update(double t);
 private:
 	MapFlip* mapflip;
 	int xDraw, yDraw;			//描画位置
 	double switchTime;	//最後に切り出し画像を切り替えた時間
+	double switchBetween;
 };
 
 class FlipEffect {//同じFlipMovieエフェクトを繰り返し再生する際のリソースを保持する
 public:
-	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw);
+	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween = 0.03);
 	void setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight);	//画像をセット("画像パス",切り出しサイズ)
 	void setPos(int xDraw, int yDraw);	//描画位置をセット
 	void play();						//再生開始
@@ -45,6 +46,7 @@ private:
 	Texture map;
 	int xFlipWidth, yFlipHeight;	//切り出しサイズ
 	int xDraw, yDraw;				//描画位置
+	double switchBetween;
 };
 
 /*

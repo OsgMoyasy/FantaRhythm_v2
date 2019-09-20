@@ -12,7 +12,7 @@ Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(100){
 	x = initx;
 	y = inity;
 	framecnt = 0;
-	totaldmg = 0;
+	totalDamage = 0;
 }
 Enemy::~Enemy(){
 	TextureAsset::UnregisterAll();
@@ -22,18 +22,18 @@ void Enemy::update() {
 	
 }
 void Enemy::draw() {
-	Print << U"enemydmg" + Format(totaldmg);
+	Print << U"enemydmg" + Format(totalDamage);
 	TextureAsset(U"enemy").drawAt(x, y);
-	for (FlipEffect* feffect : flipeffect) {
-		feffect->draw();
+	for (FlipEffect* numEffect : flipeffect) {
+		numEffect->draw();
 	}
 
 }
 void Enemy::addDamage(int dmg) {
-	totaldmg += dmg;
+	totalDamage += dmg;
 }
 int Enemy::getTotalDamage() {
-	return totaldmg;
+	return totalDamage;
 }
 
 void Enemy::moveUpDown() {

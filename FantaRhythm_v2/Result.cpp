@@ -1,28 +1,46 @@
 #include "Result.h"
+#include <vector>
+constexpr double NUMBER_SWTIME = 0.05;						//数字エフェクトが切り替わる時間
+constexpr double NUM_MAXTIME = NUMBER_SWTIME * 9 * 1000;	//数字が確定するまでの時間
+constexpr int NUMIM_WIDTH = 50, NUMIM_HEIGHT = 75;
+constexpr int SCOREX = 800, SCOREY = 130;
+const String numberImPath = U"resources/images/items/num/num2.png";
 
-Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool clearflag) {
-	this->judgecnt = judgecnt;
-	this->totaldmg = totaldmg;
-	this->clearflag = clearflag;
 
-	framecnt = 0;
+Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
+	this->judgeCnt = judgeCnt;
+	this->totalDamage = totalDamage;
+	this->isClear = isClear;
+	stopwatch.start();
 	alphaBack = 0;
 	alphaFont = 0;
 
 	FontAsset::Register(U"font", 50);
 	FontAsset::Preload(U"font");
-	FontAsset::Register(U"subfont", 30);
-	FontAsset::Preload(U"subfont");
-	if (clearflag) {//ゲームクリア
-		TextureAsset::Register(U"back", U"resources/images/back/BackScreen.jpg");
+
+	if (isClear) {//ゲームクリア
+		//テクスチャ初期化
+		TextureAsset::Register(U"back", U"resources/images/back/result.png");
+
+		//効果音初期化
+		se = new SE(U"resources/musics/effects/Congratulations.wav");
+		se->play();
+
+		//クリア用ポインタ割り当て
 		stateUpdate = &Result::successUpdate;
 		stateDraw = &Result::successDraw;
-		int score = calcScore(this->judgecnt);
+
+		//スコア計算　文字列変換
+		score = calcScore(this->judgeCnt);
 		scoreStr = Format(score);
-		scoreDraw = U"               ";
+		damageStr = Format(totalDamage);
+
+		//文字列を画像変換
+		imNumberInit();
 	}
 	else {//ゲームオーバー
 		TextureAsset::Register(U"back", U"resources/images/back/gameOver.jpg");
+		//ゲームオーバー用ポインタ割り当て
 		stateUpdate = &Result::failedUpdate;
 		stateDraw = &Result::failedDraw;
 	}
@@ -30,15 +48,14 @@ Result::Result(JUDGE::JudgeCount judgecnt, int totaldmg, bool clearflag) {
 }
 Result::~Result(void) {
 	FontAsset::Unregister(U"font");
-	FontAsset::Unregister(U"subfont");
 	TextureAsset::UnregisterAll();
 }
 void Result::update(void) {
-	framecnt++;
 	(this->*stateUpdate)();
 }
 void Result::draw(void) {
 	(this->*stateDraw)();
+	
 }
 
 void Result::changeFontAlpha(void) {
@@ -48,54 +65,61 @@ void Result::changeFontAlpha(void) {
 }
 
 //ゲームクリア用
-int Result::calcScore(JUDGE::JudgeCount &jc) {//スコア計算
-	constexpr int weight[JUDGE::TYPE_SIZE] = {100, 70, 50, 0};
+void Result::successUpdate(void) {
+	double msF = stopwatch.msF();
+	//順番に時間さで描画する為に描画終了しているならば次に進む
+	if (scoreNumEffect->update(msF) == false) {
+		if (damageNumEffect->update(msF) == false) {
+			if (judgeUpdate() == false) {
+				//全ての描画が終了
+				changeFontAlpha();//Escで終了のメッセージ表示開始
+			}
+		}
+	}
+}
+void Result::successDraw(void) {
+	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
+	scoreNumEffect->draw();
+	damageNumEffect->draw();
+	judgeImNum->draw();
+	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 100, ColorF(0.0, 0.0, 0.0, alphaFont));
+}
+
+int Result::calcScore(JUDGE::JudgeCount& jc) {//スコア計算 判定の数と重みを掛けた総和をスコアとする
+	constexpr int weight[JUDGE::TYPE_SIZE] = { 100, 70, 50, 0 };//重み [perfect, great, good, bad]
 	int score = 0;
 	for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
 		score += weight[i] * jc.cnt[i];
 	}
 	return score;
 }
-void Result::successUpdate(void) {
-	scoreEffect();
 
-}
-void Result::successDraw(void) {
-	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
-	FontAsset(U"subfont")(U"Score   ::"+ scoreDraw).draw(Window::Width() / 2 - 100, 150,Color(0x000000));
-	FontAsset(U"subfont")(U"Perfect ::" + Format(this->judgecnt.cnt[JUDGE::PERFECT])).draw(Window::Width() / 2 - 100, 190, Color(0x000000));
-	FontAsset(U"subfont")(U"Great   ::" + Format(this->judgecnt.cnt[JUDGE::GREAT])).draw(Window::Width() / 2 - 100, 220, Color(0x000000));
-	FontAsset(U"subfont")(U"Good    ::" + Format(this->judgecnt.cnt[JUDGE::GOOD])).draw(Window::Width() / 2 - 100, 260, Color(0x000000));
-	FontAsset(U"subfont")(U"Bad     ::" + Format(this->judgecnt.cnt[JUDGE::BAD])).draw(Window::Width() / 2 - 100, 300, Color(0x000000));
+void Result::imNumberInit() {
+	scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
+	damageNumEffect = new NumWithEffect(numberImPath, damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
+	judgeImNum = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
 }
 
-void Result::scoreEffect(void) {
-	constexpr int frameend = 60 * 1;//数値を決定するまでのフレーム数
-	constexpr int framespace = 3; //数値が移り変わるフレーム数
-
-	static int wordcnt = scoreStr.size() -1;
-	static int number = 0;	//移り変わっている数字
-
-	if (wordcnt < 0) {//全て確定しているならば終了させる
-		return;
+bool Result::judgeUpdate() {
+	static int row = 0;//1 = damage 2 = parfect・・・
+	static double prevtime = stopwatch.msF();
+	if (row >= JUDGE::TYPE_SIZE) {//全て追加し終わったら
+		return false;
 	}
-
-	if (framecnt % framespace == 0) {//0-9まで間隔空けて変更
-		number++;
-		number %= 10;
-		String tmp = Format(number);//一発で出来る様に要変更
-		scoreDraw.at(wordcnt) = tmp.at(0);
+	if (stopwatch.msF() - prevtime >= NUM_MAXTIME) {//追加させる時間が来たら数字を追加し下方向へ
+		judgeImNum->addMulti(judgeCnt.cnt[row], SCOREX, SCOREY + NUMIM_HEIGHT * (row + 2));
+		prevtime = stopwatch.msF();
+		row++;
 	}
-	if (framecnt % frameend == 0) {//数字を確定させる
-		scoreDraw.at(wordcnt) = scoreStr.at(wordcnt);
-		wordcnt--;
-	}
+	return true;
 }
+
 //ゲームオーバー用
 void Result::failedUpdate(void) {
+	constexpr int alphaBackMaxMs = 3000;//背景画像のアルファ値が元に戻るまでの時間
 	//背景や文字を時間経過で表示させるための処理
-	if (framecnt <= alphatime) {
-		alphaBack = (double)framecnt / alphatime;
+	if (stopwatch.ms() <= alphaBackMaxMs) {
+		alphaBack = (double)stopwatch.ms() / alphaBackMaxMs;
 	}
 	else {
 		changeFontAlpha();
@@ -104,5 +128,8 @@ void Result::failedUpdate(void) {
 
 void Result::failedDraw(void) {
 	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//背景描画
-	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alphaFont));
+	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 100, AlphaF(alphaFont));
 }
+
+
+

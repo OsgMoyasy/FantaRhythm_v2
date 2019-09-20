@@ -19,7 +19,7 @@ public:
 private:
 	FlipEffect* flipeffect[EffectType::SIZE];
 	int framecnt;
-	int totaldmg;//敵に与えた総ダメージ
+	int totalDamage;//敵に与えた総ダメージ
 	const int inity, initx;
 	int x, y;
 
