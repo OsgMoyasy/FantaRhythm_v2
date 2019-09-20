@@ -60,7 +60,7 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	cha[obj.val]->getEvent(obj.msg);
 	if (obj.msg == DAMAGE) {//ダメージイベント
 		enemy->attack();
-		selfDamage(obj.val);
+		addDamage(obj.val);
 	}
 	if (obj.msg == GUARD) {
 		cha[obj.val]->onGuardFlag();
@@ -87,7 +87,7 @@ void CharacterSet::calchpx(int currenthp) {
 	hpx = (int)(per * HPWIDTH);
 }
 
-void CharacterSet::selfDamage(int lane) {
+void CharacterSet::addDamage(int lane) {
 	cha[lane]->damage(damage);
 	int currenthp = getCurrentHp();
 

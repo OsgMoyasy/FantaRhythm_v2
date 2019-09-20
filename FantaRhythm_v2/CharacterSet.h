@@ -28,7 +28,7 @@ public:
 	void TotalhpDraw();
 	int getTotalDamage(void);
 	int getCurrentHp(void);
-	void selfDamage(int lane);
+	void addDamage(int lane);
 	void gameEndEffect(void);
 private:
 	int totalhp;
