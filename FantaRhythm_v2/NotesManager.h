@@ -14,9 +14,6 @@ private:
 	enum class NOTESTYPE;
 	struct Notes;
 
-
-	int notewidth;
-	
 	class NotesSubject* notessubject;
 	
 	std::list<Notes> notelist[LANESIZE];
@@ -43,6 +40,9 @@ private:
 	int laneGoalY;		//Goal = 流れ切ったノーツの表示をやめる所
 	float timeRequired;	//ノーツの出現から判定まで流れる時間[ms]
 	float notespeed;	//ノーツ速度の補正倍率
+	int notewidth;
+	float laneStartScale;	//ノーツの拡大率
+	float laneJudgeScale;
 
 	void plusItr(noteitr& itr);	//notelistのイテレータを進める
 

@@ -92,8 +92,11 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//‘¬‚³
 	notespeed = 1.0;
 	timeRequired = 1500 / notespeed;
-
+	//ƒm[ƒc‚Ì‘å‚«‚³
 	notewidth = TextureAsset(U"note").width();
+	laneStartScale = 0.2;
+	laneJudgeScale = 1.0;
+
 	for (int i = 0; i < LANESIZE; i++) {
 		down[i] = 0;
 		press[i] = 0;
@@ -302,8 +305,6 @@ double NotesManager::getScale(double currenty) {
 	return  temp;
 }
 NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
-	constexpr double laneStartScale = 0.2;
-	constexpr double laneJudgeScale = 1.0;
 	double progressRate = progressByAngle(getProgress(time));
 	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
 	double currentX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRate);
