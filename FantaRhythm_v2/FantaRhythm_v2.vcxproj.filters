@@ -61,6 +61,12 @@
     <Filter Include="Resource Files\nlp\japanese\jumanpp">
       <UniqueIdentifier>{f6fe2a89-c647-48e2-bb2c-27b03b1aeced}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Jobs">
+      <UniqueIdentifier>{eacf6186-19d7-4b25-a658-1f0f4b0e8ff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Jobs">
+      <UniqueIdentifier>{2fffb453-0c11-4b65-a93f-53e89233aab5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -93,35 +99,35 @@
     <ClCompile Include="CharacterSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Soldier.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Result.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Witch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Archer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sage.cpp">
+    <ClCompile Include="ImageNumber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Berserker.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Archer.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
     <ClCompile Include="Combostar.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Sage.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Soldier.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
     <ClCompile Include="Tanker.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="ImageNumber.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Witch.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -321,9 +327,6 @@
     <ClInclude Include="CharacterSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Soldier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Result.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -333,25 +336,31 @@
     <ClInclude Include="Judge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Witch.h">
+    <ClInclude Include="ImageNumber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Archer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sage.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
     <ClInclude Include="Berserker.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
     <ClInclude Include="Combostar.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Sage.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Soldier.h">
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
     <ClInclude Include="Tanker.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Jobs</Filter>
     </ClInclude>
-    <ClInclude Include="ImageNumber.h">
+    <ClInclude Include="Witch.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Jobs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
