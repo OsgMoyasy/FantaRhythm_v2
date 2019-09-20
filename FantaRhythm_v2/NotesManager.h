@@ -63,6 +63,8 @@ private:
 	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
 	double getCurrentPosition(double startPos, double endPos, double progressRate);//現在座標を返す
 	double getScale(double currenty);//拡大率計算
+	struct ProPos;//progressRateと現在座標(X,Y)
+	ProPos getProPos(int lane, int time);//progressRateと現在座標(X,Y)を返す
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示

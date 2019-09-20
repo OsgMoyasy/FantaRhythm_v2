@@ -28,6 +28,12 @@ struct NotesManager::Notes {
 	bool display;
 };
 
+struct NotesManager::ProPos {
+	double scale;
+	double x;
+	double y;
+};
+
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
@@ -295,16 +301,23 @@ double NotesManager::getScale(double currenty) {
 	double temp = currenty / (laneJudgeY - 100);//­‚µ‘‚ß‚Ék¬—¦‚ð‚à‚Æ‚É–ß‚·‚½‚ßˆø‚¢‚Ä‚Ý‚Ä‚¢‚é
 	return  temp;
 }
-
-void NotesManager::displayNormal(int lane, int time) {
+NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
+	constexpr double laneStartScale = 0.2;
+	constexpr double laneJudgeScale = 1.0;
 	double progressRate = progressByAngle(getProgress(time));
 	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
-	if (currentY > laneGoalY) {
+	double currentX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRate);
+	double scale = getCurrentPosition(laneStartScale, laneJudgeScale, progressRate);
+	return { scale ,currentX ,currentY };
+}
+
+void NotesManager::displayNormal(int lane, int time) {
+	ProPos now = getProPos(lane, time);
+	if (now.y > laneGoalY) {
 		plusItr(displayitr[lane]);
 		return;
 	}
-	double currentX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRate);
-	TextureAsset(U"note").scaled(getScale(currentY)).drawAt(currentX, currentY);
+	TextureAsset(U"note").scaled(now.scale).drawAt(now.x, now.y);
 }
 void NotesManager::displayLong(int lane, int time, int longtime) {
 	//•`‰æˆÊ’u‚ÌŒvŽZ
