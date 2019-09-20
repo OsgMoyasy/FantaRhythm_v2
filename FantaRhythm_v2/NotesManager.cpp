@@ -322,35 +322,33 @@ void NotesManager::displayNormal(int lane, int time) {
 void NotesManager::displayLong(int lane, int time, int longtime) {
 	//描画位置の計算
 	//上側
-	double progressRateEnd = progressByAngle(getProgress(longtime));
-	double currentEndY = getCurrentPosition(laneStartY, laneJudgeY, progressRateEnd);//描画位置Y座標を計算
-	if (currentEndY > laneGoalY) {//描画が終了しているなら
+	int longt = longtime < nowtime + timeRequired ? longtime : nowtime + timeRequired;
+	ProPos end = getProPos(lane, longt);
+	if (end.y > laneGoalY) {
 		plusItr(displayitr[lane]);
 		return;
 	}
-	double currentEndX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateEnd);//描画位置X座標を計算
-	if (currentEndY < laneStartY) {//上側がまだ描画位置に到達していないなら
-		currentEndX = laneStartX[lane];
-		currentEndY = laneStartY;//初期位置へ固定
-	}
-
 	//下側
-	double progressRateBgn = progressByAngle(getProgress(time));
-	double currentBgnY = getCurrentPosition(laneStartY, laneJudgeY, progressRateBgn);//描画位置Y座標を計算
-	double currentBgnX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateBgn);//描画位置X座標を計算
-
-	//拡大率計算
-	double scaleEnd = getScale(currentEndY);
-	double scaleBgn = getScale(currentBgnY);
+	ProPos bgn = getProPos(lane, time);
 
 	//描画処理
-	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
-		Line(currentEndX + linex * scaleEnd, currentEndY, currentBgnX + linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
-		Line(currentEndX - linex * scaleEnd, currentEndY, currentBgnX - linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
+	ProPos a, b = end;
+	constexpr int BETW = 50;//伸ばし棒の太さの再計算の間隔[ms]
+	for (int i = longt - BETW;i > time;i -= BETW) {
+		a = b;
+		b = getProPos(lane, i);
+		for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
+			Line(a.x + linex * a.scale, a.y, b.x + linex * b.scale, b.y).draw(1, Color(150 + linex * 2, 50, 50));
+			Line(a.x - linex * a.scale, a.y, b.x - linex * b.scale, b.y).draw(1, Color(150 + linex * 2, 50, 50));
+		}
 	}
-	
-	TextureAsset(U"note").scaled(scaleEnd).drawAt(currentEndX, currentEndY);
-	TextureAsset(U"note").scaled(scaleBgn).drawAt(currentBgnX, currentBgnY);
+	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
+		Line(b.x + linex * b.scale, b.y, bgn.x + linex * bgn.scale, bgn.y).draw(1, Color(150 + linex * 2, 50, 50));
+		Line(b.x - linex * b.scale, b.y, bgn.x - linex * bgn.scale, bgn.y).draw(1, Color(150 + linex * 2, 50, 50));
+	}
+
+	TextureAsset(U"note").scaled(end.scale).drawAt(end.x, end.y);
+	TextureAsset(U"note").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
 }
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット
