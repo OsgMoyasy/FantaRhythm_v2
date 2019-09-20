@@ -10,6 +10,10 @@ namespace JOB {
 		SOLDIER,
 		ARCHER,
 		WITCH,
+		SAGE,
+		BERSERKER,
+		COMBOSTAR,
+		TANKER,
 	};
 }
 

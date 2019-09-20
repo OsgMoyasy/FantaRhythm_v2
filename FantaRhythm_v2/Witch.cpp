@@ -1,10 +1,10 @@
 #include "Witch.h"
-#define CHARGEMAX 10
+constexpr int CHARGEMAX = 10;
 
 //仕様的にはSoldierと同じ
 //魔女のジョブ
 
-Witch::Witch(CharacterSubject* csubject, CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
+Witch::Witch(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
 	chargeClear();
 	chargedamage = 0;
 }
@@ -22,7 +22,7 @@ void Witch::update() {
 	Print << U"charge=" << chargecount;
 }
 
-void Witch::charge() {
+void Witch::charge() {				//Witchは基本チャージだけ
 	if (chargecount < CHARGEMAX) {
 		chargecount += 1;
 	}
@@ -34,6 +34,8 @@ void Witch::chargeClear() {
 
 void Witch::chargeAttack() {
 	chargedamage = getPower() * (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
+	setAttackEvent(chargedamage, EffectType::NOMAL);
+	chargeClear();
 }
 
 void Witch::getEvent(Massage msg) {
@@ -44,8 +46,6 @@ void Witch::getEvent(Massage msg) {
 		break;
 	case Massage::DOWNATTACK:
 		chargeAttack();
-		break;
-		chargeClear();
 		break;
 	}
 }

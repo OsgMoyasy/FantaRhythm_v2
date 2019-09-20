@@ -1,8 +1,8 @@
 #include"Character.h"
 #include"FantaRhythm_v2.h"
 
-constexpr int moverange = 70;		//�U�� �㉺�̒�����*2
-constexpr int movefreq = 4 * 60;	//�㉺�������	���̒l��b�w��
+constexpr int moverange = 70;		//謖ｯ蟷 荳贋ｸ九�髟ｷ縺輔�*2
+constexpr int movefreq = 4 * 60;	//荳贋ｸ九☆繧句捉譛	蟾ｦ縺ｮ蛟､繧堤ｧ呈欠螳
 constexpr int effectsize = 200;
 bool Character::guardflag;
 
@@ -45,14 +45,15 @@ void Character::moveRigthLight() {
 
 }
 
-void Character::damage(int damage) {
-	if (guardflag == 1) {
-		//�K�[�h�G�t�F�N�g
-		guardflag = false;
-	}
-	else {
+void Character::damage(int damage) {		//繝繝｡繝ｼ繧ｸ鬟溘ｉ縺�□縺代�髢｢謨ｰ
 		hp -= damage;
 		playEffect(EffectType::DAMAGE, x, y);
+}
+
+void Character::cheakdamage(int damage) {		//繧ｿ繝ｳ繧ｯ逕ｨ
+	if (guardflag == 1) {
+		//繧ｬ繝ｼ繝峨お繝輔ぉ繧ｯ繝
+		guardflag == false;
 	}
 }
 
@@ -74,7 +75,7 @@ int Character::getArgs2() {
 void Character::setAttackEvent(int attack, EffectType::Type type) {
 	playEffect(type);
 	csubject->setEvent(attack);
-	csubject->notifyObservers();//�C�x���g�N��
+	csubject->notifyObservers();//繧､繝吶Φ繝郁ｵｷ蜍
 }
 
 void Character::playEffect(EffectType::Type type) {
@@ -91,10 +92,21 @@ void Character::drawEffect(void) {
 	}
 }
 
+
 void Character::onGuardFlag(void) {
 	guardflag = true;
 }
 
 void Character::guard(void) {
 
+}
+
+int Character::heal() {			//繧ｪ繝ｼ繝舌�繝ｩ繧､繝臥畑
+	return 0;
+}
+
+void Character::recovery() {			//荳莠ｺ縺ｲ縺ｨ繧翫�蝗槫ｾｩ驥
+	if (heal() > 0) {
+		hp += heal();
+	}
 }

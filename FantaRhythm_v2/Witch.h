@@ -1,10 +1,10 @@
 #pragma once
-#include "FantaRhythm_v2.h"
+#include <Siv3D.hpp>
 #include "Character.h"
 
 class Witch :public Character {
 public:
-	Witch(CharacterSubject* csubject, CSVData& csv, double ix, double iy, int row);
+	Witch(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
 	~Witch();
 	void update();
 	void draw();

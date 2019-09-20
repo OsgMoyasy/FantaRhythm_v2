@@ -198,8 +198,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="Berserker.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterSet.cpp" />
+    <ClCompile Include="Combostar.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameEffect.cpp" />
@@ -208,9 +210,11 @@
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Sage.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SelectMusic.cpp" />
     <ClCompile Include="Soldier.cpp" />
+    <ClCompile Include="Tanker.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Witch.cpp" />
   </ItemGroup>
@@ -276,8 +280,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archer.h" />
+    <ClInclude Include="Berserker.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterSet.h" />
+    <ClInclude Include="Combostar.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FantaRhythm_v2.h" />
     <ClInclude Include="Game.h" />
@@ -288,10 +294,12 @@
     <ClInclude Include="NotesManager.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="Sage.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectMusic.h" />
     <ClInclude Include="Soldier.h" />
+    <ClInclude Include="Tanker.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Witch.h" />
   </ItemGroup>
