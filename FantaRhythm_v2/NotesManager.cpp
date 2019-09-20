@@ -287,7 +287,7 @@ double NotesManager::progressByAngle(double progressRate) {
 	return (START_ANGLE - atan(nowRange / EYE_HEIGHT)) / (START_ANGLE - JUDGE_ANGLE);
 }
 
-double NotesManager::getCurrentPosition(int startPos, int endPos, double progressRate) {
+double NotesManager::getCurrentPosition(double startPos, double endPos, double progressRate) {
 	return startPos + (endPos - startPos) * progressRate;
 }
 
