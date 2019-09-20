@@ -23,7 +23,7 @@ private:
 };
 
 struct FlipMovie :IEffect {//MapFlipを利用してパラパラ漫画を作るエフェクト
-	FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween = 0.03);
+	FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw = 0, int yDraw = 0, double switchBetween = 0.03);
 	~FlipMovie();
 	bool update(double t);
 private:
@@ -35,7 +35,7 @@ private:
 
 class FlipEffect {//同じFlipMovieエフェクトを繰り返し再生する際のリソースを保持する
 public:
-	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween = 0.03);
+	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw = 0, int yDraw = 0, double switchBetween = 0.03);
 	void setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight);	//画像をセット("画像パス",切り出しサイズ)
 	void setPos(int xDraw, int yDraw);	//描画位置をセット
 	void play();						//再生開始
