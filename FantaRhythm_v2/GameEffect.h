@@ -23,7 +23,7 @@ private:
 };
 
 struct FlipMovie :IEffect {//MapFlipを利用してパラパラ漫画を作るエフェクト
-	FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween = 0.03);
+	FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw = 0, int yDraw = 0, double switchBetween = 0.03);
 	~FlipMovie();
 	bool update(double t);
 private:
@@ -35,7 +35,7 @@ private:
 
 class FlipEffect {//同じFlipMovieエフェクトを繰り返し再生する際のリソースを保持する
 public:
-	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw, int yDraw, double switchBetween = 0.03);
+	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw = 0, int yDraw = 0, double switchBetween = 0.03);
 	void setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight);	//画像をセット("画像パス",切り出しサイズ)
 	void setPos(int xDraw, int yDraw);	//描画位置をセット
 	void play();						//再生開始
@@ -48,6 +48,18 @@ private:
 	int xDraw, yDraw;				//描画位置
 	double switchBetween;
 };
+
+template<typename T>
+class FlipMap {//FlipEffectをunordered_mapで管理する為のクラス。キーに使う型は自由。
+public:
+	~FlipMap();
+	void set(T name, const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw = 0, int yDraw = 0);	//使用するエフェクトを登録
+	FlipEffect* get(T name);	//エフェクトを指定して取得
+	void draw();					//再生中の全てのエフェクトを描画
+private:
+	std::unordered_map<T, FlipEffect*> usingEffect;
+};
+#include"FlipSet.h"
 
 /*
 struct Fractal :IEffect {//フラクタル模様を作り出すエフェクト

@@ -14,9 +14,6 @@ private:
 	enum class NOTESTYPE;
 	struct Notes;
 
-
-	int notewidth;
-	
 	class NotesSubject* notessubject;
 	
 	std::list<Notes> notelist[LANESIZE];
@@ -43,6 +40,9 @@ private:
 	int laneGoalY;		//Goal = 流れ切ったノーツの表示をやめる所
 	float timeRequired;	//ノーツの出現から判定まで流れる時間[ms]
 	float notespeed;	//ノーツ速度の補正倍率
+	int notewidth;
+	float laneStartScale;	//ノーツの拡大率
+	float laneJudgeScale;
 
 	void plusItr(noteitr& itr);	//notelistのイテレータを進める
 
@@ -61,8 +61,9 @@ private:
 	
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
 	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
-	double getCurrentPosition(int startPos, int endPos, double progressRate);//現在座標を返す
-	double getScale(double currenty);//拡大率計算
+	double getCurrentPosition(double startPos, double endPos, double progressRate);//現在座標を返す
+	struct ProPos;//progressRateと現在座標(X,Y)
+	ProPos getProPos(int lane, int time);//progressRateと現在座標(X,Y)を返す
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示

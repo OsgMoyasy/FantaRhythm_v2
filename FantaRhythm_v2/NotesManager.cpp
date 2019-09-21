@@ -28,6 +28,12 @@ struct NotesManager::Notes {
 	bool display;
 };
 
+struct NotesManager::ProPos {
+	double scale;
+	double x;
+	double y;
+};
+
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
@@ -86,8 +92,11 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//‘¬‚³
 	notespeed = 1.0;
 	timeRequired = 1500 / notespeed;
-
+	//ƒm[ƒc‚Ì‘å‚«‚³
 	notewidth = TextureAsset(U"note").width();
+	laneStartScale = 0.2;
+	laneJudgeScale = 1.0;
+
 	for (int i = 0; i < LANESIZE; i++) {
 		down[i] = 0;
 		press[i] = 0;
@@ -287,57 +296,56 @@ double NotesManager::progressByAngle(double progressRate) {
 	return (START_ANGLE - atan(nowRange / EYE_HEIGHT)) / (START_ANGLE - JUDGE_ANGLE);
 }
 
-double NotesManager::getCurrentPosition(int startPos, int endPos, double progressRate) {
+double NotesManager::getCurrentPosition(double startPos, double endPos, double progressRate) {
 	return startPos + (endPos - startPos) * progressRate;
 }
 
-double NotesManager::getScale(double currenty) {
-	double temp = currenty / (laneJudgeY - 100);//­‚µ‘‚ß‚Ék¬—¦‚ğ‚à‚Æ‚É–ß‚·‚½‚ßˆø‚¢‚Ä‚İ‚Ä‚¢‚é
-	return  temp;
+NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
+	double progressRate = progressByAngle(getProgress(time));
+	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
+	double currentX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRate);
+	double scale = getCurrentPosition(laneStartScale, laneJudgeScale, progressRate);
+	return { scale ,currentX ,currentY };
 }
 
 void NotesManager::displayNormal(int lane, int time) {
-	double progressRate = progressByAngle(getProgress(time));
-	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
-	if (currentY > laneGoalY) {
+	ProPos now = getProPos(lane, time);
+	if (now.y > laneGoalY) {
 		plusItr(displayitr[lane]);
 		return;
 	}
-	double currentX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRate);
-	TextureAsset(U"note").scaled(getScale(currentY)).drawAt(currentX, currentY);
+	TextureAsset(U"note").scaled(now.scale).drawAt(now.x, now.y);
 }
 void NotesManager::displayLong(int lane, int time, int longtime) {
 	//•`‰æˆÊ’u‚ÌŒvZ
 	//ã‘¤
-	double progressRateEnd = progressByAngle(getProgress(longtime));
-	double currentEndY = getCurrentPosition(laneStartY, laneJudgeY, progressRateEnd);//•`‰æˆÊ’uYÀ•W‚ğŒvZ
-	if (currentEndY > laneGoalY) {//•`‰æ‚ªI—¹‚µ‚Ä‚¢‚é‚È‚ç
+	int longt = longtime < nowtime + timeRequired ? longtime : nowtime + timeRequired;
+	ProPos end = getProPos(lane, longt);
+	if (end.y > laneGoalY) {
 		plusItr(displayitr[lane]);
 		return;
 	}
-	double currentEndX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateEnd);//•`‰æˆÊ’uXÀ•W‚ğŒvZ
-	if (currentEndY < laneStartY) {//ã‘¤‚ª‚Ü‚¾•`‰æˆÊ’u‚É“’B‚µ‚Ä‚¢‚È‚¢‚È‚ç
-		currentEndX = laneStartX[lane];
-		currentEndY = laneStartY;//‰ŠúˆÊ’u‚ÖŒÅ’è
-	}
-
 	//‰º‘¤
-	double progressRateBgn = progressByAngle(getProgress(time));
-	double currentBgnY = getCurrentPosition(laneStartY, laneJudgeY, progressRateBgn);//•`‰æˆÊ’uYÀ•W‚ğŒvZ
-	double currentBgnX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRateBgn);//•`‰æˆÊ’uXÀ•W‚ğŒvZ
-
-	//Šg‘å—¦ŒvZ
-	double scaleEnd = getScale(currentEndY);
-	double scaleBgn = getScale(currentBgnY);
+	ProPos bgn = getProPos(lane, time);
 
 	//•`‰æˆ—
-	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
-		Line(currentEndX + linex * scaleEnd, currentEndY, currentBgnX + linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
-		Line(currentEndX - linex * scaleEnd, currentEndY, currentBgnX - linex * scaleBgn, currentBgnY).draw(1, Color(150 + linex * 2, 50, 50));
+	ProPos a, b = end;
+	constexpr int BETW = 50;//L‚Î‚µ–_‚Ì‘¾‚³‚ÌÄŒvZ‚ÌŠÔŠu[ms]
+	for (int i = longt - BETW;i > time;i -= BETW) {
+		a = b;
+		b = getProPos(lane, i);
+		for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
+			Line(a.x + linex * a.scale, a.y, b.x + linex * b.scale, b.y).draw(1, Color(150 + linex * 2, 50, 50));
+			Line(a.x - linex * a.scale, a.y, b.x - linex * b.scale, b.y).draw(1, Color(150 + linex * 2, 50, 50));
+		}
 	}
-	
-	TextureAsset(U"note").scaled(scaleEnd).drawAt(currentEndX, currentEndY);
-	TextureAsset(U"note").scaled(scaleBgn).drawAt(currentBgnX, currentBgnY);
+	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
+		Line(b.x + linex * b.scale, b.y, bgn.x + linex * bgn.scale, bgn.y).draw(1, Color(150 + linex * 2, 50, 50));
+		Line(b.x - linex * b.scale, b.y, bgn.x - linex * bgn.scale, bgn.y).draw(1, Color(150 + linex * 2, 50, 50));
+	}
+
+	TextureAsset(U"note").scaled(end.scale).drawAt(end.x, end.y);
+	TextureAsset(U"note").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
 }
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//ƒCƒxƒ“ƒgƒIƒuƒWƒFƒNƒgƒZƒbƒg
