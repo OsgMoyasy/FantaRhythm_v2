@@ -68,6 +68,10 @@ FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, in
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
 	this->switchBetween = switchBetween;
+	existSE = false;
+}
+FlipEffect::~FlipEffect() {
+	if (existSE) { delete se; }
 }
 void FlipEffect::setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight) {
 	Texture tmp(path);
@@ -79,11 +83,18 @@ void FlipEffect::setPos(int xDraw, int yDraw) {
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
 }
+void FlipEffect::setSE(FilePath& path) {
+	if (existSE) { delete se; }
+	se = new SE(path);
+	existSE = true;
+}
 void FlipEffect::play() {
 	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw, switchBetween);
+	if (existSE) { se->play(); }
 }
 void FlipEffect::play(int xDraw, int yDraw) {
 	effect.add<FlipMovie>(map, xFlipWidth, yFlipHeight, xDraw, yDraw, switchBetween);
+	if (existSE) { se->play(); }
 }
 void FlipEffect::draw() {
 	effect.update();
