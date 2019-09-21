@@ -236,8 +236,13 @@ void NotesManager::judgeCritical(int lane) {
 	static int prevTime[LANESIZE]{ 0, 0, 0, 0 };
 	static int pressHold[LANESIZE] = { 0,0,0,0 };
 	static JUDGE::TYPE typeHold[LANESIZE] = { JUDGE::NONE,JUDGE::NONE,JUDGE::NONE,JUDGE::NONE };
+	//judgeCriticalEventを呼び上記のローカル静的変数を初期化するマクロ
+	#define JUDGE_CRITICAL_EVENT  judgeCriticalEvent(typeHold[lane], lane, pressHold[lane]);\
+								  pressHold[lane] = 0;prevTime[lane] = 0;\
+								  typeHold[lane] = JUDGE::NONE;
+
 	JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
-	if (down[lane] ){
+	if (down[lane] ){//ボタンが押され始めかどうかを判定
 		if (type < JUDGE::NONE) {
 			if (typeHold[lane] == JUDGE::NONE) {
 				pressHold[lane] = down[lane];
@@ -247,37 +252,26 @@ void NotesManager::judgeCritical(int lane) {
 		}
 	}
 
-	if (nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD ||//押さずに時間切れ
-		typeHold[lane] == JUDGE::BAD) {//BAD判定
-		pressHold[lane] = 0;
-		typeHold[lane] = JUDGE::NONE;
-		prevTime[lane] = 0;
-		return judgeCriticalEvent(JUDGE::BAD, lane, pressHold[lane]);
-	}
-
+	//ボタンが押された後の時
 	if (pressHold[lane] > 0) {
-		if (press[lane] == PSHBTN::BOTH) {
-			judgeCriticalEvent(typeHold[lane], lane, PSHBTN::BOTH);
-			pressHold[lane] = 0;
-			typeHold[lane] = JUDGE::NONE;
-			prevTime[lane] = 0;
+		if (press[lane] == PSHBTN::BOTH) {//同時押しの場合
+			pressHold[lane] = PSHBTN::BOTH;
+			JUDGE_CRITICAL_EVENT;//同時押しイベント
+			return;
+		}
+		else if (press[lane] == 0 ||				//ボタンが途中で離されるか
+				 nowtime - prevTime[lane] > 50) {	//同時押しされてない場合の処理
+			JUDGE_CRITICAL_EVENT;//最初に押した時点のイベントを起こす
 			return;
 		}
 	}
-	if (pressHold[lane] > 0 && nowtime - prevTime[lane] > 50){
-		judgeCriticalEvent(typeHold[lane], lane, pressHold[lane]);
-		pressHold[lane] = 0;
-		typeHold[lane] = JUDGE::NONE;
-		prevTime[lane] = 0;
-		return;
-	}
-
-	if (pressHold[lane] > 0 && press[lane] == 0) {//一度判定に入って同時押し前に離された時
-		judgeCriticalEvent(typeHold[lane], lane, pressHold[lane]);
-		pressHold[lane] = 0;
-		typeHold[lane] = JUDGE::NONE;
-		prevTime[lane] = 0;
-		return;
+	else {
+		if (nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD ||//押さずに時間切れ
+			typeHold[lane] == JUDGE::BAD) {//BAD判定
+			typeHold[lane] = JUDGE::BAD;
+			JUDGE_CRITICAL_EVENT;//BADイベント
+			return;
+		}
 	}
 }
 
