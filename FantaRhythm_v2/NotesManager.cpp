@@ -4,6 +4,7 @@
 enum class NotesManager::NOTESTYPE {
 	NORMAL,
 	LONG,
+	CRITICAL,
 	SENTINEL,
 };
 
@@ -11,6 +12,7 @@ namespace PSHBTN {
 	constexpr int NONE = 0;
 	constexpr int UP = 1;
 	constexpr int DOWN = 2;
+	constexpr int BOTH = 3;
 }
 
 namespace JUDGE_RANGE{
@@ -37,6 +39,8 @@ struct NotesManager::ProPos {
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
+	TextureAsset::Register(U"cri", U"resources/images/items/Nort2nd.png");
+	TextureAsset::Preload(U"cri");
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
@@ -51,13 +55,17 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
 		case 0:
-				note.type = NOTESTYPE::NORMAL;
-				note.judgetime = note.time;
-				break;
+			note.type = NOTESTYPE::NORMAL;
+			note.judgetime = note.time;
+			break;
 		case 1:
-				note.type = NOTESTYPE::LONG;
-				note.judgetime = note.longtime;
-				break;
+			note.type = NOTESTYPE::LONG;
+			note.judgetime = note.longtime;
+			break;
+		case 2:
+			note.type = NOTESTYPE::CRITICAL;
+			note.judgetime = note.time;
+			break;
 		}
 		note.display = true;
 		notelist[lane].push_back(note);
@@ -173,6 +181,9 @@ void NotesManager::controlJudge(void) {
 		case NOTESTYPE::LONG:
 			judgeLong(i);
 			break;
+		case NOTESTYPE::CRITICAL:
+			judgeCritical(i);
+			break;
 		default:
 			break;
 		}
@@ -187,7 +198,7 @@ void NotesManager::judgeNormal(int lane) {
 		return judgeEvent(JUDGE::BAD, lane);
 	}
 }
-JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {
+JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//判定するタイミングからJUDGEのタイプを返す
 	return judgeType(abs(nowtime - judgetime));
 }
 void NotesManager::judgeLong(int lane) {
@@ -220,6 +231,50 @@ void NotesManager::judgeLong(int lane) {
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
+
+void NotesManager::judgeCritical(int lane) {
+	static int prevTime[LANESIZE]{ 0, 0, 0, 0 };
+	static int pressHold[LANESIZE] = { 0,0,0,0 };
+	static JUDGE::TYPE typeHold[LANESIZE] = { JUDGE::NONE,JUDGE::NONE,JUDGE::NONE,JUDGE::NONE };
+	//judgeCriticalEventを呼び上記のローカル静的変数を初期化するマクロ
+	#define JUDGE_CRITICAL_EVENT  judgeCriticalEvent(typeHold[lane], lane, pressHold[lane]);\
+								  pressHold[lane] = 0;prevTime[lane] = 0;\
+								  typeHold[lane] = JUDGE::NONE;
+
+	JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
+	if (down[lane] ){//ボタンが押され始めかどうかを判定
+		if (type < JUDGE::NONE) {
+			if (typeHold[lane] == JUDGE::NONE) {
+				pressHold[lane] = down[lane];
+				typeHold[lane] = type;
+				prevTime[lane] = nowtime;
+			}
+		}
+	}
+
+	//ボタンが押された後の時
+	if (pressHold[lane] > 0) {
+		if (press[lane] == PSHBTN::BOTH) {//同時押しの場合
+			pressHold[lane] = PSHBTN::BOTH;
+			JUDGE_CRITICAL_EVENT;//同時押しイベント
+			return;
+		}
+		else if (press[lane] == 0 ||				//ボタンが途中で離されるか
+				 nowtime - prevTime[lane] > 50) {	//同時押しされてない場合の処理
+			JUDGE_CRITICAL_EVENT;//最初に押した時点のイベントを起こす
+			return;
+		}
+	}
+	else {
+		if (nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD ||//押さずに時間切れ
+			typeHold[lane] == JUDGE::BAD) {//BAD判定
+			typeHold[lane] = JUDGE::BAD;
+			JUDGE_CRITICAL_EVENT;//BADイベント
+			return;
+		}
+	}
+}
+
 void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	down[lane] = pressedkey[lane];
 	judgeEvent(type, lane);
@@ -228,8 +283,7 @@ void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 
 void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 	if (next) {
-		checkitr[lane]->display = false;//ディスプレイ表示オフ
-		plusItr(checkitr[lane]);//判定対象を次に進める
+		noteNext(lane);
 	}
 	judgecount.cnt[type]++;//判定をカウントアップ
 	if(type == JUDGE::BAD){
@@ -246,6 +300,35 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 		}
 	}
 }
+
+void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType) {
+	noteNext(lane);
+	judgecount.cnt[type]++;//判定をカウントアップ
+	if (type == JUDGE::BAD) {
+		setEvent(Massage::CRITICALDAMAGE, lane);
+	}
+	else {
+		switch (buttonType) {
+		case PSHBTN::UP:
+			setEvent(Massage::UPATTACK, lane);
+			setEvent(Massage::CRITICALDAMAGE, lane);
+			break;
+		case PSHBTN::DOWN:
+			setEvent(Massage::DOWNATTACK, lane);
+			setEvent(Massage::CRITICALDAMAGE, lane);
+			break;
+		case PSHBTN::BOTH:
+			setEvent(Massage::BOTHATTACK, lane);
+			break;
+		}
+	}
+}
+
+void NotesManager::noteNext(int lane) {
+	checkitr[lane]->display = false;//ディスプレイ表示オフ
+	plusItr(checkitr[lane]);//判定対象を次に進める
+}
+
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
 	return &judgecount;
 }
@@ -273,6 +356,9 @@ void NotesManager::draw(void){
 				break;
 			case NOTESTYPE::LONG:
 				displayLong(i, itr->time, itr->longtime);
+				break;
+			case NOTESTYPE::CRITICAL:
+				displayCritical(i, itr->time);
 				break;
 			default:
 				break;
@@ -347,6 +433,17 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	TextureAsset(U"note").scaled(end.scale).drawAt(end.x, end.y);
 	TextureAsset(U"note").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
 }
+
+void NotesManager::displayCritical(int lane, int time) {
+	ProPos now = getProPos(lane, time);
+	if (now.y > laneGoalY) {
+		plusItr(displayitr[lane]);
+		return;
+	}
+	TextureAsset(U"cri").scaled(now.scale).drawAt(now.x, now.y);
+}
+
+
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット
 	notessubject->notifyObservers();//イベント起動

@@ -33,10 +33,8 @@ public:
 	void drawEffect(void);
 	int heal();			//ジョブクラスでオーバーライド
 	void recovery();	//回復
-	void onGuardFlag(void);
-	void cheakdamage(int damage);
 	void damage(int damage);
-
+	void guard(void);
 
 private:
 	class CharacterSubject* csubject;
@@ -50,6 +48,6 @@ private:
 	double x, y;//現在位置
 	int framecnt;//上下移動に使うフレームカウント
 	static bool isGuard;
-	void guard(void);//flagを降ろして防御
+
 
 };

@@ -75,13 +75,17 @@ void CharacterSet::draw() {
 
 void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	cha[obj.val]->getEvent(obj.msg);
-	if (obj.msg == DAMAGE) {//自分たち側へのダメージ
+	switch (obj.msg) {
+	case Massage::DAMAGE://自分たち側へのダメージ
 		enemy->attack();
-		damageToSelves(obj.val);
+		damageToSelves(obj.val, damage);
+		break;
+	case Massage::CRITICALDAMAGE:
+		enemy->attack();
+		damageToSelves(obj.val, damage * 2);
+		break;
 	}
-	if (obj.msg == GUARD) {//仮同時押しイベント
-		cha[obj.val]->onGuardFlag();
-	}
+	
 	for (int i = 0; i < CHANUMBER; i++) {//回復判定 要修正
 		cha[i]->heal();
 		for (int j = 0; j < CHANUMBER; j++) {
@@ -104,7 +108,7 @@ void CharacterSet::calchpx(int currenthp) {
 	hpx = (int)(per * HPWIDTH);
 }
 
-void CharacterSet::damageToSelves(int lane) {
+void CharacterSet::damageToSelves(int lane, int damage) {
 	cha[lane]->damage(damage);
 	int currenthp = getCurrentHp();
 

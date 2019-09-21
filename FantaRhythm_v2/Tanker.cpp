@@ -41,7 +41,7 @@ void Tanker::downAttack() {
 		sealedcount += 1;
 	}
 	if (sealedcount == 4) {
-		onGuardFlag();
+		//onGuardFlag();
 	}
 	
 }
