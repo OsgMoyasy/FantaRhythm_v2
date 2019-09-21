@@ -22,6 +22,8 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 	args2 = csv.get<int>(row, 6);
 	TextureAsset::Register(name,U"resources/images/character/"+name+U".png");
 	TextureAsset::Preload(name);
+	TextureAsset::Register(U"shield", U"resources/images/items/shield.png");
+	TextureAsset::Preload(U"shield");
 	initx = ix;
 	inity = iy;
 	framecnt = 0;
@@ -49,13 +51,6 @@ void Character::damage(int damage) {
 		hp -= damage;
 		playEffect(EffectType::DAMAGE, x, y);
 }
-
-void Character::cheakdamage(int damage) {//ガードを使用するときに使う用
-	if (isGuard == 1) {
-		isGuard = false;
-	}
-}
-
 int Character::getHp() {
 	return hp;
 }
@@ -92,12 +87,8 @@ void Character::drawEffect(void) {
 }
 
 
-void Character::onGuardFlag(void) {
-	isGuard = true;
-}
-
 void Character::guard(void) {
-
+	TextureAsset(U"shield").drawAt(x, y);
 }
 
 int Character::heal() {

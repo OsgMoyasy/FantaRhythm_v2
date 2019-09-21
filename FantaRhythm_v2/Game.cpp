@@ -9,7 +9,7 @@ Game::Game(const String& music, const String& dif) {
 	notes = new NotesManager(notessubject,difpath);
 	
 	
-	int save[4] = { 0,1,2,3 };//テスト用セーブデータ
+	int save[4] = { 0,0,0,0 };//テスト用セーブデータ
 	characterm = new CharacterSet(save,musicpath);
 
 	notessubject->addObserver(characterm);//オブザーバーへ登録

@@ -39,6 +39,8 @@ void Soldier::chargeAttack() {
 
 void Soldier::getEvent(Massage msg) {
 	switch (msg) {
+	case Massage::BOTHATTACK://“¯‰Ÿ‚µ‚ÍãUŒ‚
+		guard();
 	case Massage::UPATTACK:
 		charge();
 		break;
