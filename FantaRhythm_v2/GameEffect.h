@@ -33,20 +33,27 @@ private:
 	double switchBetween;
 };
 
-class FlipEffect {//同じFlipMovieエフェクトを繰り返し再生する際のリソースを保持する
+class FlipEffect {//同じFlipMovieエフェクトを繰り返し再生する際のリソースを保持する。SEも再生できる。
 public:
 	FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, int xDraw = 0, int yDraw = 0, double switchBetween = 0.03);
+	~FlipEffect();
 	void setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight);	//画像をセット("画像パス",切り出しサイズ)
 	void setPos(int xDraw, int yDraw);	//描画位置をセット
+	void setSE(FilePath& path);			//SEをセット
 	void play();						//再生開始
 	void play(int xDraw, int yDraw);	//再生開始(描画位置)
 	void draw();	//描画(フレーム毎に呼び出す必要あり)
 private:
+	//エフェクト関係
 	Effect effect;
 	Texture map;
 	int xFlipWidth, yFlipHeight;	//切り出しサイズ
 	int xDraw, yDraw;				//描画位置
 	double switchBetween;
+
+	//SE関係
+	SE* se;
+	bool existSE;	//SEが設定されているか
 };
 
 template<typename T>
