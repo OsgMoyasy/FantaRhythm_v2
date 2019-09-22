@@ -8,11 +8,10 @@ public:
 	~Witch();
 	void update();
 	void draw();
-	void getEvent(Massage msg);
 protected:
-	void upEvent(void);
-	void downEvent(void);
-	void damageEvent(void);
+	void upEvent(void) final;
+	void downEvent(void) final;
+	void damageEvent(void) final;
 private:
 	int chargecount;
 	int chargedamage;
