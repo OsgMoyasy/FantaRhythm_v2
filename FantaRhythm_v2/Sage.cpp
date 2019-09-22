@@ -32,7 +32,7 @@ void Sage::recoveryClear() {
 	recoverycount = 0;
 }
 
-int Sage::heal() {
+int Sage::isHeal() {
 	if (recoverycount > 5) {
 		curehp = getPower() * recoverycount;
 		return curehp;
@@ -45,7 +45,7 @@ void Sage::upEvent(void) {
 	setAttackEvent(getPower(), EffectType::NOMAL);
 }
 void Sage::downEvent(void) {
-	heal();
+	isHeal();
 	recoveryClear();
 }
 void Sage::damageEvent(void) {

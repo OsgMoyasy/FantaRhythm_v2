@@ -1,9 +1,10 @@
 #pragma once
 #include <Siv3D.hpp>
 #include "Character.h"
+#include "Healer.h"
 
 
-class Sage :public Character {
+class Sage :public Character, public Healer{
 public:
 	Sage(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
 	~Sage();
@@ -14,7 +15,7 @@ protected:
 	void downEvent(void) final;
 	void damageEvent(void) final;
 private:
-	int heal();
+	int isHeal();
 	int recoverycount;
 	int curehp;
 	void recoverycharge();

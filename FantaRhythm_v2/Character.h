@@ -31,8 +31,7 @@ public:
 	void playEffect(EffectType::Type type);
 	void playEffect(EffectType::Type type, double x, double y);
 	void drawEffect(void);
-	int heal();			//ジョブクラスでオーバーライド
-	void recovery();	//回復
+	void recovery(int amount);
 	void damage(int damage);
 protected:
 	virtual void upEvent(void) = 0;

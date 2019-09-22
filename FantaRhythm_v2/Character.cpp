@@ -107,12 +107,7 @@ void Character::guard(void) {
 	TextureAsset(U"shield").drawAt(x, y);
 }
 
-int Character::heal() {
-	return 0;
-}
 
-void Character::recovery() {
-	if (heal() > 0) {
-		hp += heal();
-	}
+void Character::recovery(int amount) {
+	hp += amount;
 }
