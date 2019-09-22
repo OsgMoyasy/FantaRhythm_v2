@@ -9,8 +9,10 @@ public:
 	~Sage();
 	void update();
 	void draw();
-	void getEvent(Massage msg);
-
+protected:
+	void upEvent(void);
+	void downEvent(void);
+	void damageEvent(void);
 private:
 	int heal();
 	int recoverycount;

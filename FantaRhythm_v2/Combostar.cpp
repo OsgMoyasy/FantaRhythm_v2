@@ -32,21 +32,18 @@ void Combostar::comboClear() {
 }
 
 void Combostar::comboAttack() {
-	combodamage = getPower() * (std::pow(getArgs1(), combocount / 10));
+	combodamage = (int)getPower() * (std::pow(getArgs1(), combocount / 10));
 	setAttackEvent(combodamage, EffectType::ULT);
 }
 
-void Combostar::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		combocharge();
-		break;
-	case Massage::DOWNATTACK:
-		comboAttack();
-		break;
-	case Massage::DAMAGE:
-		comboClear();
-		break;
-	}
+
+void Combostar::upEvent(void) {
+	combocharge();
+}
+void Combostar::downEvent(void) {
+	comboAttack();
+}
+void Combostar::damageEvent(void) {
+	comboClear();
 }
 

@@ -47,14 +47,12 @@ void Archer::arrowsAttack() {
 }
 
 
-void Archer::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		arrowscharge();
-		break;
-	case Massage::DOWNATTACK:
-		arrowsAttack();
-		break;
-	}
+void Archer::upEvent(void) {
+	arrowscharge();
 }
-
+void Archer::downEvent(void) {
+	arrowsAttack();
+}
+void Archer::damageEvent(void) {
+	
+}

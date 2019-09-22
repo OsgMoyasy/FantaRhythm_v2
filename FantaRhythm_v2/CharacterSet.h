@@ -22,7 +22,7 @@ public:
 private:
 	int totalhp;
 	int hpx;
-	int damage;
+	int damage;	//敵キャラのダメージ　難易度等で変更しやすいようにとりあえずここに置いている
 	class Character* cha[CHANUMBER];
 	class Enemy* enemy;
 	class CharacterSubject* csubject;//キャラクター個々からイベントを受け取るために

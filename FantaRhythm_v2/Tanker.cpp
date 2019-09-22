@@ -46,17 +46,13 @@ void Tanker::downAttack() {
 	
 }
 
-void Tanker::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		upAttack();
-		break;
-	case Massage::DOWNATTACK:
-		downAttack();
-		break;
-	case Massage::DAMAGE:
-		chargeClear();
-		break;
-	}
+void Tanker::upEvent(void) {
+	upAttack();
+}
+void Tanker::downEvent(void) {
+	downAttack();
+}
+void Tanker::damageEvent(void) {
+	chargeClear();
 }
 

@@ -37,19 +37,12 @@ void Soldier::chargeAttack() {
 	chargeClear();
 }
 
-void Soldier::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::BOTHATTACK://“¯‰Ÿ‚µ‚ÍãUŒ‚
-		guard();
-	case Massage::UPATTACK:
-		charge();
-		break;
-	case Massage::DOWNATTACK:
-		chargeAttack();
-		break;
-	case Massage::DAMAGE:
-		chargeClear();
-		break;
-	}
+void Soldier::upEvent(void) {
+	charge();
 }
-
+void Soldier::downEvent(void) {
+	chargeAttack();
+}
+void Soldier::damageEvent(void) {
+	chargeClear();
+}

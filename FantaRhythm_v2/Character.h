@@ -20,7 +20,7 @@ public:
 	void characterDraw();
 	virtual void draw()=0;
 	virtual void update()=0;
-	virtual void getEvent(Massage msg)=0;
+	void getEvent(Massage msg);
 	void moveUpDown();
 	void moveRigthLight();
 	int getHp();
@@ -34,8 +34,10 @@ public:
 	int heal();			//ジョブクラスでオーバーライド
 	void recovery();	//回復
 	void damage(int damage);
-	void guard(void);
-
+protected:
+	virtual void upEvent(void) = 0;
+	virtual void downEvent(void) = 0;
+	virtual void damageEvent(void) = 0;
 private:
 	class CharacterSubject* csubject;
 	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3種類
@@ -49,5 +51,5 @@ private:
 	int framecnt;//上下移動に使うフレームカウント
 	static bool isGuard;
 
-
+	void guard(void);
 };

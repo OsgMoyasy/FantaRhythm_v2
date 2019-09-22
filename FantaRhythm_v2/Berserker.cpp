@@ -33,15 +33,13 @@ void Berserker::BusterAttack() {
 	setAttackEvent(busterdamage, EffectType::ULT);
 }
 
+void Berserker::upEvent(void) {
+	attack();
+}
+void Berserker::downEvent(void) {
+	BusterAttack();
+}
+void Berserker::damageEvent(void) {
 
-void Berserker::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		attack();
-		break;
-	case Massage::DOWNATTACK:
-		BusterAttack();
-		break;
-	}
 }
 

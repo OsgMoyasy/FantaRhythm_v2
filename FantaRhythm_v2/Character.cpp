@@ -37,6 +37,22 @@ void Character::characterDraw() {
 	TextureAsset(name).drawAt(x, y);
 }
 
+void Character::getEvent(Massage msg) {
+	switch (msg) {
+	case Massage::BOTHATTACK://“¯‰Ÿ‚µ‚ÍãUŒ‚
+		guard();
+	case Massage::UPATTACK:
+		upEvent();
+		break;
+	case Massage::DOWNATTACK:
+		downEvent();
+		break;
+	case Massage::DAMAGE:
+		damageEvent();
+		break;
+	}
+}
+
 
 void Character::moveUpDown() {
 	y = inity + sin(Math::Pi * 2.0 / MOVEFREQ * framecnt++) * MOVERANGE;

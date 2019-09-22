@@ -40,16 +40,14 @@ int Sage::heal() {
 	return 0;
 }
 
+void Sage::upEvent(void) {
+	recoverycharge();
+	setAttackEvent(getPower(), EffectType::NOMAL);
+}
+void Sage::downEvent(void) {
+	heal();
+	recoveryClear();
+}
+void Sage::damageEvent(void) {
 
-void Sage::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		recoverycharge();
-		setAttackEvent(getPower(), EffectType::NOMAL);
-		break;
-	case Massage::DOWNATTACK:
-		heal();
-		recoveryClear();
-		break;
-	}
 }

@@ -38,15 +38,15 @@ void Witch::chargeAttack() {
 	chargeClear();
 }
 
-void Witch::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		charge();
-		setAttackEvent(getPower(),EffectType::NOMAL);
-		break;
-	case Massage::DOWNATTACK:
-		chargeAttack();
-		break;
-	}
+
+void Witch::upEvent(void) {
+	charge();
+	setAttackEvent(getPower(), EffectType::NOMAL);
+}
+void Witch::downEvent(void) {
+	chargeAttack();
+}
+void Witch::damageEvent(void) {
+
 }
 
