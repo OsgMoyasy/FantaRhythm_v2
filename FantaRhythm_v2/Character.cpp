@@ -8,10 +8,10 @@ constexpr int EFFECTSIZE = 200; //エフェクトの画像サイズ
 Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
 	//エフェクトの作成
-	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effect/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effect/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effect/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effect/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.1);
+	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.1);
 	//CSVファイルの読み込み
 	characterNum = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
