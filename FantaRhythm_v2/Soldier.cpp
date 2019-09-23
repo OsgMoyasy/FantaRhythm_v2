@@ -10,13 +10,11 @@ Soldier::~Soldier() {
 
 }
 
-void Soldier::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Soldier::jobDraw() {
+
 }
 
-void Soldier::update() {
-	moveUpDown();
+void Soldier::jobUpdate() {
 	Print << U"charge=" << chargecount;
 }
 

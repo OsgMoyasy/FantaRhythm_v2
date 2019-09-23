@@ -13,13 +13,10 @@ Tanker::~Tanker() {
 
 }
 
-void Tanker::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Tanker::jobDraw() {
 }
 
-void Tanker::update() {
-	moveUpDown();
+void Tanker::jobUpdate() {
 	Print << U"sealed=" << sealedcount;
 }
 

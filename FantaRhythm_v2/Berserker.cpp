@@ -11,13 +11,10 @@ Berserker::~Berserker() {
 
 }
 
-void Berserker::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Berserker::jobDraw() {
 }
 
-void Berserker::update() {
-	moveUpDown();
+void Berserker::jobUpdate() {
 	//Print << U"charge=" << chargecount;
 }
 

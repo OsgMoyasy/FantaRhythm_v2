@@ -4,24 +4,24 @@
 constexpr int MOVERANGE = 70;	//キャラの上下移動高さ
 constexpr int MOVEFREQ = 4 * 60;//キャラ移動周期（フレーム数＊時間(s))
 constexpr int EFFECTSIZE = 200; //エフェクトの画像サイズ
-bool Character::isGuard;
 
 Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
-	
+	//エフェクトの作成
 	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effect/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effect/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effect/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-
-
+	//CSVファイルの読み込み
 	characterNum = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
 	hp = csv.get<int>(row, 3);
 	power = csv.get<int>(row,4);
 	args1 = csv.get<int>(row, 5);
 	args2 = csv.get<int>(row, 6);
+	//キャラ画像の読み込み
 	TextureAsset::Register(name,U"resources/images/character/"+name+U".png");
 	TextureAsset::Preload(name);
+	//盾画像読み込み
 	TextureAsset::Register(U"shield", U"resources/images/items/shield.png");
 	TextureAsset::Preload(U"shield");
 	initx = ix;
@@ -31,6 +31,16 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 
 Character::~Character() {
 	TextureAsset::UnregisterAll();
+}
+
+void Character::draw() {
+	characterDraw();
+	jobDraw();
+	drawEffect();
+}
+void Character::update() {
+	moveUpDown();
+	jobUpdate();
 }
 
 void Character::characterDraw() {

@@ -10,13 +10,11 @@ Combostar::~Combostar() {
 
 }
 
-void Combostar::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Combostar::jobDraw() {
+
 }
 
-void Combostar::update() {
-	moveUpDown();
+void Combostar::jobUpdate() {
 	Print << U"combo=" << combocount;
 }
 

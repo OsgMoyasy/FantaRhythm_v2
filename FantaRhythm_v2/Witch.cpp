@@ -13,12 +13,10 @@ Witch::~Witch() {
 
 }
 
-void Witch::draw() {
-	Character::characterDraw();
+void Witch::jobDraw() {
 }
 
-void Witch::update() {
-	moveUpDown();
+void Witch::jobUpdate() {
 	Print << U"charge=" << chargecount;
 }
 

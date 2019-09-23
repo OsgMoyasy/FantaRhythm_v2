@@ -13,12 +13,11 @@ Sage::~Sage() {
 
 }
 
-void Sage::draw() {
-	Character::characterDraw();
+void Sage::jobDraw() {
+
 }
 
-void Sage::update() {
-	moveUpDown();
+void Sage::jobUpdate() {
 	Print << U"recovery count=" << recoverycount;			
 }
 

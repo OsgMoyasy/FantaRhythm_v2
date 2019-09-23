@@ -8,12 +8,6 @@ class Sage :public Character, public Healer{
 public:
 	Sage(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
 	~Sage();
-	void update();
-	void draw();
-protected:
-	void upEvent(void) final;
-	void downEvent(void) final;
-	void damageEvent(void) final;
 private:
 	int isHeal();
 	int recoverycount;
@@ -21,4 +15,9 @@ private:
 	void recoverycharge();
 	void recoveryClear();
 
+	void jobUpdate() final;
+	void jobDraw() final;
+	void upEvent(void) final;
+	void downEvent(void) final;
+	void damageEvent(void) final;
 };
