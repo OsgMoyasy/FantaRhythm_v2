@@ -4,19 +4,18 @@
 #include <Siv3D.hpp>
 #include "GameEffect.h"
 
-namespace EffectType{
-	enum Type {
-		NOMAL,
-		ULT,
-		DAMAGE,
-		SIZE,
-	};
-};
-
 class Character {
 public:
 	Character(CharacterSubject* csubject, const FilePath& jobname, const CSVData& csv, double ix, double iy, int row);
 	~Character();
+
+	enum EffectType {
+		NOMAL,
+		ULT,
+		DAMAGE,
+		GUARD,
+		SIZE,
+	};
 	
 	void draw();
 	void update();
@@ -27,9 +26,9 @@ public:
 	int getPower();
 	int getArgs1();
 	int getArgs2();
-	void setAttackEvent(int attack, EffectType::Type type);
-	void playEffect(EffectType::Type type);
-	void playEffect(EffectType::Type type, double x, double y);
+	void setAttackEvent(int attack, EffectType type);
+	void playEffect(EffectType type);
+	void playEffect(EffectType type, double x, double y);
 	void drawEffect(void);
 	void recovery(int amount);	//キャラの回復
 	void damage(int damage);	//キャラへのダメージ

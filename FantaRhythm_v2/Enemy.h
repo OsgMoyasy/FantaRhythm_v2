@@ -3,13 +3,20 @@
 #include <math.h>
 #include "Observer.h"
 #include "GameEffect.h"
-#include "Character.h"
 
 
 class Enemy :public Observer{
 public:
 	Enemy(String path);
 	~Enemy(void);
+
+	enum EffectType {
+		NOMAL,
+		ULT,
+		DAMAGE,
+		SIZE,
+	};
+
 	void update(void);
 	void draw(void);
 	void addDamage(int dmg);

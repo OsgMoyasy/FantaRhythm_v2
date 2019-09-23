@@ -11,6 +11,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effect/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effect/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effect/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effect/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.1);
 	//CSVファイルの読み込み
 	characterNum = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
@@ -21,9 +22,6 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 	//キャラ画像の読み込み
 	TextureAsset::Register(name,U"resources/images/character/"+name+U".png");
 	TextureAsset::Preload(name);
-	//盾画像読み込み
-	TextureAsset::Register(U"shield", U"resources/images/items/shield.png");
-	TextureAsset::Preload(U"shield");
 	initx = ix;
 	inity = iy;
 	framecnt = 0;
@@ -92,17 +90,17 @@ int Character::getArgs1() {
 int Character::getArgs2() {
 	return args2;
 }
-void Character::setAttackEvent(int attack, EffectType::Type type) {
+void Character::setAttackEvent(int attack, EffectType type) {
 	playEffect(type);
 	csubject->setEvent(attack);
 	csubject->notifyObservers();
 }
 
-void Character::playEffect(EffectType::Type type) {
+void Character::playEffect(EffectType type) {
 	flipeffect[type]->play((int)(x - EFFECTSIZE / 3), (int)y);
 }
 
-void Character::playEffect(EffectType::Type type, double x, double y) {
+void Character::playEffect(EffectType type, double x, double y) {
 	flipeffect[type]->play((int)x, (int)y);
 }
 
@@ -114,7 +112,7 @@ void Character::drawEffect(void) {
 
 
 void Character::guard(void) {
-	TextureAsset(U"shield").drawAt(x, y);
+	playEffect(EffectType::GUARD, x, y);
 }
 
 
