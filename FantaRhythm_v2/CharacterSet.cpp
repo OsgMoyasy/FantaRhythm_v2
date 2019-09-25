@@ -2,11 +2,7 @@
 #include "Jobs.h"
 #include <typeinfo.h>
 
-constexpr int HPWIDTH = 400;
-constexpr int HPHEIGHT = 30;
 
-constexpr int HPX = 800;//HPゲージ左上の位置
-constexpr int HPY = 30;
 
 CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	csubject = new CharacterSubject();
@@ -48,8 +44,13 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 		
 	}
 	totalhp = getCurrentHp();
-	calchpx(totalhp);
 	damage = 20;
+	//HPゲージの作成
+	constexpr int HPWIDTH = 400;
+	constexpr int HPHEIGHT = 30;
+	constexpr int HPX = 800;//HPゲージ左上の位置
+	constexpr int HPY = 30;
+	hpGauge = new Gauge(HPX, HPY, HPWIDTH, HPHEIGHT, totalhp, Color(Palette::Red), Color(Palette::Green));
 }
 
 CharacterSet::~CharacterSet() {
@@ -68,9 +69,9 @@ void CharacterSet::update() {
 void CharacterSet::draw() {
 	for (int i = 0; i < CHANUMBER; i++) {
 		cha[i]->draw();
-		TotalhpDraw();
 	}
 	enemy->draw();
+	hpGauge->draw();
 }
 
 
@@ -101,19 +102,13 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	}
 }
 
-void CharacterSet::TotalhpDraw() {		//総HP表示
-	Rect(HPX, HPY, HPWIDTH, HPHEIGHT).draw(Palette::Red);
-	Rect(HPX, HPY, hpx, HPHEIGHT).draw(Palette::Green);
-}
+
 
 int CharacterSet::getTotalDamage(void) {
 	return enemy->getTotalDamage();
 }
 
-void CharacterSet::calchpx(int currenthp) {
-	double per = (double)currenthp / totalhp;
-	hpx = (int)(per * HPWIDTH);
-}
+
 
 void CharacterSet::damageToSelves(int lane, int damage) {
 	cha[lane]->damage(damage);
@@ -125,7 +120,7 @@ void CharacterSet::damageToSelves(int lane, int damage) {
 	else if (currenthp < 0) {
 		currenthp = 0;
 	}
-	calchpx(currenthp);
+	hpGauge->update(currenthp);
 }
 
 int CharacterSet::getCurrentHp(void) {

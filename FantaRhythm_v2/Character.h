@@ -7,7 +7,7 @@
 class Character {
 public:
 	Character(CharacterSubject* csubject, const FilePath& jobname, const CSVData& csv, double ix, double iy, int row);
-	~Character();
+	~Character(void);
 
 	enum EffectType {
 		NOMAL,
@@ -16,23 +16,27 @@ public:
 		GUARD,
 		SIZE,
 	};
-	
-	void draw();
-	void update();
+
+	void update(void);
+	void draw(void);
 	void getEvent(Massage msg);//CharacterSetからイベント受取
-	void moveUpDown();
-	void moveRigthLight();
+
 	int getHp();
-	int getPower();
-	int getArgs1();
-	int getArgs2();
-	void setAttackEvent(int attack, EffectType type);
-	void playEffect(EffectType type);
-	void playEffect(EffectType type, double x, double y);
-	void drawEffect(void);
+
 	void recovery(int amount);	//キャラの回復
 	void damage(int damage);	//キャラへのダメージ
 protected:
+	//jobで使用するゲッター
+	int getPower(void);
+	int getArgs1(void);
+	int getArgs2(void);
+	double getX(void);
+	double getY(void);
+	int    getW(void);
+	int    getH(void);
+	String getName(void);
+	
+	void setAttackEvent(int attack, EffectType type);//敵への攻撃イベント
 	//ジョブクラスでオーバーライド
 	virtual void jobDraw() = 0;
 	virtual void jobUpdate() = 0;
@@ -50,7 +54,13 @@ private:
 	double initx, inity;//基本位置
 	double x, y;		//現在位置
 	int framecnt;		//上下移動に使うフレームカウント
+	//キャラ移動
+	void moveUpDown(void);
+	void characterDraw(void);
+	//エフェクト
+	void playEffect(EffectType type);
+	void playEffect(EffectType type, double x, double y);
+	void drawEffect(void);
 
 	void guard(void);	//ガードイベント
-	void characterDraw();
 };

@@ -129,6 +129,9 @@
     <ClCompile Include="Witch.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
+    <ClCompile Include="Gauge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -368,6 +371,9 @@
     </ClInclude>
     <ClInclude Include="Healer.h">
       <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Gauge.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -25,24 +25,22 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 	initx = ix;
 	inity = iy;
 	framecnt = 0;
+	moveUpDown();
 }
 
-Character::~Character() {
+Character::~Character(void) {
 	TextureAsset::UnregisterAll();
 }
 
-void Character::draw() {
-	characterDraw();
-	jobDraw();
-	drawEffect();
-}
-void Character::update() {
+void Character::update(void) {
 	moveUpDown();
 	jobUpdate();
 }
 
-void Character::characterDraw() {
-	TextureAsset(name).drawAt(x, y);
+void Character::draw(void) {
+	characterDraw();
+	jobDraw();
+	drawEffect();
 }
 
 void Character::getEvent(Massage msg) {
@@ -62,22 +60,20 @@ void Character::getEvent(Massage msg) {
 }
 
 
-void Character::moveUpDown() {
-	y = inity + sin(Math::Pi * 2.0 / MOVEFREQ * framecnt++) * MOVERANGE;
-	x = initx;
+
+int Character::getHp() {
+	return hp;
 }
 
-void Character::moveRigthLight() {
-
+void Character::recovery(int amount) {
+	hp += amount;
 }
 
 void Character::damage(int damage) {
 		hp -= damage;
 		playEffect(EffectType::DAMAGE, x, y);
 }
-int Character::getHp() {
-	return hp;
-}
+
 
 int Character::getPower() {
 	return power;
@@ -90,10 +86,37 @@ int Character::getArgs1() {
 int Character::getArgs2() {
 	return args2;
 }
+
+double Character::getX() {
+	return x;
+}
+double Character::getY() {
+	return y;
+}
+int Character::getW() {
+	return TextureAsset(name).width();
+}
+int Character::getH() {
+	return TextureAsset(name).height();
+}
+String Character::getName() {
+	return name;
+}
+
 void Character::setAttackEvent(int attack, EffectType type) {
 	playEffect(type);
 	csubject->setEvent(attack);
 	csubject->notifyObservers();
+}
+
+
+void Character::moveUpDown(void) {
+	y = inity + sin(Math::Pi * 2.0 / MOVEFREQ * framecnt++) * MOVERANGE;
+	x = initx;
+}
+
+void Character::characterDraw() {
+	TextureAsset(name).drawAt(x, y);
 }
 
 void Character::playEffect(EffectType type) {
@@ -104,18 +127,13 @@ void Character::playEffect(EffectType type, double x, double y) {
 	flipeffect[type]->play((int)x, (int)y);
 }
 
-void Character::drawEffect(void) {
-	for (FlipEffect* numEffect : flipeffect) {
-		numEffect->draw();
-	}
-}
-
-
 void Character::guard(void) {
 	playEffect(EffectType::GUARD, x, y);
 }
 
-
-void Character::recovery(int amount) {
-	hp += amount;
+void Character::drawEffect(void) {
+	for (FlipEffect* feffect : flipeffect) {
+		feffect->draw();
+	}
 }
+

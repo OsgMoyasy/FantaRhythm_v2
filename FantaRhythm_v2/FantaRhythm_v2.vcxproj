@@ -205,6 +205,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameEffect.cpp" />
+    <ClCompile Include="Gauge.cpp" />
     <ClCompile Include="ImageNumber.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MusicManager.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="FlipSet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameEffect.h" />
+    <ClInclude Include="Gauge.h" />
     <ClInclude Include="Healer.h" />
     <ClInclude Include="ImageNumber.h" />
     <ClInclude Include="Jobs.h" />
