@@ -26,7 +26,7 @@ public:
 	int getHp();
 	int getPower();
 	int getArgs1();
-	int getArgs2();
+	double getArgs2();
 	void setAttackEvent(int attack, EffectType::Type type);
 	void playEffect(EffectType::Type type);
 	void playEffect(EffectType::Type type, double x, double y);
@@ -45,11 +45,12 @@ private:
 	String name;	//キャラの名前
 	int hp;			//ヒットポイント
 	int power;		//攻撃力ベース
-	int args1, args2;//汎用値
-	double initx, inity;//基本位置
-	double x, y;//現在位置
-	int framecnt;//上下移動に使うフレームカウント
+	int args1;		//汎用値1
+	double args2;	//汎用値2
+	double initx, inity;	//基本位置
+	double x, y;	//現在位置
+	int framecnt;	//上下移動に使うフレームカウント
 	static bool isGuard;
-	void guard(void);//flagを降ろして防御
+	void guard(void);	//flagを降ろして防御
 
 };

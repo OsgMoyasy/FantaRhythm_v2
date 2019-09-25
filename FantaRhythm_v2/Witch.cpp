@@ -33,7 +33,10 @@ void Witch::chargeClear() {
 }
 
 void Witch::chargeAttack() {
-	chargedamage = getPower() * (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
+	chargedamage = (getPower()+getArgs1()) * chargecount ;
+	if (chargecount > 8) {						//チャージのカウントが8回を超えた時
+		chargedamage = ((getPower() + getArgs1()) * chargecount )* getArgs2();
+	}
 	setAttackEvent(chargedamage, EffectType::NOMAL);
 	chargeClear();
 }
@@ -42,10 +45,12 @@ void Witch::getEvent(Massage msg) {
 	switch (msg) {
 	case Massage::UPATTACK:
 		charge();
-		setAttackEvent(getPower(),EffectType::NOMAL);
 		break;
 	case Massage::DOWNATTACK:
 		chargeAttack();
+		break;
+	case Massage::DAMAGE:
+		chargeClear();
 		break;
 	}
 }

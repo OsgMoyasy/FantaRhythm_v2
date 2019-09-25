@@ -2,7 +2,8 @@
 constexpr int CHARGEMAX = 10;
 
 Soldier::Soldier(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"soldier", csv, ix, iy, row ) {
-	chargeClear();
+	//chargeClear();
+	chargecount = 9;
 	chargedamage = 0;
 }
 
@@ -32,7 +33,13 @@ void Soldier::chargeClear() {
 }
 
 void Soldier::chargeAttack() {
-	chargedamage=getPower()* (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
+	if (chargecount > 8) {
+		chargedamage =( getArgs1() * chargecount ) * getArgs2();
+	}
+	else {
+		chargedamage = getArgs1() * chargecount;
+	}
+
 	setAttackEvent(chargedamage, EffectType::ULT);
 	chargeClear();
 }

@@ -11,6 +11,7 @@ public:
 	void getEvent(Massage msg);
 
 private:
+	int updamage;
 	int combocount;
 	int combodamage;
 	void combocharge();

@@ -47,7 +47,7 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	}
 	totalhp = getCurrentHp();
 	calchpx(totalhp);
-	damage = 20;
+	damage = 2;
 }
 
 CharacterSet::~CharacterSet() {

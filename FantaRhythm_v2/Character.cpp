@@ -19,7 +19,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 	hp = csv.get<int>(row, 3);
 	power = csv.get<int>(row,4);
 	args1 = csv.get<int>(row, 5);
-	args2 = csv.get<int>(row, 6);
+	args2 = csv.get<double>(row, 6);
 	TextureAsset::Register(name,U"resources/images/character/"+name+U".png");
 	TextureAsset::Preload(name);
 	initx = ix;
@@ -68,9 +68,10 @@ int Character::getArgs1() {
 	return args1;
 }
 
-int Character::getArgs2() {
+double Character::getArgs2() {
 	return args2;
 }
+
 void Character::setAttackEvent(int attack, EffectType::Type type) {
 	playEffect(type);
 	csubject->setEvent(attack);

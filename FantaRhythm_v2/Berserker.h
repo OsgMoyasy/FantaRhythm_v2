@@ -12,6 +12,7 @@ public:
 
 private:
 	int mydamage;
+	int selfcount;
 	int attackdamage;
 	int busterdamage;
 	void attack();
