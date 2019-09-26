@@ -23,6 +23,7 @@ void Archer::jobUpdate() {
 }
 
 void Archer::arrowscharge() {		//矢のチャージ(5本まで)
+	setAttackEvent(getPower(), EffectType::NOMAL);
 	if (arrowscount < ARROWSMAX) {
 		arrowscount += 1;
 	}
@@ -36,7 +37,7 @@ void Archer::arrowsClear() {		//攻撃した後、矢が正の整数ならば減らす
 
 void Archer::arrowsAttack() {
 	if (arrowscount > 0) {			//矢の数があればランダムでダメージ、なければ常に1ダメージ
-		arrowsdamage = getPower() * Random(1, 20);
+		arrowsdamage = getArgs1() * Random(1, 20);
 	}
 	else {
 		arrowsdamage = 1;

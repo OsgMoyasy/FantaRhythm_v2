@@ -7,6 +7,7 @@ public:
 	Combostar(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
 	~Combostar();
 private:
+	int updamage;
 	int combocount;
 	int combodamage;
 	void combocharge();

@@ -4,6 +4,7 @@ constexpr int COMBOMAX = 30;
 Combostar::Combostar(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"combostar", csv, ix, iy, row) {
 	comboClear();
 	combodamage = 0;
+	updamage = 0;
 }
 
 Combostar::~Combostar() {
@@ -18,19 +19,23 @@ void Combostar::jobUpdate() {
 	Print << U"combo=" << combocount;
 }
 
-void Combostar::combocharge() {		//¬ƒ_ƒ[ƒW@•@ƒRƒ“ƒ{‰ÁŽZ
-	setAttackEvent(getPower(), EffectType::NOMAL);
+void Combostar::combocharge() {		//å°ãƒ€ãƒ¡ãƒ¼ã‚¸ã€€ï¼†ã€€ã‚³ãƒ³ãƒœåŠ ç®—
+	updamage = getPower() + getArgs1();
+	setAttackEvent(updamage, EffectType::NOMAL);
 	if (combocount < COMBOMAX) {
 		combocount += 1;
 	}
 }
 
 void Combostar::comboClear() {
-	combocount = 0;
+	combocount = 1;
 }
 
 void Combostar::comboAttack() {
-	combodamage = (int)getPower() * (std::pow(getArgs1(), combocount / 10));
+	combodamage = (getPower() * combocount);
+	if (combocount > 20) {
+		combodamage *= getArgs2();
+	}
 	setAttackEvent(combodamage, EffectType::ULT);
 }
 

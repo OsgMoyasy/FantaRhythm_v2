@@ -8,6 +8,7 @@ public:
 	~Berserker();
 private:
 	int mydamage;
+	int selfcount;
 	int attackdamage;
 	int busterdamage;
 	void attack();

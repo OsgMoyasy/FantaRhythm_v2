@@ -1,6 +1,7 @@
 #include "Soldier.h"
 constexpr int CHARGEMAX = 10;
 
+
 Soldier::Soldier(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"soldier", csv, ix, iy, row ){
 	chargeClear();
 	chargedamage = 0;
@@ -20,7 +21,7 @@ void Soldier::jobUpdate() {
 	Print << U"charge=" << chargeCount;
 }
 
-void Soldier::charge() {//小ダメージ　＆　チャージ
+void Soldier::charge() {//蟆上ム繝｡繝ｼ繧ｸ縲�ｼ�縲繝√Ε繝ｼ繧ｸ
 	setAttackEvent(getPower(), EffectType::NOMAL);
 	if (chargeCount < CHARGEMAX) {
 		chargeCount +=1;
@@ -32,7 +33,12 @@ void Soldier::chargeClear() {
 }
 
 void Soldier::chargeAttack() {
-	chargedamage=getPower()* (std::pow(getArgs1(), chargeCount / CHARGEMAX * 10));
+	if (chargecount > 8) {
+		chargedamage =( getArgs1() * chargecount ) * getArgs2();
+	}
+	else {
+		chargedamage = getArgs1() * chargecount;
+	}
 	setAttackEvent(chargedamage, EffectType::ULT);
 	chargeClear();
 }

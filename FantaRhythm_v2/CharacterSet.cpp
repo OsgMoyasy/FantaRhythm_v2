@@ -13,9 +13,9 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	CSVData csv;
 	csv.load(U"resources/testcharadata.csv");
 	for (int lane = 0; lane < CHANUMBER; lane++) {
-		int initx = 900 + lane * 90, inity = 250 + lane * 80;//‰ŠúÀ•W‚Ìİ’èŒã‚ÅŒ©’¼‚·
+		int initx = 900 + lane * 90, inity = 250 + lane * 80;//åˆæœŸåº§æ¨™ã®è¨­å®šå¾Œã§è¦‹ç›´ã™
 		
-		switch (csv.get<int>(save[lane], 1)) {//ƒLƒƒƒ‰”Ô†‚Ìs‚ÌƒWƒ‡ƒu‚ğæ“¾
+		switch (csv.get<int>(save[lane], 1)) {//ã‚­ãƒ£ãƒ©ç•ªå·ã®è¡Œã®ã‚¸ãƒ§ãƒ–ã‚’å–å¾—
 		case JOB::SOLDIER:
 			cha[lane] = new Soldier(csubject, csv, initx, inity, lane);
 			break;
@@ -38,17 +38,17 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 			cha[lane] = new Tanker(csubject, csv, initx, inity, lane);
 			break;
 		default:
-			//ƒGƒ‰[
+			//ã‚¨ãƒ©ãƒ¼
 			break;
 		}
 		
 	}
 	totalhp = getCurrentHp();
 	damage = 20;
-	//HPƒQ[ƒW‚Ìì¬
+	//HPã‚²ãƒ¼ã‚¸ã®ä½œæˆ
 	constexpr int HPWIDTH = 400;
 	constexpr int HPHEIGHT = 30;
-	constexpr int HPX = 800;//HPƒQ[ƒW¶ã‚ÌˆÊ’u
+	constexpr int HPX = 800;//HPã‚²ãƒ¼ã‚¸å·¦ä¸Šã®ä½ç½®
 	constexpr int HPY = 30;
 	hpGauge = new Gauge(HPX, HPY, HPWIDTH, HPHEIGHT, totalhp, Color(Palette::Red), Color(Palette::Green));
 }
@@ -76,10 +76,10 @@ void CharacterSet::draw() {
 
 
 
-void CharacterSet::funcEvent(Obj obj) {//ƒCƒxƒ“ƒg‚ğ’Ê’B
+void CharacterSet::funcEvent(Obj obj) {//ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€šé”
 	cha[obj.val]->getEvent(obj.msg);
 	switch (obj.msg) {
-	case Massage::DAMAGE://©•ª‚½‚¿‘¤‚Ö‚Ìƒ_ƒ[ƒW
+	case Massage::DAMAGE://è‡ªåˆ†ãŸã¡å´ã¸ã®ãƒ€ãƒ¡ãƒ¼ã‚¸
 		enemy->attack();
 		damageToSelves(obj.val, damage);
 		break;
@@ -89,8 +89,8 @@ void CharacterSet::funcEvent(Obj obj) {//ƒCƒxƒ“ƒg‚ğ’Ê’B
 		break;
 	}
 	
-	for (int i = 0; i < CHANUMBER; i++) {//‰ñ•œ”»’è —vC³
-		if (typeid(cha[i]) == typeid(Healer)){//‰ñ•œƒLƒƒƒ‰‚È‚Ì‚©”»’è
+	for (int i = 0; i < CHANUMBER; i++) {//å›å¾©åˆ¤å®š è¦ä¿®æ­£
+		if (typeid(cha[i]) == typeid(Healer)){//å›å¾©ã‚­ãƒ£ãƒ©ãªã®ã‹åˆ¤å®š
 			int amount = ((Healer*)cha[i])->isHeal();
 			if (amount > 0) {
 				for (int j = 0; j < CHANUMBER; j++) {
