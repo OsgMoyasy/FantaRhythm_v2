@@ -1,48 +1,72 @@
 #include"Character.h"
 #include"FantaRhythm_v2.h"
 
-constexpr int MOVERANGE = 70;	//ÉLÉÉÉâÇÃè„â∫à⁄ìÆçÇÇ≥
-constexpr int MOVEFREQ = 4 * 60;//ÉLÉÉÉâà⁄ìÆé¸ä˙ÅiÉtÉåÅ[ÉÄêîÅñéûä‘(s))
-constexpr int EFFECTSIZE = 200; //ÉGÉtÉFÉNÉgÇÃâÊëúÉTÉCÉY
-bool Character::isGuard;
+constexpr int MOVERANGE = 70;	//„Ç≠„É£„É©„ÅÆ‰∏ä‰∏ãÁßªÂãïÈ´ò„Åï
+constexpr int MOVEFREQ = 4 * 60;//„Ç≠„É£„É©ÁßªÂãïÂë®ÊúüÔºà„Éï„É¨„Éº„É†Êï∞ÔºäÊôÇÈñì(s))
+constexpr int EFFECTSIZE = 200; //„Ç®„Éï„Çß„ÇØ„Éà„ÅÆÁîªÂÉè„Çµ„Ç§„Ç∫
 
 Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
-	
-	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effect/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effect/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effect/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-
-
+	//„Ç®„Éï„Çß„ÇØ„Éà„ÅÆ‰ΩúÊàê
+	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.1);
+	//CSV„Éï„Ç°„Ç§„É´„ÅÆË™≠„ÅøËæº„Åø
 	characterNum = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
 	hp = csv.get<int>(row, 3);
 	power = csv.get<int>(row,4);
-	args1 = csv.get<int>(row, 5);
+	args1 = csv.get<double>(row, 5);
 	args2 = csv.get<double>(row, 6);
+	//„Ç≠„É£„É©ÁîªÂÉè„ÅÆË™≠„ÅøËæº„Åø
 	TextureAsset::Register(name,U"resources/images/character/"+name+U".png");
 	TextureAsset::Preload(name);
 	initx = ix;
 	inity = iy;
 	framecnt = 0;
+	moveUpDown();
 }
 
-Character::~Character() {
+Character::~Character(void) {
 	TextureAsset::UnregisterAll();
 }
 
-void Character::characterDraw() {
-	TextureAsset(name).drawAt(x, y);
+void Character::update(void) {
+	moveUpDown();
+	jobUpdate();
+}
+
+void Character::draw(void) {
+	characterDraw();
+	jobDraw();
+	drawEffect();
+}
+
+void Character::getEvent(Massage msg) {
+	switch (msg) {
+	case Massage::BOTHATTACK://ÂêåÊôÇÊäº„Åó„ÅØ‰∏äÊîªÊíÉ
+		guard();
+	case Massage::UPATTACK:
+		upEvent();
+		break;
+	case Massage::DOWNATTACK:
+		downEvent();
+		break;
+	case Massage::DAMAGE:
+		damageEvent();
+		break;
+	}
 }
 
 
-void Character::moveUpDown() {
-	y = inity + sin(Math::Pi * 2.0 / MOVEFREQ * framecnt++) * MOVERANGE;
-	x = initx;
+
+int Character::getHp() {
+	return hp;
 }
 
-void Character::moveRigthLight() {
-
+void Character::recovery(int amount) {
+	hp += amount;
 }
 
 void Character::damage(int damage) {
@@ -50,15 +74,6 @@ void Character::damage(int damage) {
 		playEffect(EffectType::DAMAGE, x, y);
 }
 
-void Character::cheakdamage(int damage) {//ÉKÅ[ÉhÇégópÇ∑ÇÈÇ∆Ç´Ç…égÇ§óp
-	if (isGuard == 1) {
-		isGuard = false;
-	}
-}
-
-int Character::getHp() {
-	return hp;
-}
 
 int Character::getPower() {
 	return power;
@@ -72,41 +87,53 @@ double Character::getArgs2() {
 	return args2;
 }
 
-void Character::setAttackEvent(int attack, EffectType::Type type) {
+double Character::getX() {
+	return x;
+}
+double Character::getY() {
+	return y;
+}
+int Character::getW() {
+	return TextureAsset(name).width();
+}
+int Character::getH() {
+	return TextureAsset(name).height();
+}
+String Character::getName() {
+	return name;
+}
+
+void Character::setAttackEvent(int attack, EffectType type) {
 	playEffect(type);
 	csubject->setEvent(attack);
 	csubject->notifyObservers();
 }
 
-void Character::playEffect(EffectType::Type type) {
+
+void Character::moveUpDown(void) {
+	y = inity + sin(Math::Pi * 2.0 / MOVEFREQ * framecnt++) * MOVERANGE;
+	x = initx;
+}
+
+void Character::characterDraw() {
+	TextureAsset(name).drawAt(x, y);
+}
+
+void Character::playEffect(EffectType type) {
 	flipeffect[type]->play((int)(x - EFFECTSIZE / 3), (int)y);
 }
 
-void Character::playEffect(EffectType::Type type, double x, double y) {
+void Character::playEffect(EffectType type, double x, double y) {
 	flipeffect[type]->play((int)x, (int)y);
 }
 
-void Character::drawEffect(void) {
-	for (FlipEffect* numEffect : flipeffect) {
-		numEffect->draw();
-	}
-}
-
-
-void Character::onGuardFlag(void) {
-	isGuard = true;
-}
-
 void Character::guard(void) {
-
+	playEffect(EffectType::GUARD, x, y);
 }
 
-int Character::heal() {
-	return 0;
-}
-
-void Character::recovery() {
-	if (heal() > 0) {
-		hp += heal();
+void Character::drawEffect(void) {
+	for (FlipEffect* feffect : flipeffect) {
+		feffect->draw();
 	}
 }
+

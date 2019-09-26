@@ -1,8 +1,8 @@
 #include "Witch.h"
 constexpr int CHARGEMAX = 10;
 
-//d—l“I‚É‚ÍSoldier‚Æ“¯‚¶
-//–‚—‚ÌƒWƒ‡ƒu
+//ä»•æ§˜çš„ã«ã¯Soldierã¨åŒã˜
+//é­”å¥³ã®ã‚¸ãƒ§ãƒ–
 
 Witch::Witch(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
 	chargeClear();
@@ -13,16 +13,14 @@ Witch::~Witch() {
 
 }
 
-void Witch::draw() {
-	Character::characterDraw();
+void Witch::jobDraw() {
 }
 
-void Witch::update() {
-	moveUpDown();
+void Witch::jobUpdate() {
 	Print << U"charge=" << chargecount;
 }
 
-void Witch::charge() {				//Witch‚ÍŠî–{ƒ`ƒƒ[ƒW‚¾‚¯
+void Witch::charge() {				//Witchã¯åŸºæœ¬ãƒãƒ£ãƒ¼ã‚¸ã ã‘
 	if (chargecount < CHARGEMAX) {
 		chargecount += 1;
 	}
@@ -34,24 +32,20 @@ void Witch::chargeClear() {
 
 void Witch::chargeAttack() {
 	chargedamage = (getPower()+getArgs1()) * chargecount ;
-	if (chargecount > 8) {						//ƒ`ƒƒ[ƒW‚ÌƒJƒEƒ“ƒg‚ª8‰ñ‚ğ’´‚¦‚½
+	if (chargecount > 8) {						//ãƒãƒ£ãƒ¼ã‚¸ã®ã‚«ã‚¦ãƒ³ãƒˆãŒ8å›ã‚’è¶…ãˆãŸæ™‚
 		chargedamage = ((getPower() + getArgs1()) * chargecount )* getArgs2();
 	}
 	setAttackEvent(chargedamage, EffectType::NOMAL);
 	chargeClear();
 }
 
-void Witch::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		charge();
-		break;
-	case Massage::DOWNATTACK:
-		chargeAttack();
-		break;
-	case Massage::DAMAGE:
-		chargeClear();
-		break;
-	}
+void Witch::upEvent(void) {
+	charge();
+}
+void Witch::downEvent(void) {
+	chargeAttack();
+}
+void Witch::damageEvent(void) {
+  chargeClear();
 }
 

@@ -13,12 +13,11 @@ Sage::~Sage() {
 
 }
 
-void Sage::draw() {
-	Character::characterDraw();
+void Sage::jobDraw() {
+
 }
 
-void Sage::update() {
-	moveUpDown();
+void Sage::jobUpdate() {
 	Print << U"recovery count=" << recoverycount;			
 }
 
@@ -32,7 +31,7 @@ void Sage::recoveryClear() {
 	recoverycount = 0;
 }
 
-int Sage::heal() {
+int Sage::isHeal() {
 	if (recoverycount > 5) {
 		curehp = getPower() * recoverycount;
 		return curehp;
@@ -40,16 +39,14 @@ int Sage::heal() {
 	return 0;
 }
 
+void Sage::upEvent(void) {
+	recoverycharge();
+	setAttackEvent(getPower(), EffectType::NOMAL);
+}
+void Sage::downEvent(void) {
+	isHeal();
+	recoveryClear();
+}
+void Sage::damageEvent(void) {
 
-void Sage::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		recoverycharge();
-		setAttackEvent(getPower(), EffectType::NOMAL);
-		break;
-	case Massage::DOWNATTACK:
-		heal();
-		recoveryClear();
-		break;
-	}
 }

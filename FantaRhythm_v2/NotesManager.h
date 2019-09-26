@@ -51,13 +51,16 @@ private:
 	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 	JUDGE::TYPE NoteisHit(int judgetime);
 
-	void controlJudge(void);	//ノーツの種類毎に判定用関数を呼び出し
-	void judgeNormal(int lane);	//ノーマルノーツを判定
-	void judgeLong(int lane);	//ロングノーツを判定
+	void controlJudge(void);		//ノーツの種類毎に判定用関数を呼び出し
+	void judgeNormal(int lane);		//ノーマルノーツを判定
+	void judgeLong(int lane);		//ロングノーツを判定
+	void judgeCritical(int lane);	//敵の攻撃ノーツを判定
 
 
 	void judgeEvent(JUDGE::TYPE type, int lane, bool next = true);
 	void judgeLongEvent(JUDGE::TYPE type, int lane);
+	void judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType);
+	void noteNext(int lane);
 	
 	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
 	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
@@ -67,6 +70,7 @@ private:
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
+	void displayCritical(int lane, int time);			//敵の攻撃ノーツを表示
 
 
 	void setEvent(Massage msg, int val);

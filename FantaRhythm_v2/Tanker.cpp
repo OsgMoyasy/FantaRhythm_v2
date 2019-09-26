@@ -13,13 +13,10 @@ Tanker::~Tanker() {
 
 }
 
-void Tanker::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Tanker::jobDraw() {
 }
 
-void Tanker::update() {
-	moveUpDown();
+void Tanker::jobUpdate() {
 	Print << U"sealed=" << sealedcount;
 }
 
@@ -41,22 +38,18 @@ void Tanker::downAttack() {
 		sealedcount += 1;
 	}
 	if (sealedcount == 4) {
-		onGuardFlag();
+		//onGuardFlag();
 	}
 	
 }
 
-void Tanker::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		upAttack();
-		break;
-	case Massage::DOWNATTACK:
-		downAttack();
-		break;
-	case Massage::DAMAGE:
-		chargeClear();
-		break;
-	}
+void Tanker::upEvent(void) {
+	upAttack();
+}
+void Tanker::downEvent(void) {
+	downAttack();
+}
+void Tanker::damageEvent(void) {
+	chargeClear();
 }
 

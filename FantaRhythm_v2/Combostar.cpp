@@ -11,17 +11,15 @@ Combostar::~Combostar() {
 
 }
 
-void Combostar::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Combostar::jobDraw() {
+
 }
 
-void Combostar::update() {
-	moveUpDown();
+void Combostar::jobUpdate() {
 	Print << U"combo=" << combocount;
 }
 
-void Combostar::combocharge() {		//¬ƒ_ƒ[ƒW@•@ƒRƒ“ƒ{‰ÁŽZ
+void Combostar::combocharge() {		//å°ãƒ€ãƒ¡ãƒ¼ã‚¸ã€€ï¼†ã€€ã‚³ãƒ³ãƒœåŠ ç®—
 	updamage = getPower() + getArgs1();
 	setAttackEvent(updamage, EffectType::NOMAL);
 	if (combocount < COMBOMAX) {
@@ -41,17 +39,14 @@ void Combostar::comboAttack() {
 	setAttackEvent(combodamage, EffectType::ULT);
 }
 
-void Combostar::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		combocharge();
-		break;
-	case Massage::DOWNATTACK:
-		comboAttack();
-		break;
-	case Massage::DAMAGE:
-		comboClear();
-		break;
-	}
+
+void Combostar::upEvent(void) {
+	combocharge();
+}
+void Combostar::downEvent(void) {
+	comboAttack();
+}
+void Combostar::damageEvent(void) {
+	comboClear();
 }
 

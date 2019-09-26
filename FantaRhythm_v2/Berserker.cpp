@@ -2,27 +2,26 @@
 constexpr int CHARGEMAX = 10;
 
 Berserker::Berserker(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"Berserker", csv, ix, iy, row) {
-	attackdamage = 0;		//‚±‚Ì“ñ‚Â‚Í‚½‚Ô‚ñg‚í‚È‚¢
+	attackdamage = 0;		//ã“ã®äºŒã¤ã¯ãŸã¶ã‚“ä½¿ã‚ãªã„
 	busterdamage = 0;	
-	selfcount = 0;			//downattack‚Ì‰ñ”
-	mydamage = 4;			//‰ºƒ{ƒ^ƒ“UŒ‚‚ÅH‚ç‚¤damage—Ê
+	selfcount = 0;			//downattackã®å›æ•°
+	mydamage = 4;			//ä¸‹ãƒœã‚¿ãƒ³æ”»æ’ƒã§é£Ÿã‚‰ã†damageé‡
 }
 
 Berserker::~Berserker() {
 
 }
 
-void Berserker::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Berserker::jobDraw() {
 }
 
-void Berserker::update() {
+
+void Berserker::jobUpdate() {
 	moveUpDown();
 	Print << U"Berserker=" << attackdamage;
 }
 
-void Berserker::attack() {		//•’Ê‚ÌUŒ‚
+void Berserker::attack() {		//æ™®é€šã®æ”»æ’ƒ
 	attackdamage = getPower() + getArgs1();
 	setAttackEvent(attackdamage, EffectType::ULT);
 }
@@ -38,15 +37,13 @@ void Berserker::BusterAttack() {
 	setAttackEvent(busterdamage, EffectType::ULT);
 }
 
+void Berserker::upEvent(void) {
+	attack();
+}
+void Berserker::downEvent(void) {
+	BusterAttack();
+}
+void Berserker::damageEvent(void) {
 
-void Berserker::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		attack();
-		break;
-	case Massage::DOWNATTACK:
-		BusterAttack();
-		break;
-	}
 }
 

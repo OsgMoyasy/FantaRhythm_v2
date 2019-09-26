@@ -3,6 +3,7 @@
 #include"Character.h"
 #include "Observer.h"
 #include "Enemy.h"
+#include "Gauge.h"
 
 #define CHANUMBER 4
 
@@ -15,18 +16,15 @@ public:
 	void draw();
 	void update();
 	void funcEvent(Obj obj);
-	void TotalhpDraw();
 	int getTotalDamage(void);
 	int getCurrentHp(void);
 	void gameEndEffect(void);
 private:
 	int totalhp;
-	int hpx;
-	int damage;
+	int damage;	//敵キャラのダメージ　難易度等で変更しやすいようにとりあえずここに置いている
 	class Character* cha[CHANUMBER];
 	class Enemy* enemy;
 	class CharacterSubject* csubject;//キャラクター個々からイベントを受け取るために
-	void damageToSelves(int lane);
-
-	void calchpx(int currenthp);
+	class Gauge* hpGauge;
+	void damageToSelves(int lane, int damage);
 };

@@ -6,10 +6,6 @@ class Berserker :public Character {
 public:
 	Berserker(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
 	~Berserker();
-	void update();
-	void draw();
-	void getEvent(Massage msg);
-
 private:
 	int mydamage;
 	int selfcount;
@@ -17,4 +13,10 @@ private:
 	int busterdamage;
 	void attack();
 	void BusterAttack();
+
+	void jobUpdate() final;
+	void jobDraw() final;
+	void upEvent(void) final;
+	void downEvent(void) final;
+	void damageEvent(void) final;
 };
