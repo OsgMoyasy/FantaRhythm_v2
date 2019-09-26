@@ -27,8 +27,8 @@ public:
 protected:
 	//jobで使用するゲッター
 	int getPower(void);
-	int getArgs1(void);
-	int getArgs2(void);
+	double getArgs1(void);
+	double getArgs2(void);
 	double getX(void);
 	double getY(void);
 	int    getW(void);

@@ -79,7 +79,7 @@ int Character::getPower() {
 	return power;
 }
 
-int Character::getArgs1() {
+double Character::getArgs1() {
 	return args1;
 }
 

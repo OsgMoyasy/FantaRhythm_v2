@@ -17,23 +17,23 @@ void Witch::jobDraw() {
 }
 
 void Witch::jobUpdate() {
-	Print << U"charge=" << chargecount;
+	Print << U"charge=" << chargeCount;
 }
 
 void Witch::charge() {				//Witchは基本チャージだけ
-	if (chargecount < CHARGEMAX) {
-		chargecount += 1;
+	if (chargeCount < CHARGEMAX) {
+		chargeCount += 1;
 	}
 }
 
 void Witch::chargeClear() {
-	chargecount = 1;
+	chargeCount = 1;
 }
 
 void Witch::chargeAttack() {
-	chargedamage = (getPower()+getArgs1()) * chargecount ;
-	if (chargecount > 8) {						//チャージのカウントが8回を超えた時
-		chargedamage = ((getPower() + getArgs1()) * chargecount )* getArgs2();
+	chargedamage = (getPower()+getArgs1()) * chargeCount ;
+	if (chargeCount > 8) {						//チャージのカウントが8回を超えた時
+		chargedamage = ((getPower() + getArgs1()) * chargeCount )* getArgs2();
 	}
 	setAttackEvent(chargedamage, EffectType::NOMAL);
 	chargeClear();

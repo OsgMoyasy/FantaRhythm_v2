@@ -33,11 +33,11 @@ void Soldier::chargeClear() {
 }
 
 void Soldier::chargeAttack() {
-	if (chargecount > 8) {
-		chargedamage =( getArgs1() * chargecount ) * getArgs2();
+	if (chargeCount > 8) {
+		chargedamage =( getArgs1() * chargeCount ) * getArgs2();
 	}
 	else {
-		chargedamage = getArgs1() * chargecount;
+		chargedamage = getArgs1() * chargeCount;
 	}
 	setAttackEvent(chargedamage, EffectType::ULT);
 	chargeClear();

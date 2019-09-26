@@ -7,7 +7,7 @@ public:
 	Witch(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
 	~Witch();
 private:
-	int chargecount;
+	int chargeCount;
 	int chargedamage;
 	void charge();
 	void chargeClear();

@@ -17,7 +17,6 @@ void Berserker::jobDraw() {
 
 
 void Berserker::jobUpdate() {
-	moveUpDown();
 	Print << U"Berserker=" << attackdamage;
 }
 
