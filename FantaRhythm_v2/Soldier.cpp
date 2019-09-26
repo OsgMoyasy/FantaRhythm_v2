@@ -21,7 +21,7 @@ void Soldier::jobUpdate() {
 	Print << U"charge=" << chargeCount;
 }
 
-void Soldier::charge() {//蟆上ム繝｡繝ｼ繧ｸ縲�ｼ�縲繝√Ε繝ｼ繧ｸ
+void Soldier::charge() {//小ダメージ　＆　チャージ
 	setAttackEvent(getPower(), EffectType::NOMAL);
 	if (chargeCount < CHARGEMAX) {
 		chargeCount +=1;

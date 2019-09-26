@@ -1,25 +1,25 @@
 #include"Character.h"
 #include"FantaRhythm_v2.h"
 
-constexpr int MOVERANGE = 70;	//ã‚­ãƒ£ãƒ©ã®ä¸Šä¸‹ç§»å‹•é«˜ã•
-constexpr int MOVEFREQ = 4 * 60;//ã‚­ãƒ£ãƒ©ç§»å‹•å‘¨æœŸï¼ˆãƒ•ãƒ¬ãƒ¼ãƒ æ•°ï¼Šæ™‚é–“(s))
-constexpr int EFFECTSIZE = 200; //ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ç”»åƒã‚µã‚¤ã‚º
+constexpr int MOVERANGE = 70;	//ƒLƒƒƒ‰‚Ìã‰ºˆÚ“®‚‚³
+constexpr int MOVEFREQ = 4 * 60;//ƒLƒƒƒ‰ˆÚ“®üŠúiƒtƒŒ[ƒ€”–ŠÔ(s))
+constexpr int EFFECTSIZE = 200; //ƒGƒtƒFƒNƒg‚Ì‰æ‘œƒTƒCƒY
 
 Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
 	this->csubject = csubject;
-	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ä½œæˆ
+	//ƒGƒtƒFƒNƒg‚Ìì¬
 	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.1);
-	//CSVãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
+	//CSVƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	characterNum = csv.get<int>(row, 0);
 	name = csv.get<String>(row, 2);
 	hp = csv.get<int>(row, 3);
 	power = csv.get<int>(row,4);
 	args1 = csv.get<double>(row, 5);
 	args2 = csv.get<double>(row, 6);
-	//ã‚­ãƒ£ãƒ©ç”»åƒã®èª­ã¿è¾¼ã¿
+	//ƒLƒƒƒ‰‰æ‘œ‚Ì“Ç‚İ‚İ
 	TextureAsset::Register(name,U"resources/images/character/"+name+U".png");
 	TextureAsset::Preload(name);
 	initx = ix;
@@ -45,7 +45,7 @@ void Character::draw(void) {
 
 void Character::getEvent(Massage msg) {
 	switch (msg) {
-	case Massage::BOTHATTACK://åŒæ™‚æŠ¼ã—ã¯ä¸Šæ”»æ’ƒ
+	case Massage::BOTHATTACK://“¯‰Ÿ‚µ‚ÍãUŒ‚
 		guard();
 	case Massage::UPATTACK:
 		upEvent();

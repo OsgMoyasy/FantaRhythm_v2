@@ -19,7 +19,7 @@ void Combostar::jobUpdate() {
 	Print << U"combo=" << combocount;
 }
 
-void Combostar::combocharge() {		//å°ãƒ€ãƒ¡ãƒ¼ã‚¸ã€€ï¼†ã€€ã‚³ãƒ³ãƒœåŠ ç®—
+void Combostar::combocharge() {		//¬ƒ_ƒ[ƒW@•@ƒRƒ“ƒ{‰ÁŽZ
 	updamage = getPower() + getArgs1();
 	setAttackEvent(updamage, EffectType::NOMAL);
 	if (combocount < COMBOMAX) {

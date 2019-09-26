@@ -1,8 +1,8 @@
 #include "Witch.h"
 constexpr int CHARGEMAX = 10;
 
-//ä»•æ§˜çš„ã«ã¯Soldierã¨åŒã˜
-//é­”å¥³ã®ã‚¸ãƒ§ãƒ–
+//d—l“I‚É‚ÍSoldier‚Æ“¯‚¶
+//–‚—‚ÌƒWƒ‡ƒu
 
 Witch::Witch(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
 	chargeClear();
@@ -20,7 +20,7 @@ void Witch::jobUpdate() {
 	Print << U"charge=" << chargeCount;
 }
 
-void Witch::charge() {				//Witchã¯åŸºæœ¬ãƒãƒ£ãƒ¼ã‚¸ã ã‘
+void Witch::charge() {				//Witch‚ÍŠî–{ƒ`ƒƒ[ƒW‚¾‚¯
 	if (chargeCount < CHARGEMAX) {
 		chargeCount += 1;
 	}
@@ -32,7 +32,7 @@ void Witch::chargeClear() {
 
 void Witch::chargeAttack() {
 	chargedamage = (getPower()+getArgs1()) * chargeCount ;
-	if (chargeCount > 8) {						//ãƒãƒ£ãƒ¼ã‚¸ã®ã‚«ã‚¦ãƒ³ãƒˆãŒ8å›ã‚’è¶…ãˆãŸæ™‚
+	if (chargeCount > 8) {						//ƒ`ƒƒ[ƒW‚ÌƒJƒEƒ“ƒg‚ª8‰ñ‚ğ’´‚¦‚½
 		chargedamage = ((getPower() + getArgs1()) * chargeCount )* getArgs2();
 	}
 	setAttackEvent(chargedamage, EffectType::NOMAL);

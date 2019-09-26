@@ -2,10 +2,10 @@
 constexpr int CHARGEMAX = 10;
 
 Berserker::Berserker(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"Berserker", csv, ix, iy, row) {
-	attackdamage = 0;		//ã“ã®äºŒã¤ã¯ãŸã¶ã‚“ä½¿ã‚ãªã„
+	attackdamage = 0;		//‚±‚Ì“ñ‚Â‚Í‚½‚Ô‚ñg‚í‚È‚¢
 	busterdamage = 0;	
-	selfcount = 0;			//downattackã®å›æ•°
-	mydamage = 4;			//ä¸‹ãƒœã‚¿ãƒ³æ”»æ’ƒã§é£Ÿã‚‰ã†damageé‡
+	selfcount = 0;			//downattack‚Ì‰ñ”
+	mydamage = 4;			//‰ºƒ{ƒ^ƒ“UŒ‚‚ÅH‚ç‚¤damage—Ê
 }
 
 Berserker::~Berserker() {
@@ -20,7 +20,7 @@ void Berserker::jobUpdate() {
 	Print << U"Berserker=" << attackdamage;
 }
 
-void Berserker::attack() {		//æ™®é€šã®æ”»æ’ƒ
+void Berserker::attack() {		//•’Ê‚ÌUŒ‚
 	attackdamage = getPower() + getArgs1();
 	setAttackEvent(attackdamage, EffectType::ULT);
 }

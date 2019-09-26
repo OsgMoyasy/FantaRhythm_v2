@@ -8,12 +8,12 @@ Game::Game(const String& music, const String& dif) {
 	
 	notes = new NotesManager(notessubject,difpath);
 	
-	int save[4] = { 0,0,0,0 };//ãƒ†ã‚¹ãƒˆç”¨ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿
+	int save[4] = { 0,0,0,0 };//ƒeƒXƒg—pƒZ[ƒuƒf[ƒ^
 	characterm = new CharacterSet(save,musicpath);
 
-	notessubject->addObserver(characterm);//ã‚ªãƒ–ã‚¶ãƒ¼ãƒãƒ¼ã¸ç™»éŒ²
+	notessubject->addObserver(characterm);//ƒIƒuƒU[ƒo[‚Ö“o˜^
 	
-	isClear = true;//falseã«ãªã‚Œã°ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
+	isClear = true;//false‚É‚È‚ê‚ÎƒQ[ƒ€ƒI[ƒo[
 	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");
 	TextureAsset::Preload(U"back");
 
@@ -40,7 +40,7 @@ void Game::update() {
 }
 
 void Game::draw() {
-	//èƒŒæ™¯ç”»åƒæç”»
+	//”wŒi‰æ‘œ•`‰æ
 	TextureAsset(U"back").draw();
 	notes->draw();
 	characterm->draw();
@@ -61,7 +61,7 @@ void Game::gameEndCheck(void) {
 		isClear = false;
 		characterm->gameEndEffect();
 	}
-	if (MusicManager::musicEndCheck() ) {//æ›²ãŒçµ‚ã‚ã£ã¦ã„ã‚‹ã€€or ã‚²ãƒ¼ãƒ å¤±æ•—ã—ã¦ã„ã‚‹
-		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//ã‚·ãƒ¼ãƒ³ç§»è¡Œ
+	if (MusicManager::musicEndCheck() ) {//‹È‚ªI‚í‚Á‚Ä‚¢‚é@or ƒQ[ƒ€¸”s‚µ‚Ä‚¢‚é
+		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//ƒV[ƒ“ˆÚs
 	}
 }

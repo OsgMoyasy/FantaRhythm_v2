@@ -19,13 +19,13 @@ public:
 
 	void update(void);
 	void draw(void);
-	void getEvent(Massage msg);//CharacterSetã‹ã‚‰ã‚¤ãƒ™ãƒ³ãƒˆå—å–
+	void getEvent(Massage msg);//CharacterSet‚©‚çƒCƒxƒ“ƒgóæ
 	int getHp();
 
-	void recovery(int amount);	//ã‚­ãƒ£ãƒ©ã®å›å¾©
-	void damage(int damage);	//ã‚­ãƒ£ãƒ©ã¸ã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+	void recovery(int amount);	//ƒLƒƒƒ‰‚Ì‰ñ•œ
+	void damage(int damage);	//ƒLƒƒƒ‰‚Ö‚Ìƒ_ƒ[ƒW
 protected:
-	//jobã§ä½¿ç”¨ã™ã‚‹ã‚²ãƒƒã‚¿ãƒ¼
+	//job‚Åg—p‚·‚éƒQƒbƒ^[
 	int getPower(void);
 	double getArgs1(void);
 	double getArgs2(void);
@@ -35,8 +35,8 @@ protected:
 	int    getH(void);
 	String getName(void);
 	
-	void setAttackEvent(int attack, EffectType type);//æ•µã¸ã®æ”»æ’ƒã‚¤ãƒ™ãƒ³ãƒˆ
-	//ã‚¸ãƒ§ãƒ–ã‚¯ãƒ©ã‚¹ã§ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰
+	void setAttackEvent(int attack, EffectType type);//“G‚Ö‚ÌUŒ‚ƒCƒxƒ“ƒg
+	//ƒWƒ‡ƒuƒNƒ‰ƒX‚ÅƒI[ƒo[ƒ‰ƒCƒh
 	virtual void jobDraw() = 0;
 	virtual void jobUpdate() = 0;
 	virtual void upEvent(void) = 0;
@@ -44,22 +44,22 @@ protected:
 	virtual void damageEvent(void) = 0;
 private:
 	class CharacterSubject* csubject;
-	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3ç¨®é¡
-	int characterNum;	//ã‚­ãƒ£ãƒ©ã®ç•ªå·
+	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3í—Ş
+	int characterNum;	//ƒLƒƒƒ‰‚Ì”Ô†
 
-	String name;		//ã‚­ãƒ£ãƒ©ã®åå‰
-	int hp;				//ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆ
-	int power;			//æ”»æ’ƒåŠ›ãƒ™ãƒ¼ã‚¹
-	double args1, args2;	//æ±ç”¨å€¤
-	double initx, inity;//åŸºæœ¬ä½ç½®
-	double x, y;		//ç¾åœ¨ä½ç½®
-	int framecnt;		//ä¸Šä¸‹ç§»å‹•ã«ä½¿ã†ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆ
-	//ã‚­ãƒ£ãƒ©ç§»å‹•
+	String name;		//ƒLƒƒƒ‰‚Ì–¼‘O
+	int hp;				//ƒqƒbƒgƒ|ƒCƒ“ƒg
+	int power;			//UŒ‚—Íƒx[ƒX
+	double args1, args2;	//”Ä—p’l
+	double initx, inity;//Šî–{ˆÊ’u
+	double x, y;		//Œ»İˆÊ’u
+	int framecnt;		//ã‰ºˆÚ“®‚Ég‚¤ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg
+	//ƒLƒƒƒ‰ˆÚ“®
 	void moveUpDown(void);
 	void characterDraw(void);
-	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+	//ƒGƒtƒFƒNƒg
 	void playEffect(EffectType type);
 	void playEffect(EffectType type, double x, double y);
 	void drawEffect(void);
-	void guard(void);	//ã‚¬ãƒ¼ãƒ‰ã‚¤ãƒ™ãƒ³ãƒˆ
+	void guard(void);	//ƒK[ƒhƒCƒxƒ“ƒg
 };
