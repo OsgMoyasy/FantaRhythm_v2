@@ -7,6 +7,8 @@ constexpr int RECOVERYMAX = 15;
 
 Sage::Sage(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"sage", csv, ix, iy, row) {
 	recoveryClear();
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, RECOVERYMAX, Color(Palette::Black), Color(Palette::Burlywood));
+	chargeGauge->update(recoverycount);
 }
 
 Sage::~Sage() {
@@ -14,7 +16,7 @@ Sage::~Sage() {
 }
 
 void Sage::jobDraw() {
-
+	chargeGauge->draw(getY() + getH() / 2.0);
 }
 
 void Sage::jobUpdate() {
@@ -42,11 +44,13 @@ int Sage::isHeal() {
 void Sage::upEvent(void) {
 	recoverycharge();
 	setAttackEvent(getPower(), EffectType::NOMAL);
+	chargeGauge->update(recoverycount);
 }
 void Sage::downEvent(void) {
 	isHeal();
 	recoveryClear();
+	chargeGauge->update(recoverycount);
 }
 void Sage::damageEvent(void) {
-
+	chargeGauge->update(recoverycount);
 }

@@ -2,6 +2,7 @@
 #include <Siv3D.hpp>
 #include "Character.h"
 #include "Healer.h"
+#include "Gauge.h"
 
 
 class Sage :public Character, public Healer{
@@ -20,4 +21,8 @@ private:
 	void upEvent(void) final;
 	void downEvent(void) final;
 	void damageEvent(void) final;
+
+	//チャージ計算描画
+	class Gauge* chargeGauge;
+	double currentChargeW, chaY;	//変動するゲージ幅, Ｙ座標
 };

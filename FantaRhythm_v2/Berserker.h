@@ -1,6 +1,7 @@
 #pragma once
 #include <Siv3D.hpp>
 #include "Character.h"
+#include "Gauge.h"
 
 class Berserker :public Character {
 public:
@@ -9,6 +10,7 @@ public:
 private:
 	int mydamage;
 	int selfcount;
+	int upcount;
 	int attackdamage;
 	int busterdamage;
 	void attack();
@@ -19,4 +21,8 @@ private:
 	void upEvent(void) final;
 	void downEvent(void) final;
 	void damageEvent(void) final;
+
+	//ƒ`ƒƒ[ƒWŒvZ•`‰æ
+	class Gauge* chargeGauge;
+	double currentChargeW, chaY;	//•Ï“®‚·‚éƒQ[ƒW•, ‚xÀ•W
 };

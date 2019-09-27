@@ -1,6 +1,7 @@
 #pragma once
 #include <Siv3D.hpp>
 #include "Character.h"
+#include "Gauge.h"
 
 class Combostar :public Character {
 public:
@@ -19,4 +20,8 @@ private:
 	void upEvent(void) final;
 	void downEvent(void) final;
 	void damageEvent(void) final;
+
+	//チャージ計算描画
+	class Gauge* chargeGauge;
+	double currentChargeW, chaY;	//変動するゲージ幅, Ｙ座標
 };

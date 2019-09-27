@@ -5,6 +5,8 @@ Combostar::Combostar(CharacterSubject* csubject, const CSVData& csv, double ix, 
 	comboClear();
 	combodamage = 0;
 	updamage = 0;
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, COMBOMAX, Color(Palette::Black), Color(Palette::Yellow));
+	chargeGauge->update(combocount);
 }
 
 Combostar::~Combostar() {
@@ -12,7 +14,7 @@ Combostar::~Combostar() {
 }
 
 void Combostar::jobDraw() {
-
+	chargeGauge->draw(getY() + getH() / 2.0);
 }
 
 void Combostar::jobUpdate() {
@@ -42,11 +44,14 @@ void Combostar::comboAttack() {
 
 void Combostar::upEvent(void) {
 	combocharge();
+	chargeGauge->update(combocount);
 }
 void Combostar::downEvent(void) {
 	comboAttack();
+	chargeGauge->update(combocount);
 }
 void Combostar::damageEvent(void) {
 	comboClear();
+	chargeGauge->update(combocount);
 }
 

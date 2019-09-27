@@ -7,6 +7,8 @@ constexpr int CHARGEMAX = 10;
 Witch::Witch(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
 	chargeClear();
 	chargedamage = 0;
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, CHARGEMAX, Color(Palette::Black), Color(Palette::Orangered));
+	chargeGauge->update(chargeCount);
 }
 
 Witch::~Witch() {
@@ -14,6 +16,7 @@ Witch::~Witch() {
 }
 
 void Witch::jobDraw() {
+	chargeGauge->draw(getY() + getH() / 2.0);
 }
 
 void Witch::jobUpdate() {
@@ -41,11 +44,14 @@ void Witch::chargeAttack() {
 
 void Witch::upEvent(void) {
 	charge();
+	chargeGauge->update(chargeCount);
 }
 void Witch::downEvent(void) {
 	chargeAttack();
+	chargeGauge->update(chargeCount);
 }
 void Witch::damageEvent(void) {
-  chargeClear();
+	chargeClear();
+	chargeGauge->update(chargeCount);
 }
 

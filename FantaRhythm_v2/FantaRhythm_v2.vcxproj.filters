@@ -114,9 +114,6 @@
     <ClCompile Include="Archer.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="Combostar.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
     <ClCompile Include="Sage.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
@@ -131,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="Gauge.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Combostar.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
