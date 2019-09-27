@@ -17,25 +17,25 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 		
 		switch (csv.get<int>(save[lane], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
-			cha[lane] = new Soldier(csubject, csv, initx, inity, lane);
+			cha[lane] = new Soldier(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::ARCHER:
-			cha[lane] = new Archer(csubject, csv, initx, inity, lane);
+			cha[lane] = new Archer(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::WITCH:
-			cha[lane] = new Witch(csubject, csv, initx, inity, lane);
+			cha[lane] = new Witch(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::SAGE:
-			cha[lane] = new Sage(csubject, csv, initx, inity, lane);
+			cha[lane] = new Sage(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::BERSERKER:
-			cha[lane] = new Berserker(csubject, csv, initx, inity, lane);
+			cha[lane] = new Berserker(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::COMBOSTAR:
-			cha[lane] = new Combostar(csubject, csv, initx, inity, lane);
+			cha[lane] = new Combostar(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::TANKER:
-			cha[lane] = new Tanker(csubject, csv, initx, inity, lane);
+			cha[lane] = new Tanker(csubject, csv, initx, inity, save[lane]);
 			break;
 		default:
 			//エラー
