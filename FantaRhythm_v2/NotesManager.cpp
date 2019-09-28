@@ -42,6 +42,9 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"cri", U"resources/images/items/Nort2nd.png");
 	TextureAsset::Preload(U"cri");
 
+	effect.set(JUDGE::GOOD, U"resources/images/effect/nortsEffect.png", 100, 100);
+	effect.set(JUDGE::GREAT, U"resources/images/effect/nortsEffect.png", 100, 100);
+
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
 
@@ -365,6 +368,7 @@ void NotesManager::draw(void){
 			}
 		}	
 	}
+	effect.draw();//再生中の全てのエフェクトを描画
 }
 
 double NotesManager::getProgress(int time) {
@@ -443,6 +447,9 @@ void NotesManager::displayCritical(int lane, int time) {
 	TextureAsset(U"cri").scaled(now.scale).drawAt(now.x, now.y);
 }
 
+void NotesManager::playNotesEffect(ProPos pos, JUDGE::TYPE type) {
+	effect[type]->play(pos.x, pos.y);
+}
 
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット

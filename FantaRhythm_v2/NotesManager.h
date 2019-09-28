@@ -33,6 +33,7 @@ private:
 	int pressedkey[LANESIZE];//押されたボタンを保持
 
 	//描画関係の変数
+	FlipSet<JUDGE::TYPE> effect;//使用するエフェクト
 	int laneStartX[LANESIZE];	//Start = レーンの上端
 	int laneStartY;		
 	int laneJudgeX[LANESIZE];	//Judge = レーンと判定線が交わる所
@@ -71,7 +72,7 @@ private:
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
 	void displayCritical(int lane, int time);			//敵の攻撃ノーツを表示
-
+	void playNotesEffect(ProPos pos, JUDGE::TYPE type);	//ノーツ破壊時のエフェクト再生
 
 	void setEvent(Massage msg, int val);
 	
