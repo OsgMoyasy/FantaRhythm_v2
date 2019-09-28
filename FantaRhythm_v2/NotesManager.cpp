@@ -201,6 +201,7 @@ void NotesManager::judgeNormal(int lane) {
 	int time = checkitr[lane]->time;
 	JUDGE::TYPE type = NoteisHit(time);
 	if (down[lane] && type != JUDGE::NONE) {//判定時間過ぎるか判定可能でボタンが押されている時
+		playNotesEffect(getProPos(lane, time), type);
 		return judgeEvent(type, lane);
 	}
 	else if(nowtime > time + JUDGE_RANGE::BAD){
@@ -211,6 +212,7 @@ void NotesManager::judgeLong(int lane) {
 	if (pressedkey[lane] == false && down[lane]) {
 		JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
 		if (type <= JUDGE::GOOD) {//下端で押されたら(この判定はJUDGEenumの並び順に依存している)
+			playNotesEffect(getProPos(lane, nowtime), type);
 			pressedkey[lane] = down[lane];//そのロングノーツの判定を有効化
 			return judgeEvent(type, lane, false);
 		}
@@ -229,6 +231,7 @@ void NotesManager::judgeLong(int lane) {
 		}
 		else {//離した
 			JUDGE::TYPE type = NoteisHit(checkitr[lane]->judgetime);
+			playNotesEffect(getProPos(lane, checkitr[lane]->longtime), type);
 			return judgeLongEvent(type, lane);
 		}
 	}
@@ -261,11 +264,13 @@ void NotesManager::judgeCritical(int lane) {
 	if (pressHold[lane] > 0) {
 		if (press[lane] == PSHBTN::BOTH) {//同時押しの場合
 			pressHold[lane] = PSHBTN::BOTH;
+			playNotesEffect(getProPos(lane, checkitr[lane]->time), typeHold[lane]);
 			JUDGE_CRITICAL_EVENT;//同時押しイベント
 			return;
 		}
 		else if (press[lane] == 0 ||				//ボタンが途中で離されるか
 				 nowtime - prevTime[lane] > 50) {	//同時押しされてない場合の処理
+			playNotesEffect(getProPos(lane, checkitr[lane]->time), typeHold[lane]);
 			JUDGE_CRITICAL_EVENT;//最初に押した時点のイベントを起こす
 			return;
 		}
