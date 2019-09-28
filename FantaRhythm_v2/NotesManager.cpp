@@ -125,6 +125,7 @@ void NotesManager::update(void)
 	controlJudge();
 }
 
+
 void NotesManager::plusItr(noteitr& itr) {
 	if (itr->type != NOTESTYPE::SENTINEL)//番兵かどうか判定
 		itr++;
@@ -157,6 +158,9 @@ void NotesManager::checkAttack(void) {
 	down[3] += KeyF.down() ? PSHBTN::DOWN : 0;
 	press[3] += KeyF.pressed() ? PSHBTN::DOWN : 0;
 }
+JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//判定するタイミングからJUDGEのタイプを返す
+	return judgeType(abs(nowtime - judgetime));
+}
 JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 	if (checktime <= JUDGE_RANGE::PERFECT) {//PERFECT
 		return JUDGE::PERFECT;
@@ -174,6 +178,7 @@ JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 		return JUDGE::NONE;
 	}
 }
+
 
 void NotesManager::controlJudge(void) {
 	for (int i = 0;i < LANESIZE;i++) {
@@ -200,9 +205,6 @@ void NotesManager::judgeNormal(int lane) {
 	else if(nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD){
 		return judgeEvent(JUDGE::BAD, lane);
 	}
-}
-JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//判定するタイミングからJUDGEのタイプを返す
-	return judgeType(abs(nowtime - judgetime));
 }
 void NotesManager::judgeLong(int lane) {
 	if (pressedkey[lane] == false && down[lane]) {
@@ -234,7 +236,6 @@ void NotesManager::judgeLong(int lane) {
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
-
 void NotesManager::judgeCritical(int lane) {
 	static int prevTime[LANESIZE]{ 0, 0, 0, 0 };
 	static int pressHold[LANESIZE] = { 0,0,0,0 };
@@ -278,12 +279,12 @@ void NotesManager::judgeCritical(int lane) {
 	}
 }
 
+
 void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	down[lane] = pressedkey[lane];
 	judgeEvent(type, lane);
 	pressedkey[lane] = 0;//判定したので長押しの状態を初期化
 }
-
 void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 	if (next) {
 		noteNext(lane);
@@ -303,7 +304,6 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 		}
 	}
 }
-
 void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType) {
 	noteNext(lane);
 	judgecount.cnt[type]++;//判定をカウントアップ
@@ -326,11 +326,11 @@ void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType
 		}
 	}
 }
-
 void NotesManager::noteNext(int lane) {
 	checkitr[lane]->display = false;//ディスプレイ表示オフ
 	plusItr(checkitr[lane]);//判定対象を次に進める
 }
+
 
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
 	return &judgecount;
@@ -371,10 +371,10 @@ void NotesManager::draw(void){
 	effect.draw();//再生中の全てのエフェクトを描画
 }
 
+
 double NotesManager::getProgress(int time) {
 	return (timeRequired - (time - nowtime)) / timeRequired;
 }
-
 double NotesManager::progressByAngle(double progressRate) {
 	using namespace std;
 	constexpr double EYE_HEIGHT = 1.0;
@@ -385,11 +385,9 @@ double NotesManager::progressByAngle(double progressRate) {
 	double nowRange = START_RANGE - (START_RANGE - JUDGE_RANGE) * progressRate;
 	return (START_ANGLE - atan(nowRange / EYE_HEIGHT)) / (START_ANGLE - JUDGE_ANGLE);
 }
-
 double NotesManager::getCurrentPosition(double startPos, double endPos, double progressRate) {
 	return startPos + (endPos - startPos) * progressRate;
 }
-
 NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
 	double progressRate = progressByAngle(getProgress(time));
 	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
@@ -397,6 +395,7 @@ NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
 	double scale = getCurrentPosition(laneStartScale, laneJudgeScale, progressRate);
 	return { scale ,currentX ,currentY };
 }
+
 
 void NotesManager::displayNormal(int lane, int time) {
 	ProPos now = getProPos(lane, time);
@@ -437,7 +436,6 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	TextureAsset(U"note").scaled(end.scale).drawAt(end.x, end.y);
 	TextureAsset(U"note").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
 }
-
 void NotesManager::displayCritical(int lane, int time) {
 	ProPos now = getProPos(lane, time);
 	if (now.y > laneGoalY) {
@@ -446,10 +444,10 @@ void NotesManager::displayCritical(int lane, int time) {
 	}
 	TextureAsset(U"cri").scaled(now.scale).drawAt(now.x, now.y);
 }
-
 void NotesManager::playNotesEffect(ProPos pos, JUDGE::TYPE type) {
 	effect[type]->play(pos.x, pos.y);
 }
+
 
 void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->setEvent(msg, val);//イベントオブジェクトセット

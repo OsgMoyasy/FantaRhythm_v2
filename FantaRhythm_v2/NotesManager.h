@@ -49,14 +49,13 @@ private:
 
 	void checkAttack(void);		//ボタンの押し状況を確認する
 	struct ButtonandJudge;		//NoteisHit関数の応答用
-	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 	JUDGE::TYPE NoteisHit(int judgetime);
+	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 
 	void controlJudge(void);		//ノーツの種類毎に判定用関数を呼び出し
 	void judgeNormal(int lane);		//ノーマルノーツを判定
 	void judgeLong(int lane);		//ロングノーツを判定
 	void judgeCritical(int lane);	//敵の攻撃ノーツを判定
-
 
 	void judgeEvent(JUDGE::TYPE type, int lane, bool next = true);
 	void judgeLongEvent(JUDGE::TYPE type, int lane);
