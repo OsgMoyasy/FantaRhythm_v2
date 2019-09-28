@@ -202,10 +202,12 @@ void NotesManager::judgeNormal(int lane) {
 	JUDGE::TYPE type = NoteisHit(time);
 	if (down[lane] && type != JUDGE::NONE) {//”»’èŽžŠÔ‰ß‚¬‚é‚©”»’è‰Â”\‚Åƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éŽž
 		playNotesEffect(getProPos(lane, time), type);
-		return judgeEvent(type, lane);
+		judgeEvent(type, lane);
+		return;
 	}
 	else if(nowtime > time + JUDGE_RANGE::BAD){
-		return judgeEvent(JUDGE::BAD, lane);
+		judgeEvent(JUDGE::BAD, lane);
+		return;
 	}
 }
 void NotesManager::judgeLong(int lane) {
