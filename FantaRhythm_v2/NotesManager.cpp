@@ -445,7 +445,14 @@ void NotesManager::displayCritical(int lane, int time) {
 	TextureAsset(U"cri").scaled(now.scale).drawAt(now.x, now.y);
 }
 void NotesManager::playNotesEffect(ProPos pos, JUDGE::TYPE type) {
-	effect[type]->play(pos.x, pos.y);
+	if (type <= JUDGE::GREAT) {
+		effect[JUDGE::GREAT]->play(pos.x, pos.y);
+		return;
+	}
+	if (type <= JUDGE::GOOD) {
+		effect[JUDGE::GOOD]->play(pos.x, pos.y);
+		return;
+	}
 }
 
 
