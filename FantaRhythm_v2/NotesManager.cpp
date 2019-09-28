@@ -43,7 +43,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Preload(U"cri");
 
 	effect.set(JUDGE::GOOD, U"resources/images/effect/nortsEffect.png", 100, 100);
-	effect.set(JUDGE::GREAT, U"resources/images/effect/nortsEffect.png", 100, 100);
+	effect.set(JUDGE::GREAT, U"resources/images/effect/nortsEffect2.png", 100, 100);
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
