@@ -198,11 +198,12 @@ void NotesManager::controlJudge(void) {
 	}
 }
 void NotesManager::judgeNormal(int lane) {
-	JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
+	int time = checkitr[lane]->time;
+	JUDGE::TYPE type = NoteisHit(time);
 	if (down[lane] && type != JUDGE::NONE) {//”»’èŽžŠÔ‰ß‚¬‚é‚©”»’è‰Â”\‚Åƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éŽž
 		return judgeEvent(type, lane);
 	}
-	else if(nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD){
+	else if(nowtime > time + JUDGE_RANGE::BAD){
 		return judgeEvent(JUDGE::BAD, lane);
 	}
 }
