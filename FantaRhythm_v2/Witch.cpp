@@ -7,46 +7,51 @@ constexpr int CHARGEMAX = 10;
 Witch::Witch(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
 	chargeClear();
 	chargedamage = 0;
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, CHARGEMAX, Color(Palette::Black), Color(Palette::Orangered));
+	chargeGauge->update(chargeCount);
 }
 
 Witch::~Witch() {
 
 }
 
-void Witch::draw() {
-	Character::characterDraw();
+void Witch::jobDraw() {
+	chargeGauge->draw(getY() + getH() / 2.0);
 }
 
-void Witch::update() {
-	moveUpDown();
-	Print << U"charge=" << chargecount;
+void Witch::jobUpdate() {
+	Print << U"charge=" << chargeCount;
 }
 
 void Witch::charge() {				//Witchは基本チャージだけ
-	if (chargecount < CHARGEMAX) {
-		chargecount += 1;
+	if (chargeCount < CHARGEMAX) {
+		chargeCount += 1;
 	}
 }
 
 void Witch::chargeClear() {
-	chargecount = 1;
+	chargeCount = 1;
 }
 
 void Witch::chargeAttack() {
-	chargedamage = getPower() * (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
+	chargedamage = (getPower()+getArgs1()) * chargeCount ;
+	if (chargeCount > 8) {						//チャージのカウントが8回を超えた時
+		chargedamage = ((getPower() + getArgs1()) * chargeCount )* getArgs2();
+	}
 	setAttackEvent(chargedamage, EffectType::NOMAL);
 	chargeClear();
 }
 
-void Witch::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		charge();
-		setAttackEvent(getPower(),EffectType::NOMAL);
-		break;
-	case Massage::DOWNATTACK:
-		chargeAttack();
-		break;
-	}
+void Witch::upEvent(void) {
+	charge();
+	chargeGauge->update(chargeCount);
+}
+void Witch::downEvent(void) {
+	chargeAttack();
+	chargeGauge->update(chargeCount);
+}
+void Witch::damageEvent(void) {
+	chargeClear();
+	chargeGauge->update(chargeCount);
 }
 

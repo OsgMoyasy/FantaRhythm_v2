@@ -1,10 +1,8 @@
 #include"CharacterSet.h"
 #include "Jobs.h"
-constexpr int HPWIDTH = 400;
-constexpr int HPHEIGHT = 30;
+#include <typeinfo.h>
 
-constexpr int HPX = 800;//HPゲージ左上の位置
-constexpr int HPY = 30;
+
 
 CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	csubject = new CharacterSubject();
@@ -19,25 +17,25 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 		
 		switch (csv.get<int>(save[lane], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
-			cha[lane] = new Soldier(csubject, csv, initx, inity, lane);
+			cha[lane] = new Soldier(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::ARCHER:
-			cha[lane] = new Archer(csubject, csv, initx, inity, lane);
+			cha[lane] = new Archer(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::WITCH:
-			cha[lane] = new Witch(csubject, csv, initx, inity, lane);
+			cha[lane] = new Witch(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::SAGE:
-			cha[lane] = new Sage(csubject, csv, initx, inity, lane);
+			cha[lane] = new Sage(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::BERSERKER:
-			cha[lane] = new Berserker(csubject, csv, initx, inity, lane);
+			cha[lane] = new Berserker(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::COMBOSTAR:
-			cha[lane] = new Combostar(csubject, csv, initx, inity, lane);
+			cha[lane] = new Combostar(csubject, csv, initx, inity, save[lane]);
 			break;
 		case JOB::TANKER:
-			cha[lane] = new Tanker(csubject, csv, initx, inity, lane);
+			cha[lane] = new Tanker(csubject, csv, initx, inity, save[lane]);
 			break;
 		default:
 			//エラー
@@ -46,8 +44,13 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 		
 	}
 	totalhp = getCurrentHp();
-	calchpx(totalhp);
 	damage = 20;
+	//HPゲージの作成
+	constexpr int HPWIDTH = 400;
+	constexpr int HPHEIGHT = 30;
+	constexpr int HPX = 800;//HPゲージ左上の位置
+	constexpr int HPY = 30;
+	hpGauge = new Gauge(HPX, HPY, HPWIDTH, HPHEIGHT, totalhp, Color(Palette::Red), Color(Palette::Green));
 }
 
 CharacterSet::~CharacterSet() {
@@ -66,9 +69,9 @@ void CharacterSet::update() {
 void CharacterSet::draw() {
 	for (int i = 0; i < CHANUMBER; i++) {
 		cha[i]->draw();
-		TotalhpDraw();
 	}
 	enemy->draw();
+	hpGauge->draw();
 }
 
 
@@ -87,26 +90,25 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	}
 	
 	for (int i = 0; i < CHANUMBER; i++) {//回復判定 要修正
-		cha[i]->heal();
-		for (int j = 0; j < CHANUMBER; j++) {
-			cha[i]->recovery();
+		if (typeid(cha[i]) == typeid(Healer)){//回復キャラなのか判定
+			int amount = ((Healer*)cha[i])->isHeal();
+			if (amount > 0) {
+				for (int j = 0; j < CHANUMBER; j++) {
+					cha[i]->recovery(amount);
+				}
+			}
 		}
+
 	}
 }
 
-void CharacterSet::TotalhpDraw() {		//総HP表示
-	Rect(HPX, HPY, HPWIDTH, HPHEIGHT).draw(Palette::Red);
-	Rect(HPX, HPY, hpx, HPHEIGHT).draw(Palette::Green);
-}
+
 
 int CharacterSet::getTotalDamage(void) {
 	return enemy->getTotalDamage();
 }
 
-void CharacterSet::calchpx(int currenthp) {
-	double per = (double)currenthp / totalhp;
-	hpx = (int)(per * HPWIDTH);
-}
+
 
 void CharacterSet::damageToSelves(int lane, int damage) {
 	cha[lane]->damage(damage);
@@ -118,7 +120,7 @@ void CharacterSet::damageToSelves(int lane, int damage) {
 	else if (currenthp < 0) {
 		currenthp = 0;
 	}
-	calchpx(currenthp);
+	hpGauge->update(currenthp);
 }
 
 int CharacterSet::getCurrentHp(void) {

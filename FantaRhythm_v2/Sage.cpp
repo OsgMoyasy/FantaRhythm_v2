@@ -7,18 +7,19 @@ constexpr int RECOVERYMAX = 15;
 
 Sage::Sage(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"sage", csv, ix, iy, row) {
 	recoveryClear();
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, RECOVERYMAX, Color(Palette::Black), Color(Palette::Burlywood));
+	chargeGauge->update(recoverycount);
 }
 
 Sage::~Sage() {
 
 }
 
-void Sage::draw() {
-	Character::characterDraw();
+void Sage::jobDraw() {
+	chargeGauge->draw(getY() + getH() / 2.0);
 }
 
-void Sage::update() {
-	moveUpDown();
+void Sage::jobUpdate() {
 	Print << U"recovery count=" << recoverycount;			
 }
 
@@ -32,7 +33,7 @@ void Sage::recoveryClear() {
 	recoverycount = 0;
 }
 
-int Sage::heal() {
+int Sage::isHeal() {
 	if (recoverycount > 5) {
 		curehp = getPower() * recoverycount;
 		return curehp;
@@ -40,16 +41,16 @@ int Sage::heal() {
 	return 0;
 }
 
-
-void Sage::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::UPATTACK:
-		recoverycharge();
-		setAttackEvent(getPower(), EffectType::NOMAL);
-		break;
-	case Massage::DOWNATTACK:
-		heal();
-		recoveryClear();
-		break;
-	}
+void Sage::upEvent(void) {
+	recoverycharge();
+	setAttackEvent(getPower(), EffectType::NOMAL);
+	chargeGauge->update(recoverycount);
+}
+void Sage::downEvent(void) {
+	isHeal();
+	recoveryClear();
+	chargeGauge->update(recoverycount);
+}
+void Sage::damageEvent(void) {
+	chargeGauge->update(recoverycount);
 }

@@ -6,6 +6,8 @@
 #include "Soldier.h"
 #include "Tanker.h"
 #include "Witch.h"
+//interface
+#include "Healer.h"
 
 namespace JOB {
 	enum LIST {

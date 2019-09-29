@@ -1,55 +1,57 @@
 #include "Soldier.h"
 constexpr int CHARGEMAX = 10;
 
-Soldier::Soldier(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"soldier", csv, ix, iy, row ) {
+
+Soldier::Soldier(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"soldier", csv, ix, iy, row ){
 	chargeClear();
 	chargedamage = 0;
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, CHARGEMAX, Color(Palette::Black), Color(Palette::Blue));
+	chargeGauge->update(chargeCount);
 }
 
 Soldier::~Soldier() {
-
+	
 }
 
-void Soldier::draw() {
-	Character::characterDraw();
-	drawEffect();
+void Soldier::jobDraw() {
+	chargeGauge->draw(getY() + getH() / 2.0);
 }
 
-void Soldier::update() {
-	moveUpDown();
-	Print << U"charge=" << chargecount;
+void Soldier::jobUpdate() {
+	Print << U"charge=" << chargeCount;
 }
 
 void Soldier::charge() {//小ダメージ　＆　チャージ
 	setAttackEvent(getPower(), EffectType::NOMAL);
-	if (chargecount < CHARGEMAX) {
-		chargecount +=1;
+	if (chargeCount < CHARGEMAX) {
+		chargeCount +=1;
 	}
 }
 
 void Soldier::chargeClear() {
-	chargecount = 1;
+	chargeCount = 1;
 }
 
 void Soldier::chargeAttack() {
-	chargedamage=getPower()* (std::pow(getArgs1(), chargecount / CHARGEMAX * 10));
+	if (chargeCount > 8) {
+		chargedamage =( getArgs1() * chargeCount ) * getArgs2();
+	}
+	else {
+		chargedamage = getArgs1() * chargeCount;
+	}
 	setAttackEvent(chargedamage, EffectType::ULT);
 	chargeClear();
 }
 
-void Soldier::getEvent(Massage msg) {
-	switch (msg) {
-	case Massage::BOTHATTACK://同時押しは上攻撃
-		guard();
-	case Massage::UPATTACK:
-		charge();
-		break;
-	case Massage::DOWNATTACK:
-		chargeAttack();
-		break;
-	case Massage::DAMAGE:
-		chargeClear();
-		break;
-	}
+void Soldier::upEvent(void) {
+	charge();
+	chargeGauge->update(chargeCount);
 }
-
+void Soldier::downEvent(void) {
+	chargeAttack();
+	chargeGauge->update(chargeCount);
+}
+void Soldier::damageEvent(void) {
+	chargeClear();
+	chargeGauge->update(chargeCount);
+}

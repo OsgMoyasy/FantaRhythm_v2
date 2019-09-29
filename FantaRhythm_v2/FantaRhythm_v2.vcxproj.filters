@@ -114,9 +114,6 @@
     <ClCompile Include="Archer.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="Combostar.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
     <ClCompile Include="Sage.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
@@ -127,6 +124,12 @@
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
     <ClCompile Include="Witch.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Gauge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Combostar.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
@@ -364,6 +367,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FlipSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Healer.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Gauge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
