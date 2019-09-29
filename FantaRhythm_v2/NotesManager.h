@@ -33,6 +33,7 @@ private:
 	int pressedkey[LANESIZE];//押されたボタンを保持
 
 	//描画関係の変数
+	FlipSet<JUDGE::TYPE> effect;//使用するエフェクト
 	int laneStartX[LANESIZE];	//Start = レーンの上端
 	int laneStartY;		
 	int laneJudgeX[LANESIZE];	//Judge = レーンと判定線が交わる所
@@ -48,14 +49,13 @@ private:
 
 	void checkAttack(void);		//ボタンの押し状況を確認する
 	struct ButtonandJudge;		//NoteisHit関数の応答用
-	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 	JUDGE::TYPE NoteisHit(int judgetime);
+	JUDGE::TYPE judgeType(int checktime);//判定のタイプを返す
 
 	void controlJudge(void);		//ノーツの種類毎に判定用関数を呼び出し
 	void judgeNormal(int lane);		//ノーマルノーツを判定
 	void judgeLong(int lane);		//ロングノーツを判定
 	void judgeCritical(int lane);	//敵の攻撃ノーツを判定
-
 
 	void judgeEvent(JUDGE::TYPE type, int lane, bool next = true);
 	void judgeLongEvent(JUDGE::TYPE type, int lane);
@@ -71,7 +71,7 @@ private:
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
 	void displayCritical(int lane, int time);			//敵の攻撃ノーツを表示
-
+	void playNotesEffect(ProPos pos, JUDGE::TYPE type);	//ノーツ破壊時のエフェクト再生
 
 	void setEvent(Massage msg, int val);
 	

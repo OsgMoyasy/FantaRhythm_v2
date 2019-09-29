@@ -42,6 +42,9 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"cri", U"resources/images/items/Nort2nd.png");
 	TextureAsset::Preload(U"cri");
 
+	effect.set(JUDGE::GOOD, U"resources/images/effect/nortsEffect.png", 100, 100);
+	effect.set(JUDGE::GREAT, U"resources/images/effect/nortsEffect2.png", 100, 100);
+
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
 
@@ -122,6 +125,7 @@ void NotesManager::update(void)
 	controlJudge();
 }
 
+
 void NotesManager::plusItr(noteitr& itr) {
 	if (itr->type != NOTESTYPE::SENTINEL)//番兵かどうか判定
 		itr++;
@@ -154,6 +158,9 @@ void NotesManager::checkAttack(void) {
 	down[3] += KeyF.down() ? PSHBTN::DOWN : 0;
 	press[3] += KeyF.pressed() ? PSHBTN::DOWN : 0;
 }
+JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//判定するタイミングからJUDGEのタイプを返す
+	return judgeType(abs(nowtime - judgetime));
+}
 JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 	if (checktime <= JUDGE_RANGE::PERFECT) {//PERFECT
 		return JUDGE::PERFECT;
@@ -171,6 +178,7 @@ JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返す
 		return JUDGE::NONE;
 	}
 }
+
 
 void NotesManager::controlJudge(void) {
 	for (int i = 0;i < LANESIZE;i++) {
@@ -190,21 +198,23 @@ void NotesManager::controlJudge(void) {
 	}
 }
 void NotesManager::judgeNormal(int lane) {
-	JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
+	int time = checkitr[lane]->time;
+	JUDGE::TYPE type = NoteisHit(time);
 	if (down[lane] && type != JUDGE::NONE) {//判定時間過ぎるか判定可能でボタンが押されている時
-		return judgeEvent(type, lane);
+		playNotesEffect(getProPos(lane, time), type);
+		judgeEvent(type, lane);
+		return;
 	}
-	else if(nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD){
-		return judgeEvent(JUDGE::BAD, lane);
+	else if(nowtime > time + JUDGE_RANGE::BAD){
+		judgeEvent(JUDGE::BAD, lane);
+		return;
 	}
-}
-JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//判定するタイミングからJUDGEのタイプを返す
-	return judgeType(abs(nowtime - judgetime));
 }
 void NotesManager::judgeLong(int lane) {
 	if (pressedkey[lane] == false && down[lane]) {
 		JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
 		if (type <= JUDGE::GOOD) {//下端で押されたら(この判定はJUDGEenumの並び順に依存している)
+			playNotesEffect(getProPos(lane, nowtime), type);
 			pressedkey[lane] = down[lane];//そのロングノーツの判定を有効化
 			return judgeEvent(type, lane, false);
 		}
@@ -223,6 +233,7 @@ void NotesManager::judgeLong(int lane) {
 		}
 		else {//離した
 			JUDGE::TYPE type = NoteisHit(checkitr[lane]->judgetime);
+			playNotesEffect(getProPos(lane, checkitr[lane]->longtime), type);
 			return judgeLongEvent(type, lane);
 		}
 	}
@@ -231,7 +242,6 @@ void NotesManager::judgeLong(int lane) {
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
-
 void NotesManager::judgeCritical(int lane) {
 	static int prevTime[LANESIZE]{ 0, 0, 0, 0 };
 	static int pressHold[LANESIZE] = { 0,0,0,0 };
@@ -256,11 +266,13 @@ void NotesManager::judgeCritical(int lane) {
 	if (pressHold[lane] > 0) {
 		if (press[lane] == PSHBTN::BOTH) {//同時押しの場合
 			pressHold[lane] = PSHBTN::BOTH;
+			playNotesEffect(getProPos(lane, checkitr[lane]->time), typeHold[lane]);
 			JUDGE_CRITICAL_EVENT;//同時押しイベント
 			return;
 		}
 		else if (press[lane] == 0 ||				//ボタンが途中で離されるか
 				 nowtime - prevTime[lane] > 50) {	//同時押しされてない場合の処理
+			playNotesEffect(getProPos(lane, checkitr[lane]->time), typeHold[lane]);
 			JUDGE_CRITICAL_EVENT;//最初に押した時点のイベントを起こす
 			return;
 		}
@@ -275,12 +287,12 @@ void NotesManager::judgeCritical(int lane) {
 	}
 }
 
+
 void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	down[lane] = pressedkey[lane];
 	judgeEvent(type, lane);
 	pressedkey[lane] = 0;//判定したので長押しの状態を初期化
 }
-
 void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 	if (next) {
 		noteNext(lane);
@@ -300,7 +312,6 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 		}
 	}
 }
-
 void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType) {
 	noteNext(lane);
 	judgecount.cnt[type]++;//判定をカウントアップ
@@ -323,11 +334,11 @@ void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType
 		}
 	}
 }
-
 void NotesManager::noteNext(int lane) {
 	checkitr[lane]->display = false;//ディスプレイ表示オフ
 	plusItr(checkitr[lane]);//判定対象を次に進める
 }
+
 
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
 	return &judgecount;
@@ -365,12 +376,13 @@ void NotesManager::draw(void){
 			}
 		}	
 	}
+	effect.draw();//再生中の全てのエフェクトを描画
 }
+
 
 double NotesManager::getProgress(int time) {
 	return (timeRequired - (time - nowtime)) / timeRequired;
 }
-
 double NotesManager::progressByAngle(double progressRate) {
 	using namespace std;
 	constexpr double EYE_HEIGHT = 1.0;
@@ -381,11 +393,9 @@ double NotesManager::progressByAngle(double progressRate) {
 	double nowRange = START_RANGE - (START_RANGE - JUDGE_RANGE) * progressRate;
 	return (START_ANGLE - atan(nowRange / EYE_HEIGHT)) / (START_ANGLE - JUDGE_ANGLE);
 }
-
 double NotesManager::getCurrentPosition(double startPos, double endPos, double progressRate) {
 	return startPos + (endPos - startPos) * progressRate;
 }
-
 NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
 	double progressRate = progressByAngle(getProgress(time));
 	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
@@ -393,6 +403,7 @@ NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
 	double scale = getCurrentPosition(laneStartScale, laneJudgeScale, progressRate);
 	return { scale ,currentX ,currentY };
 }
+
 
 void NotesManager::displayNormal(int lane, int time) {
 	ProPos now = getProPos(lane, time);
@@ -433,7 +444,6 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	TextureAsset(U"note").scaled(end.scale).drawAt(end.x, end.y);
 	TextureAsset(U"note").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
 }
-
 void NotesManager::displayCritical(int lane, int time) {
 	ProPos now = getProPos(lane, time);
 	if (now.y > laneGoalY) {
@@ -441,6 +451,16 @@ void NotesManager::displayCritical(int lane, int time) {
 		return;
 	}
 	TextureAsset(U"cri").scaled(now.scale).drawAt(now.x, now.y);
+}
+void NotesManager::playNotesEffect(ProPos pos, JUDGE::TYPE type) {
+	if (type <= JUDGE::GREAT) {
+		effect[JUDGE::GREAT]->play(pos.x, pos.y);
+		return;
+	}
+	if (type <= JUDGE::GOOD) {
+		effect[JUDGE::GOOD]->play(pos.x, pos.y);
+		return;
+	}
 }
 
 
