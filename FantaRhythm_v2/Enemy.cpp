@@ -2,7 +2,7 @@
 
 
 
-Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(100){
+Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(1100){
 	TextureAsset::Register(U"enemy", path + U"/enemy.png");
 	TextureAsset::Preload(U"enemy");
 

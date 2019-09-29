@@ -20,7 +20,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 	args1 = csv.get<double>(row, 5);
 	args2 = csv.get<double>(row, 6);
 	//ƒLƒƒƒ‰‰æ‘œ‚Ì“Ç‚Ýž‚Ý
-	TextureAsset::Register(name,U"resources/images/character/"+name+U".png");
+	TextureAsset::Register(name,U"resources/images/character/R"+name+U".png");
 	TextureAsset::Preload(name);
 	initx = ix;
 	inity = iy;
@@ -120,7 +120,7 @@ void Character::characterDraw() {
 }
 
 void Character::playEffect(EffectType type) {
-	flipeffect[type]->play((int)(x - EFFECTSIZE / 3), (int)y);
+	flipeffect[type]->play((int)(x + EFFECTSIZE / 3), (int)y);
 }
 
 void Character::playEffect(EffectType type, double x, double y) {
