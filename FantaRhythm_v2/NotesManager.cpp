@@ -98,10 +98,10 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	}
 	//Y座標
 	laneStartY = 100;
-	laneJudgeY = 650;
+	laneJudgeY = 570;
 	laneGoalY = 730;//(画面Y座標限界 + 10)
 	//速さ
-	notespeed = 1.0;
+	notespeed = 1.2;
 	timeRequired = 1500 / notespeed;
 	//ノーツの大きさ
 	notewidth = TextureAsset(U"note").width();
@@ -133,6 +133,33 @@ void NotesManager::plusItr(noteitr& itr) {
 
 
 void NotesManager::checkAttack(void) {
+	/*
+	down[0] = Gamepad(0).buttons[0].down() ? PSHBTN::UP : 0;
+	press[0] = Gamepad(0).buttons[0].pressed() ? PSHBTN::UP : 0;
+
+	down[1] = Gamepad(0).buttons[1].down() ? PSHBTN::UP : 0;
+	press[1] = Gamepad(0).buttons[1].pressed() ? PSHBTN::UP : 0;
+
+	down[2] = Gamepad(0).buttons[2].down() ? PSHBTN::UP : 0;
+	press[2] = Gamepad(0).buttons[2].pressed() ? PSHBTN::UP : 0;
+
+	down[3] = Gamepad(0).buttons[3].down() ? PSHBTN::UP : 0;
+	press[3] = Gamepad(0).buttons[3].pressed() ? PSHBTN::UP : 0;
+
+
+	down[0] += Gamepad(0).buttons[4].down() ? PSHBTN::DOWN : 0;
+	press[0] += Gamepad(0).buttons[4].pressed() ? PSHBTN::DOWN : 0;
+
+	down[1] += Gamepad(0).buttons[5].down() ? PSHBTN::DOWN : 0;
+	press[1] += Gamepad(0).buttons[5].pressed() ? PSHBTN::DOWN : 0;
+
+	down[2] += Gamepad(0).buttons[6].down() ? PSHBTN::DOWN : 0;
+	press[2] += Gamepad(0).buttons[6].pressed() ? PSHBTN::DOWN : 0;
+
+	down[3] += Gamepad(0).buttons[7].down() ? PSHBTN::DOWN : 0;
+	press[3] += Gamepad(0).buttons[7].pressed() ? PSHBTN::DOWN : 0;
+	*/
+	
 	down[0] = KeyQ.down() ? PSHBTN::UP : 0;
 	press[0] = KeyQ.pressed() ? PSHBTN::UP : 0;
 
