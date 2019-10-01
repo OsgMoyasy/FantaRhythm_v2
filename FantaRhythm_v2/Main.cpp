@@ -1,5 +1,5 @@
-﻿#include "FantaRhythm_v2.h"
-#include "SceneManager.h"
+﻿#include "SceneManager.h"
+#include "MyKey.h"
 void Main(){
 	Profiler::EnableAssetCreationWarning(false);
 	Window::Resize(1280,720);
@@ -8,6 +8,7 @@ void Main(){
 	SceneManager::initialize();
 	while (System::Update()){
 		ClearPrint();
+		MyKey::isGamePad();
 		SceneManager::updateScene();
 		SceneManager::drawScene();
 

@@ -8,13 +8,6 @@ enum class NotesManager::NOTESTYPE {
 	SENTINEL,
 };
 
-namespace PSHBTN {
-	constexpr int NONE = 0;
-	constexpr int UP = 1;
-	constexpr int DOWN = 2;
-	constexpr int BOTH = 3;
-}
-
 namespace JUDGE_RANGE{
 	constexpr int BAD = 200;//判定の最大範囲[ms]÷2
 	constexpr int GOOD = 100;//GOOD判定範囲[ms]÷2
@@ -133,57 +126,8 @@ void NotesManager::plusItr(noteitr& itr) {
 
 
 void NotesManager::checkAttack(void) {
-	/*
-	down[0] = Gamepad(0).buttons[0].down() ? PSHBTN::UP : 0;
-	press[0] = Gamepad(0).buttons[0].pressed() ? PSHBTN::UP : 0;
-
-	down[1] = Gamepad(0).buttons[1].down() ? PSHBTN::UP : 0;
-	press[1] = Gamepad(0).buttons[1].pressed() ? PSHBTN::UP : 0;
-
-	down[2] = Gamepad(0).buttons[2].down() ? PSHBTN::UP : 0;
-	press[2] = Gamepad(0).buttons[2].pressed() ? PSHBTN::UP : 0;
-
-	down[3] = Gamepad(0).buttons[3].down() ? PSHBTN::UP : 0;
-	press[3] = Gamepad(0).buttons[3].pressed() ? PSHBTN::UP : 0;
-
-
-	down[0] += Gamepad(0).buttons[4].down() ? PSHBTN::DOWN : 0;
-	press[0] += Gamepad(0).buttons[4].pressed() ? PSHBTN::DOWN : 0;
-
-	down[1] += Gamepad(0).buttons[5].down() ? PSHBTN::DOWN : 0;
-	press[1] += Gamepad(0).buttons[5].pressed() ? PSHBTN::DOWN : 0;
-
-	down[2] += Gamepad(0).buttons[6].down() ? PSHBTN::DOWN : 0;
-	press[2] += Gamepad(0).buttons[6].pressed() ? PSHBTN::DOWN : 0;
-
-	down[3] += Gamepad(0).buttons[7].down() ? PSHBTN::DOWN : 0;
-	press[3] += Gamepad(0).buttons[7].pressed() ? PSHBTN::DOWN : 0;
-	*/
-	
-	down[0] = KeyQ.down() ? PSHBTN::UP : 0;
-	press[0] = KeyQ.pressed() ? PSHBTN::UP : 0;
-
-	down[1] = KeyW.down() ? PSHBTN::UP : 0;
-	press[1] = KeyW.pressed() ? PSHBTN::UP : 0;
-
-	down[2] = KeyE.down() ? PSHBTN::UP : 0;
-	press[2] = KeyE.pressed() ? PSHBTN::UP : 0;
-
-	down[3] = KeyR.down() ? PSHBTN::UP : 0;
-	press[3] = KeyR.pressed() ? PSHBTN::UP : 0;
-
-
-	down[0] += KeyA.down() ? PSHBTN::DOWN : 0;
-	press[0] += KeyA.pressed() ? PSHBTN::DOWN : 0;
-
-	down[1] += KeyS.down() ? PSHBTN::DOWN : 0;
-	press[1] += KeyS.pressed() ? PSHBTN::DOWN : 0;
-
-	down[2] += KeyD.down() ? PSHBTN::DOWN : 0;
-	press[2] += KeyD.pressed() ? PSHBTN::DOWN : 0;
-
-	down[3] += KeyF.down() ? PSHBTN::DOWN : 0;
-	press[3] += KeyF.pressed() ? PSHBTN::DOWN : 0;
+	MyKey::getGameDownKey(down);
+	MyKey::getGamePressKey(press);
 }
 JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//判定するタイミングからJUDGEのタイプを返す
 	return judgeType(abs(nowtime - judgetime));

@@ -17,7 +17,7 @@ Title::~Title(void) {
 }
 
 void Title::update(void) {
-	if (KeyA.down()) {//‹È‘I‘ð‰æ–Ê‚Ö
+	if (MyKey::getDecisionKey()) {//‹È‘I‘ð‰æ–Ê‚Ö
 		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
 	}
 	else {

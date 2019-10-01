@@ -1,6 +1,8 @@
 #pragma once
 #include <Siv3D.hpp>
 #include "Scene.h"
+#include "MyKey.h"
+
 class Title : public Scene{
 public:
 	Title(void);

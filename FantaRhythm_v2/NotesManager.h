@@ -7,6 +7,7 @@
 #include "Judge.h"
 #include "GameEffect.h"
 #include "MusicManager.h"
+#include "MyKey.h"
 
 class NotesManager {
 private:

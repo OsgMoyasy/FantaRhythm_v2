@@ -1,5 +1,5 @@
 #include "SelectMusic.h"
-#include "SceneManager.h"
+
 
 
 #define DEFAULT_ANGLE 120
@@ -76,9 +76,9 @@ void SelectMusic::update(void) {
 void SelectMusic::updateMusic(void) {
 	if (!musicrotation) {//移動処理が完了しているとき
 		musicmoveCursor();
-		if (KeyRight.down()) {//難易度へ
+		if (MyKey::getDecisionKey()) {//難易度へ
 			changeState(DIFFICULTY);
-		}else if (KeyLeft.down()) {//タイトルへ戻る
+		}else if (MyKey::getReturnKey()) {//タイトルへ戻る
 			changeState(TITLE);
 		}
 	}
@@ -89,9 +89,9 @@ void SelectMusic::updateMusic(void) {
 void SelectMusic::updateDifficulty(void) {
 	if (!difrotation) {//移動処理が完了しているとき
 		difmoveCursor();//上下移動処理
-		if (KeyRight.down()) {//ゲームへ
+		if (MyKey::getDecisionKey()) {//ゲームへ
 			changeState(GAME);
-		}else if (KeyLeft.down()) {//曲選択へ
+		}else if (MyKey::getReturnKey()) {//曲選択へ
 			changeState(MUSIC);
 		}
 	}
@@ -116,16 +116,16 @@ void SelectMusic::draw(void) {
 }
 
 void SelectMusic::musicmoveCursor(void) {
-	if (KeyUp.pressed() == 1 && KeyDown.pressed() == 1) {//上下両方押されてれば移動させない
+	if (MyKey::getUpKey() == 1 && MyKey::getDownKey() == 1) {//上下両方押されてれば移動させない
 		return;
 	}
-	if (KeyUp.pressed()) {
+	if (MyKey::getUpKey()) {
 		musiccursor == 0 ? musiccursor = musiccount - 1 : musiccursor--;//0　～　count - 1を上方向ループ
 		musicrotation = -DEFAULT_ROTATION;//選択肢を回転させるため角度を30度マイナス
 		playMusic(musiccursor);
 		initDifficulty();//曲に合わせた難易度へ初期化
 	}
-	else if (KeyDown.pressed()) {
+	else if (MyKey::getDownKey()) {
 		musiccursor == musiccount - 1 ? musiccursor = 0 : musiccursor++;
 		musicrotation = DEFAULT_ROTATION;//選択肢を回転させるため角度を30度プラス
 		playMusic(musiccursor);
@@ -134,13 +134,13 @@ void SelectMusic::musicmoveCursor(void) {
 }
 
 void SelectMusic::difmoveCursor(void) {
-	if (KeyUp.pressed() == 1 && KeyDown.pressed() == 1) {//上下両方押されてれば移動させない
+	if (MyKey::getUpKey() == 1 && MyKey::getDownKey() == 1) {//上下両方押されてれば移動させない
 		return;
 	}
-	if (KeyUp.pressed()) {
+	if (MyKey::getUpKey()) {
 		difcursor == 0 ? difcursor = difcount - 1 : difcursor--;//0　～　count - 1を上方向ループ
 		difrotation = -DEFAULT_ROTATION;//選択肢を回転させるため角度を30度マイナス
-	}else if (KeyDown.pressed()) {
+	}else if (MyKey::getDownKey()) {
 		difcursor == difcount - 1 ? difcursor = 0 : difcursor++;
 		difrotation = DEFAULT_ROTATION;//選択肢を回転させるため角度を30度プラス
 	}
