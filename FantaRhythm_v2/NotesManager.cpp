@@ -404,28 +404,17 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 
 	Color lineColor;	//L‚Î‚µ–_@FŽw’è
 
-
 	for (int i = longt - BETW;i > time;i -= BETW) {
 		a = b;
 		b = getProPos(lane, i);
 		for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
-			if (pressedkey[lane] > 0) {
-				lineColor = Color(200 + linex * 2.5, 50, 50);
-			}
-			else {
-				lineColor = Color(150 + linex * 2.0, 50, 50);
-			}
+			lineColor = longLineColor(linex, lane, time);
 			Line(a.x + linex * a.scale, a.y, b.x + linex * b.scale, b.y).draw(1, lineColor);
 			Line(a.x - linex * a.scale, a.y, b.x - linex * b.scale, b.y).draw(1, lineColor);
 		}
 	}
 	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
-		if (pressedkey[lane] > 0) {
-			lineColor = Color(200 + linex * 2.5, 50, 50);
-		}
-		else {
-			lineColor = Color(150 + linex * 2.0, 50, 50);
-		}
+		lineColor = longLineColor(linex, lane, time);
 		Line(b.x + linex * b.scale, b.y, bgn.x + linex * bgn.scale, bgn.y).draw(1, lineColor);
 		Line(b.x - linex * b.scale, b.y, bgn.x - linex * bgn.scale, bgn.y).draw(1, lineColor);
 	}
@@ -433,6 +422,16 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	TextureAsset(U"longnote").scaled(end.scale).drawAt(end.x, end.y);
 	TextureAsset(U"longnote").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
 }
+
+Color NotesManager::longLineColor(int linex, int lane, int time) {
+	if (pressedkey[lane] > 0 && (*checkitr[lane]).time == time) {
+		return Color(200 + linex * 2.5, 50, 50);
+	}
+	else {
+		return Color(150 + linex * 2.0, 50, 50);
+	}
+}
+
 void NotesManager::displayCritical(int lane, int time) {
 	ProPos now = getProPos(lane, time);
 	if (now.y > laneGoalY) {

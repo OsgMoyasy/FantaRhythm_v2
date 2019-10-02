@@ -71,6 +71,7 @@ private:
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
+	Color longLineColor(int linex, int lane, int time);
 	void displayCritical(int lane, int time);			//敵の攻撃ノーツを表示
 	void playNotesEffect(ProPos pos, JUDGE::TYPE type);	//ノーツ破壊時のエフェクト再生
 
