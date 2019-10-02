@@ -32,7 +32,9 @@ struct NotesManager::ProPos {
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
 	TextureAsset::Preload(U"note");
-	TextureAsset::Register(U"cri", U"resources/images/items/Nort2nd.png");
+	TextureAsset::Register(U"longnote", U"resources/images/items/Nort2nd.png");
+	TextureAsset::Preload(U"longnote");
+	TextureAsset::Register(U"cri", U"resources/images/items/Nort2.png");
 	TextureAsset::Preload(U"cri");
 
 	effect.set(JUDGE::GOOD, U"resources/images/effect/nortsEffect.png", 100, 100);
@@ -399,21 +401,37 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 	//•`‰æˆ—
 	ProPos a, b = end;
 	constexpr int BETW = 50;//L‚Î‚µ–_‚Ì‘¾‚³‚ÌÄŒvŽZ‚ÌŠÔŠu[ms]
+
+	Color lineColor;	//L‚Î‚µ–_@FŽw’è
+
+
 	for (int i = longt - BETW;i > time;i -= BETW) {
 		a = b;
 		b = getProPos(lane, i);
 		for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
-			Line(a.x + linex * a.scale, a.y, b.x + linex * b.scale, b.y).draw(1, Color(150 + linex * 2, 50, 50));
-			Line(a.x - linex * a.scale, a.y, b.x - linex * b.scale, b.y).draw(1, Color(150 + linex * 2, 50, 50));
+			if (pressedkey[lane] > 0) {
+				lineColor = Color(200 + linex * 2.5, 50, 50);
+			}
+			else {
+				lineColor = Color(150 + linex * 2.0, 50, 50);
+			}
+			Line(a.x + linex * a.scale, a.y, b.x + linex * b.scale, b.y).draw(1, lineColor);
+			Line(a.x - linex * a.scale, a.y, b.x - linex * b.scale, b.y).draw(1, lineColor);
 		}
 	}
 	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
-		Line(b.x + linex * b.scale, b.y, bgn.x + linex * bgn.scale, bgn.y).draw(1, Color(150 + linex * 2, 50, 50));
-		Line(b.x - linex * b.scale, b.y, bgn.x - linex * bgn.scale, bgn.y).draw(1, Color(150 + linex * 2, 50, 50));
+		if (pressedkey[lane] > 0) {
+			lineColor = Color(200 + linex * 2.5, 50, 50);
+		}
+		else {
+			lineColor = Color(150 + linex * 2.0, 50, 50);
+		}
+		Line(b.x + linex * b.scale, b.y, bgn.x + linex * bgn.scale, bgn.y).draw(1, lineColor);
+		Line(b.x - linex * b.scale, b.y, bgn.x - linex * bgn.scale, bgn.y).draw(1, lineColor);
 	}
 
-	TextureAsset(U"note").scaled(end.scale).drawAt(end.x, end.y);
-	TextureAsset(U"note").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
+	TextureAsset(U"longnote").scaled(end.scale).drawAt(end.x, end.y);
+	TextureAsset(U"longnote").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
 }
 void NotesManager::displayCritical(int lane, int time) {
 	ProPos now = getProPos(lane, time);
