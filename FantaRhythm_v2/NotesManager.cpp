@@ -216,17 +216,17 @@ void NotesManager::judgeLong(int lane) {
 	}
 }
 void NotesManager::judgeCritical(int lane) {
-	static int prevTime[LANESIZE]{ 0, 0, 0, 0 };
-	static int pressHold[LANESIZE] = { 0,0,0,0 };
-	static JUDGE::TYPE typeHold[LANESIZE] = { JUDGE::NONE,JUDGE::NONE,JUDGE::NONE,JUDGE::NONE };
-	//judgeCriticalEventを呼び上記のローカル静的変数を初期化するマクロ
+	static int prevTime[LANESIZE] = {0, 0, 0, 0};	//押され始めの時間保持
+	static int pressHold[LANESIZE] = {0, 0, 0, 0};	//押され始めのボタン状態保持(上だけなのか下だけなのか両方なのか）
+	static JUDGE::TYPE typeHold[LANESIZE] = { JUDGE::NONE,JUDGE::NONE,JUDGE::NONE,JUDGE::NONE };//押され始めの判定を保持
+	//judgeCriticalEventを呼び,上記のローカル静的変数を初期化するマクロ
 	#define JUDGE_CRITICAL_EVENT  judgeCriticalEvent(typeHold[lane], lane, pressHold[lane]);\
-								  pressHold[lane] = 0;prevTime[lane] = 0;\
+								  pressHold[lane] = 0; prevTime[lane] = 0;\
 								  typeHold[lane] = JUDGE::NONE;
 
 	JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
 	if (down[lane] ){//ボタンが押され始めかどうかを判定
-		if (type < JUDGE::NONE) {
+		if (type < JUDGE::NONE) {//判定可能なら
 			if (typeHold[lane] == JUDGE::NONE) {
 				pressHold[lane] = down[lane];
 				typeHold[lane] = type;
@@ -275,7 +275,7 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
-		switch (down[lane]) {
+		switch (down[lane]) {//成功イベント送信
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
 			break;
@@ -285,14 +285,15 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 		}
 	}
 }
+
 void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType) {
 	noteNext(lane);
 	judgecount.cnt[type]++;//判定をカウントアップ
-	if (type == JUDGE::BAD) {
+	if (type == JUDGE::BAD) {//BADイベント送信
 		setEvent(Massage::CRITICALDAMAGE, lane);
 	}
 	else {
-		switch (buttonType) {
+		switch (buttonType) {//成功イベント送信
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
 			setEvent(Massage::CRITICALDAMAGE, lane);
