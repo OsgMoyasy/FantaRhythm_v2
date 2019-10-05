@@ -4,7 +4,8 @@
 #include "ImageNumber.h"
 #include "GameEffect.h"
 #include <Siv3D.hpp>
-
+#include "MyKey.h"
+#include "SceneManager.h"
 
 class Result : public Scene {
 public:
@@ -47,7 +48,6 @@ private:
 	void imNumberInit(void);//画像の数字に関する初期化　※使用する文字列の初期化より後に呼び出すこと
 	bool judgeUpdate();//判定数を順番に下方向に描画していくための関数
 	
-
 	//ゲームオーバー用
 	void failedUpdate(void);
 	void failedDraw(void);

@@ -59,6 +59,9 @@ void Result::start(void) {
 
 void Result::update(void) {
 	(this->*stateUpdate)();
+	if (MyKey::getReturnKey()) {//曲選択画面へ
+		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
+	}
 }
 
 void Result::draw(void) {
@@ -90,7 +93,7 @@ void Result::successDraw(void) {
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
 	judgeImNum->draw();
-	FontAsset(U"resultfont")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
+	FontAsset(U"resultfont")(U"～ 〇〇キーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//スコア計算 判定の数と重みを掛けた総和をスコアとする

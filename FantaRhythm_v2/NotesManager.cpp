@@ -246,7 +246,7 @@ void NotesManager::judgeCritical(int lane) {
 			return;
 		}
 		else if (press[lane] == 0 ||				//ボタンが途中で離されるか
-				 nowtime - prevTime[lane] > 50) {	//同時押しされてない場合の処理
+			nowtime - prevTime[lane] > 50) {	//同時押しされてない場合の処理
 			playNotesEffect(getProPos(lane, checkitr[lane]->time), typeHold[lane]);
 			JUDGE_CRITICAL_EVENT;//最初に押した時点のイベントを起こす
 			return;
