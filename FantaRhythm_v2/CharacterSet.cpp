@@ -50,7 +50,7 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	constexpr int HPHEIGHT = 30;
 	constexpr int HPX = 50;//HPÉQÅ[ÉWç∂è„ÇÃà íu
 	constexpr int HPY = 30;
-	hpGauge = new Gauge(HPX, HPY, HPWIDTH, HPHEIGHT, totalhp, Color(Palette::Red), Color(Palette::Green));
+	hpGauge = new Gauge(HPX, HPY, U"resources/images/items", totalhp, Color(Palette::Red), Color(Palette::Green));
 }
 
 CharacterSet::~CharacterSet() {

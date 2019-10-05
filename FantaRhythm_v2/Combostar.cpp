@@ -5,7 +5,7 @@ Combostar::Combostar(CharacterSubject* csubject, const CSVData& csv, double ix, 
 	comboClear();
 	combodamage = 0;
 	updamage = 0;
-	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, COMBOMAX, Color(Palette::Black), Color(Palette::Yellow));
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, U"resources/images/effects/combostar", COMBOMAX, Color(Palette::Black), Color(Palette::Yellow));
 	chargeGauge->update(combocount);
 }
 

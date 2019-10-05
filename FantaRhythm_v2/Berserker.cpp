@@ -7,7 +7,7 @@ Berserker::Berserker(CharacterSubject* csubject, const CSVData& csv, double ix, 
 	upcount = 0;
 	selfcount = 0;			//downattack‚Ì‰ñ”
 	mydamage = 4;			//‰ºƒ{ƒ^ƒ“UŒ‚‚ÅH‚ç‚¤damage—Ê
-	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, CHARGEMAX, Color(Palette::Black), Color(Palette::Darkred));
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, U"resources/images/effects/berserker", CHARGEMAX, Color(Palette::Black), Color(Palette::Darkred));
 	chargeGauge->update(selfcount);
 }
 

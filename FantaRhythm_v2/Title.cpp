@@ -9,11 +9,15 @@ Title::Title(void) {
 	FontAsset::Preload(U"font");
 	TextureAsset::Register(U"back", U"resources/images/back/start_back_image.jpg");
 	TextureAsset::Preload(U"back");
+	delete TitleAudio;
+	TitleAudio = new Audio(U"resources/musics/main/attacking ready!/attacking ready!.wav");
+	TitleAudio->play();
 }
 
 Title::~Title(void) {
 	FontAsset::Unregister(U"font");
 	TextureAsset::Unregister(U"back");
+	delete TitleAudio;
 }
 
 void Title::update(void) {

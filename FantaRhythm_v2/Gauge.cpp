@@ -1,12 +1,13 @@
 #include "Gauge.h"
-Gauge::Gauge(double x, double y, double w, double h, double maxRatio, Color backColor, Color frontColor):maxRatio(maxRatio) {
+Gauge::Gauge(double x, double y,const String& imGaugePath, double maxRatio, Color backColor, Color frontColor):maxRatio(maxRatio) {
+	imChaGauge = Texture( imGaugePath + U"/gauge.png");
 	this->x = x;
 	this->y = y;
-	this->w = w;
-	this->h = h;
+	this->w = imChaGauge.width();
+	this->h = imChaGauge.height();
 	this->backColor = backColor;
 	this->frontColor = frontColor;
-	currentW = w;
+	currentW = this->w;
 }
 Gauge::~Gauge(void) {
 
@@ -18,6 +19,7 @@ void Gauge::update(double ratio) {
 void Gauge::draw(void) {
 	Rect(x, y, w, h).draw(backColor);
 	Rect(x, y, currentW, h).draw(frontColor);
+	imChaGauge.draw(x,y);
 }
 void Gauge::draw(double y) {
 	Rect(x, y, w, h).draw(backColor);
