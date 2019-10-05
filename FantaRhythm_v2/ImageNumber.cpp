@@ -1,5 +1,6 @@
 #include "ImageNumber.h"
 
+Texture ImageNumber::imNumber[10];
 
 ImageNumber::ImageNumber(FilePath path, int w, int h) {//‰¡ˆê—ñ‚É•À‚ñ‚Å‚¢‚é‰æ‘œ
 	Image numberBase = Image(path);

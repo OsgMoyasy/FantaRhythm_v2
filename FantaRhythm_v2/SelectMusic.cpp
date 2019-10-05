@@ -8,13 +8,13 @@
 #define DEFAULT_ROTATION 30
 
 SelectMusic::SelectMusic(void)  {
-	TextureAsset::Register(U"back", U"resources/images/back/BackScreen.jpg");
-	TextureAsset::Preload(U"back");
-	TextureAsset::Register(U"title", U"resources/images/items/title.png");
-	TextureAsset::Preload(U"title");
+	TextureAsset::Register(U"selectmusicback", U"resources/images/back/BackScreen.jpg");
+	TextureAsset::Preload(U"selectmusicback");
+	TextureAsset::Register(U"selectmusictitle", U"resources/images/items/title.png");
+	TextureAsset::Preload(U"selectmusictitle");
 
-	FontAsset::Register(U"font", 30);
-	FontAsset::Preload(U"font");
+	FontAsset::Register(U"selectmusicfont", 30);
+	FontAsset::Preload(U"selectmusicfont");
 	musicrotation = difrotation = 0;
 	initMusic();
 	initDifficulty();
@@ -24,9 +24,9 @@ SelectMusic::SelectMusic(void)  {
 
 SelectMusic::~SelectMusic(void) {
 	delete audio;
-	TextureAsset::UnregisterAll();
-	FontAsset::Unregister(U"font");
-
+	FontAsset::Unregister(U"selectmusicfont");
+	TextureAsset::Unregister(U"selectmusicback");
+	TextureAsset::Unregister(U"selectmusictitle");
 }
 
 void SelectMusic::start(void) {
@@ -40,7 +40,7 @@ void SelectMusic::update(void) {
 
 void SelectMusic::draw(void) {
 	//”wŒi‰æ‘œ•`‰æ
-	TextureAsset(U"back").draw();
+	TextureAsset(U"selectmusicback").draw();
 	//Œ»Ý‚Ìó‘Ô‚É‡‚í‚¹‚½‘I‘ðŽˆ‚Ì•`‰æ
 	(this->*stateDraw)();
 }
@@ -165,8 +165,8 @@ void SelectMusic::drawMusic(void) {
 		int x = (int)(1800 + cos((angle)* Math::Pi / 180.0) * 1000);
 		int y = (int)((Window::Height() / 2) - sin((angle)* Math::Pi / 180.0) * 500);
 		//•`‰æ
-		TextureAsset(U"title").drawAt(x, y);
-		FontAsset(U"font")(FileSystem::BaseName(musicarray[(musiccursor - 2 + i + musiccount) % musiccount])).drawAt(x, y, Color(0, 0, 0));
+		TextureAsset(U"selectmusictitle").drawAt(x, y);
+		FontAsset(U"selectmusicfont")(FileSystem::BaseName(musicarray[(musiccursor - 2 + i + musiccount) % musiccount])).drawAt(x, y, Color(0, 0, 0));
 	}
 }
 void SelectMusic::drawDifficulty(void) {
@@ -177,8 +177,8 @@ void SelectMusic::drawDifficulty(void) {
 		int x = (int)(1800 + cos((angle)* Math::Pi / 180.0) * 1000);
 		int y = (int)((Window::Height() / 2) - sin((angle)* Math::Pi / 180.0) * 500);
 		//•`‰æ
-		TextureAsset(U"title").drawAt(x, y);
-		FontAsset(U"font")(FileSystem::BaseName(difarray[(difcursor - 2 + i + difcount) % difcount])).drawAt(x, y, Color(0, 0, 0));
+		TextureAsset(U"selectmusictitle").drawAt(x, y);
+		FontAsset(U"selectmusicfont")(FileSystem::BaseName(difarray[(difcursor - 2 + i + difcount) % difcount])).drawAt(x, y, Color(0, 0, 0));
 	}
 }
 

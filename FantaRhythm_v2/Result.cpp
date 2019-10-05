@@ -14,12 +14,12 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	alphaBack = 0;
 	alphaFont = 0;
 
-	FontAsset::Register(U"font", 50);
-	FontAsset::Preload(U"font");
+	FontAsset::Register(U"resultfont", 50);
+	FontAsset::Preload(U"resultfont");
 
 	if (!isClear) {//ゲームクリア
 		//テクスチャ初期化
-		TextureAsset::Register(U"back", U"resources/images/back/result.png");
+		TextureAsset::Register(U"resultback", U"resources/images/back/result.png");
 
 		//効果音初期化
 		se = new SE(U"resources/musics/effects/Congratulations.wav");
@@ -37,19 +37,19 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		imNumberInit();
 	}
 	else {//ゲームオーバー
-		TextureAsset::Register(U"back", U"resources/images/back/gameOver.jpg");
+		TextureAsset::Register(U"resultback", U"resources/images/back/gameOver.jpg");
 		//効果音初期化
 		se = new SE(U"resources/musics/effects/orehamou.mp3");
 		//ゲームオーバー用ポインタ割り当て
 		stateUpdate = &Result::failedUpdate;
 		stateDraw = &Result::failedDraw;
 	}
-	TextureAsset::Preload(U"back");//背景のロード
+	TextureAsset::Preload(U"resultback");//背景のロード
 }
 
 Result::~Result(void) {
-	FontAsset::Unregister(U"font");
-	TextureAsset::UnregisterAll();
+	TextureAsset::Unregister(U"resultback");
+	FontAsset::Unregister(U"resultfont");
 }
 
 void Result::start(void) {
@@ -86,11 +86,11 @@ void Result::successUpdate(void) {
 	}
 }
 void Result::successDraw(void) {
-	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
+	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2);
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
 	judgeImNum->draw();
-	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
+	FontAsset(U"resultfont")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//スコア計算 判定の数と重みを掛けた総和をスコアとする
@@ -135,8 +135,8 @@ void Result::failedUpdate(void) {
 }
 
 void Result::failedDraw(void) {
-	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//背景描画
-	FontAsset(U"font")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 100, AlphaF(alphaFont));
+	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//背景描画
+	FontAsset(U"resultfont")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 100, AlphaF(alphaFont));
 }
 
 

@@ -5,15 +5,14 @@
 #define TWOPI 6.28318
 
 Title::Title(void) {
-	FontAsset::Register(U"font", 50);
-	FontAsset::Preload(U"font");
-	TextureAsset::Register(U"back", U"resources/images/back/start_back_image.jpg");
-	TextureAsset::Preload(U"back");
+	FontAsset::Register(U"titlefont", 50);
+	FontAsset::Preload(U"titlefont");
+	TextureAsset::Register(U"titleback", U"resources/images/back/start_back_image.jpg");
+	TextureAsset::Preload(U"titleback");
 }
 
 Title::~Title(void) {
-	FontAsset::Unregister(U"font");
-	TextureAsset::Unregister(U"back");
+
 }
 
 void Title::start(void) {
@@ -31,11 +30,11 @@ void Title::update(void) {
 
 void Title::draw(void) {
 	//îwåiâÊëúï`âÊ
-	TextureAsset(U"back").draw();
+	TextureAsset(U"titleback").draw();
 
 	//ï∂éöóÒï`âÊ
-	FontAsset(U"font")(U"Å` Press Button To Start Å`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
-	FontAsset(U"font")(U"Å` Press Button To Start Å`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
+	FontAsset(U"titlefont")(U"Å` Press Button To Start Å`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
+	FontAsset(U"titlefont")(U"Å` Press Button To Start Å`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
 }
 
 void Title::changeAlpha(void) {

@@ -10,21 +10,37 @@ LoadEffect::~LoadEffect() {
 }
 bool LoadEffect::isUpdate() {
 	if (second >= stopwatch.sF()) {
-		calsAlpha();
+		if (prevScene != NULL) {
+			prevScene->update();
+		}
+		calcAlpha();
 		return true;
 	}
+	MyKey::setKeyLock(false);
 	alpha = 0;
 	return false;
 }
 void LoadEffect::draw() {
+	if (prevScene != NULL) {
+		prevScene->draw();
+	}
 	Rect(0, 0, Window::Width(), Window::Height()).draw(ColorF(0,0,0,alpha));
 }
 
-void LoadEffect::setTimer(int second) {
+void LoadEffect::setTimer(int second, Scene* prevScene) {
+	MyKey::setKeyLock(true);
 	this->second = second;
 	stopwatch.restart();
+	this->prevScene = prevScene;
 }
 
-void LoadEffect::calsAlpha() {
-	alpha = 1.0 - (double)stopwatch.sF() / second;
+void LoadEffect::calcAlpha() {
+	if (second / 2 >= stopwatch.sF()) {
+		alpha = (double)stopwatch.sF() / (second / 2);
+	}
+	else {
+		delete prevScene;
+		prevScene = NULL;
+		alpha = 1.0 - (double)(stopwatch.sF() - second / 2) / (second / 2);
+	}
 }

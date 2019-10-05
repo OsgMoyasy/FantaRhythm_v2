@@ -29,7 +29,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 }
 
 Character::~Character(void) {
-	TextureAsset::UnregisterAll();
+	TextureAsset::Unregister(name);
 }
 
 void Character::update(void) {

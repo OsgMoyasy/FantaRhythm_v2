@@ -41,23 +41,20 @@ void SceneManager::setNextScene(SCENE next) {
 void SceneManager::changeScene() {
 	switch (nextscene) {//nextsceneがNONE以外の時シーン移行する
 	case SCENE_TITLE:
-		delete scene;
+		loadeffect->setTimer(2, scene);
 		scene = new Title();
-		loadeffect->setTimer(2);
 		break;
 	case SCENE_SELECTMUSIC:
-		delete scene;
+		loadeffect->setTimer(2, scene);
 		scene = new SelectMusic();
-		loadeffect->setTimer(2);
 		break;
 	case SCENE_GAME:
 		if (nowscene == SCENE_SELECTMUSIC) {
+			loadeffect->setTimer(2, scene);
 			//曲のパスと難易度選択のパスを退避
 			String musicpath = ((SelectMusic*)scene)->getMusicPath();
 			String filepath = ((SelectMusic*)scene)->getDifPath();
-			delete scene;
 			scene = new Game(musicpath,filepath);
-			loadeffect->setTimer(2);
 		}
 		else {
 			nextscene = SCENE_NONE;
@@ -65,13 +62,12 @@ void SceneManager::changeScene() {
 		break;
 	case SCENE_RESULT:
 		if (nowscene == SCENE_GAME) {
+			loadeffect->setTimer(2, scene);
 			//判定のカウント数と敵への総ダメージ量を退避
 			int totalDamage = ((Game*)scene)->getTotalDamage();
 			bool isClear = ((Game*)scene)->getClearFlag();
 			JUDGE::JudgeCount jc = *((Game*)scene)->getJudgeCount();
-			delete scene;
 			scene = new Result(jc, totalDamage, isClear);
-			loadeffect->setTimer(2);
 		}
 		else {
 			nextscene = SCENE_NONE;

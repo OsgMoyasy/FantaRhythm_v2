@@ -9,7 +9,7 @@
 
 class ImageNumber {
 private:
-	Texture imNumber[10];
+	static Texture imNumber[10];
 	int imw, imh;
 
 	typedef struct _NumPoint {

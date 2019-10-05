@@ -109,7 +109,9 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	}
 }
 NotesManager::~NotesManager() {
-	TextureAsset::UnregisterAll();
+	TextureAsset::Unregister(U"note");
+	TextureAsset::Unregister(U"longnote");
+	TextureAsset::Unregister(U"cri");
 }
 
 
