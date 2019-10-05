@@ -16,6 +16,10 @@ Title::~Title(void) {
 	TextureAsset::Unregister(U"back");
 }
 
+void Title::start(void) {
+
+}
+
 void Title::update(void) {
 	if (MyKey::getDecisionKey()) {//‹È‘I‘ð‰æ–Ê‚Ö
 		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);

@@ -20,7 +20,6 @@ SelectMusic::SelectMusic(void)  {
 	initDifficulty();
 
 	changeState(MUSIC);//初期状態を曲選択へ
-	playMusic(musiccursor);//最初の曲プレビューを再生
 }
 
 SelectMusic::~SelectMusic(void) {
@@ -28,6 +27,22 @@ SelectMusic::~SelectMusic(void) {
 	TextureAsset::UnregisterAll();
 	FontAsset::Unregister(U"font");
 
+}
+
+void SelectMusic::start(void) {
+	playMusic(musiccursor);//最初の曲プレビューを再生
+}
+
+void SelectMusic::update(void) {
+	//状態に合わせた計算処理
+	(this->*stateUpdate)();
+}
+
+void SelectMusic::draw(void) {
+	//背景画像描画
+	TextureAsset(U"back").draw();
+	//現在の状態に合わせた選択肢の描画
+	(this->*stateDraw)();
 }
 
 void SelectMusic::changeState(SELECTSTATE nextstate) {
@@ -68,11 +83,6 @@ String SelectMusic::getDiffilepath(int cursor) {//難易度ファイルパス取得
 	return (musicarray[cursor] + U"/score/");
 }
 
-void SelectMusic::update(void) {
-	//状態に合わせた計算処理
-	(this->*stateUpdate)();
-}
-
 void SelectMusic::updateMusic(void) {
 	if (!musicrotation) {//移動処理が完了しているとき
 		musicmoveCursor();
@@ -106,13 +116,6 @@ void SelectMusic::rotatemusic(int& rotation) {
 	}else if (rotation > 0) {
 		rotation -= SPEED_ROTATION;//既定の位置にくるまで1フレームおきに角度をマイナス
 	}
-}
-
-void SelectMusic::draw(void) {
-	//背景画像描画
-	TextureAsset(U"back").draw();
-	//現在の状態に合わせた選択肢の描画
-	(this->*stateDraw)();
 }
 
 void SelectMusic::musicmoveCursor(void) {

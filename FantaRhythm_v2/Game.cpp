@@ -19,17 +19,17 @@ Game::Game(const String& music, const String& dif) {
 
 	FontAsset::Register(U"font", 30);
 	FontAsset::Preload(U"font");
-
-
-	MusicManager::playMusicGame(musicpath);
-
-	
+	MusicManager::setMusicGame(musicpath);
 }
 Game::~Game() {
 	delete notes;
 	TextureAsset::UnregisterAll();
 	FontAsset::Unregister(U"font");
-	MusicManager::stopMusicGame();
+	MusicManager::setEndMusic();
+}
+
+void Game::start() {
+	MusicManager::playMusic();
 }
 
 void Game::update() {
@@ -57,7 +57,7 @@ JUDGE::JudgeCount* Game::getJudgeCount(void) {
 }
 void Game::gameEndCheck(void) {
 	if (characterm->getCurrentHp() <= 0 && isClear == true) {
-		MusicManager::stopMusicGame();
+		MusicManager::setEndMusic();
 		isClear = false;
 		characterm->gameEndEffect();
 	}

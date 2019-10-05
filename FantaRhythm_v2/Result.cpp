@@ -11,20 +11,18 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	this->judgeCnt = judgeCnt;
 	this->totalDamage = totalDamage;
 	this->isClear = isClear;
-	stopwatch.start();
 	alphaBack = 0;
 	alphaFont = 0;
 
 	FontAsset::Register(U"font", 50);
 	FontAsset::Preload(U"font");
 
-	if (isClear) {//ゲームクリア
+	if (!isClear) {//ゲームクリア
 		//テクスチャ初期化
 		TextureAsset::Register(U"back", U"resources/images/back/result.png");
 
 		//効果音初期化
 		se = new SE(U"resources/musics/effects/Congratulations.wav");
-		se->play();
 
 		//クリア用ポインタ割り当て
 		stateUpdate = &Result::successUpdate;
@@ -40,19 +38,29 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	}
 	else {//ゲームオーバー
 		TextureAsset::Register(U"back", U"resources/images/back/gameOver.jpg");
+		//効果音初期化
+		se = new SE(U"resources/musics/effects/orehamou.mp3");
 		//ゲームオーバー用ポインタ割り当て
 		stateUpdate = &Result::failedUpdate;
 		stateDraw = &Result::failedDraw;
 	}
 	TextureAsset::Preload(U"back");//背景のロード
 }
+
 Result::~Result(void) {
 	FontAsset::Unregister(U"font");
 	TextureAsset::UnregisterAll();
 }
+
+void Result::start(void) {
+	stopwatch.start();
+	se->play();
+}
+
 void Result::update(void) {
 	(this->*stateUpdate)();
 }
+
 void Result::draw(void) {
 	(this->*stateDraw)();
 	

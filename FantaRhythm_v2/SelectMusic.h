@@ -9,6 +9,7 @@ class SelectMusic:public Scene{
 public:
 	SelectMusic(void);
 	~SelectMusic(void);	
+	void start(void);
 	void update(void);
 	void draw(void);
 

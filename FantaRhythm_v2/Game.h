@@ -10,6 +10,17 @@
 
 
 class Game : public Scene {
+public:
+	Game(const String& music, const String& dif);
+	~Game();
+	void start(void);
+	void update(void);
+	void draw(void);
+	bool getClearFlag(void);
+	int getTotalDamage(void);
+	JUDGE::JudgeCount* getJudgeCount(void);
+	void gameEndCheck(void);
+
 private:
 	String musicpath, difpath;
 	class NotesManager *notes;
@@ -18,15 +29,5 @@ private:
 	
 	bool isClear;
 
-public:
-	Game(const String& music, const String& dif);
-	~Game();
-
-	void update(void);
-	void draw(void);
-	bool getClearFlag(void);
-	int getTotalDamage(void);
-	JUDGE::JudgeCount* getJudgeCount(void);
-	void gameEndCheck(void);
 
 };
