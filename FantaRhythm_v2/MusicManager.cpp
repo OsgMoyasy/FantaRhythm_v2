@@ -12,6 +12,7 @@ void MusicManager::playMusicPrev(String path) {
 
 void MusicManager::setMusicGame(String path) {
 	delete audio;
+	stopwatch.reset();
 	audio = new Audio(path+ U"/game.wav");
 }
 

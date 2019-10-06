@@ -50,7 +50,8 @@ NumWithEffect::NumWithEffect(FilePath path, String numStr, int fixedAtTime, int 
 	maxMs = switchMs * 9 * 1000;
 }
 NumWithEffect::~NumWithEffect(void) {
-
+	delete imnumber;
+	delete numEffect;
 }
 bool NumWithEffect::update(double msF) {
 	if (currentWord < 0) {//数字エフェクトの描画が終わったら

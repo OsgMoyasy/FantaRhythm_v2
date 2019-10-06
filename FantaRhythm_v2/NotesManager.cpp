@@ -40,6 +40,9 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	effect.set(JUDGE::GOOD, U"resources/images/effect/nortsEffect.png", 100, 100);
 	effect.set(JUDGE::GREAT, U"resources/images/effect/nortsEffect2.png", 100, 100);
 
+	//ジャッジエフェクト初期化
+	judgeEffect = new JudgeEffect(U"resources/images/items/judgeeffect/");
+
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
 
@@ -107,11 +110,13 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		down[i] = 0;
 		press[i] = 0;
 	}
+
 }
 NotesManager::~NotesManager() {
 	TextureAsset::Unregister(U"note");
 	TextureAsset::Unregister(U"longnote");
 	TextureAsset::Unregister(U"cri");
+	delete judgeEffect;
 }
 
 
@@ -120,6 +125,7 @@ void NotesManager::update(void)
 	nowtime = (int)(MusicManager::getMusicTime());
 	checkAttack();
 	controlJudge();
+	judgeEffect->update();
 }
 
 
@@ -209,6 +215,9 @@ void NotesManager::judgeLong(int lane) {
 		else {//離した
 			JUDGE::TYPE type = NoteisHit(checkitr[lane]->judgetime);
 			playNotesEffect(getProPos(lane, checkitr[lane]->longtime), type);
+			if (type == JUDGE::TYPE::NONE) {//早すぎたときnoneになるのでbad格納
+				type = JUDGE::TYPE::BAD;
+			}
 			return judgeLongEvent(type, lane);
 		}
 	}
@@ -273,6 +282,7 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 		noteNext(lane);
 	}
 	judgecount.cnt[type]++;//判定をカウントアップ
+	judgeEffect->setEffect(type);//判定エフェクトセット
 	if(type == JUDGE::BAD){
 		setEvent(Massage::DAMAGE, lane);
 	}
@@ -291,6 +301,7 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType) {
 	noteNext(lane);
 	judgecount.cnt[type]++;//判定をカウントアップ
+	judgeEffect->setEffect(type);//判定エフェクトセット
 	if (type == JUDGE::BAD) {//BADイベント送信
 		setEvent(Massage::CRITICALDAMAGE, lane);
 	}
@@ -353,6 +364,7 @@ void NotesManager::draw(void){
 		}	
 	}
 	effect.draw();//再生中の全てのエフェクトを描画
+	judgeEffect->draw();//判定エフェクト描画
 }
 
 

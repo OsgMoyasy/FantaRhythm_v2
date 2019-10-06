@@ -207,6 +207,7 @@
     <ClCompile Include="GameEffect.cpp" />
     <ClCompile Include="Gauge.cpp" />
     <ClCompile Include="ImageNumber.cpp" />
+    <ClCompile Include="JudgeEffect.cpp" />
     <ClCompile Include="LoadEffect.cpp" />
     <ClCompile Include="MyKey.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -297,6 +298,7 @@
     <ClInclude Include="ImageNumber.h" />
     <ClInclude Include="Jobs.h" />
     <ClInclude Include="Judge.h" />
+    <ClInclude Include="JudgeEffect.h" />
     <ClInclude Include="LoadEffect.h" />
     <ClInclude Include="MyKey.h" />
     <ClInclude Include="MusicManager.h" />

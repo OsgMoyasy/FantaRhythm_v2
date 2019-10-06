@@ -8,6 +8,7 @@
 #include "GameEffect.h"
 #include "MusicManager.h"
 #include "MyKey.h"
+#include "JudgeEffect.h"
 
 class NotesManager {
 private:
@@ -16,6 +17,7 @@ private:
 	struct Notes;
 
 	class NotesSubject* notessubject;
+	class JudgeEffect* judgeEffect;
 	
 	std::list<Notes> notelist[LANESIZE];
 	using noteitr = std::list<Notes>::iterator;

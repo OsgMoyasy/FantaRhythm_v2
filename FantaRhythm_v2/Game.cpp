@@ -23,6 +23,8 @@ Game::Game(const String& music, const String& dif) {
 }
 Game::~Game() {
 	delete notes;
+	delete characterm;
+	delete notessubject;
 	TextureAsset::Unregister(U"gameback");
 	FontAsset::Unregister(U"gamefont");
 	MusicManager::setEndMusic();

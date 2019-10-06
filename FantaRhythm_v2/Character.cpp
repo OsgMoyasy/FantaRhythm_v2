@@ -30,6 +30,9 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 
 Character::~Character(void) {
 	TextureAsset::Unregister(name);
+	for (int i = 0; i < EffectType::SIZE; i++) {
+		delete flipeffect[i];
+	}
 }
 
 void Character::update(void) {

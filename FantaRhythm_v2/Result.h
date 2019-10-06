@@ -26,7 +26,7 @@ private:
 	int totalDamage;
 	JUDGE::JudgeCount judgeCnt;
 	bool isClear;
-
+	bool isEffectEnd;
 	
 	double alphaBack;
 	double alphaFont;
@@ -40,6 +40,8 @@ private:
 
 	String scoreStr;//スコアを文字列変換
 	String damageStr;//ダメージを文字列変換
+	int judgeDrawRow;//判定数描画の現在の対象
+	double judgePrevTime;
 
 	void successUpdate(void);
 	void successDraw(void);
