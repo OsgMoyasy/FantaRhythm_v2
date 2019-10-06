@@ -353,6 +353,8 @@ void NotesManager::draw(void){
 	for (int i = 0; i < 4; i++) {
 		Print << judgecount.cnt[i];
 	}
+	Print << U"NotesCombo=" << combo.get();
+
 	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//”»’èü‚Ì•`‰æ
 
 	for(int i = 0; i < LANESIZE; i++){
