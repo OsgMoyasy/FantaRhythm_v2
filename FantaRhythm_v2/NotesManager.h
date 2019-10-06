@@ -22,6 +22,15 @@ private:
 	noteitr displayitr[LANESIZE];	//表示すべきイテレータ保持
 
 	JUDGE::JudgeCount judgecount;
+	class Combo {
+	public:
+		Combo();
+		void add(int val = 1);
+		void reset();
+		int get();
+	private:
+		int count;//現在コンボ数
+	} combo;
 
 	int nowtime;	//現在時間[ms]
 

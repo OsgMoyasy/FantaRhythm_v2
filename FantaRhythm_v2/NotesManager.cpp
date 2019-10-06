@@ -299,9 +299,11 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 	}
 	judgecount.cnt[type]++;//判定をカウントアップ
 	if(type == JUDGE::BAD){
+		combo.reset();
 		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
+		combo.add();
 		switch (down[lane]) {
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
@@ -469,3 +471,15 @@ void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->notifyObservers();//イベント起動
 }
 
+NotesManager::Combo::Combo() {
+	count = 0;
+}
+void NotesManager::Combo::add(int val) {
+	count += val;
+}
+void NotesManager::Combo::reset() {
+	count = 0;
+}
+int NotesManager::Combo::get() {
+	return count;
+}
