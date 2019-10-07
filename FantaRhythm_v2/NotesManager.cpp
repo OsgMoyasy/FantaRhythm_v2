@@ -37,8 +37,11 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"cri", U"resources/images/items/Nort2.png");
 	TextureAsset::Preload(U"cri");
 
-	effect.set(JUDGE::GOOD, U"resources/images/effect/nortsEffect.png", 100, 100);
-	effect.set(JUDGE::GREAT, U"resources/images/effect/nortsEffect2.png", 100, 100);
+	TextureAsset::Register(U"judgeline", U"resources/images/items/judgeline.png");
+	TextureAsset::Preload(U"judgeline");
+
+	effect.set(JUDGE::GOOD, U"resources/images/effects/nortsEffect.png", 100, 100);
+	effect.set(JUDGE::GREAT, U"resources/images/effects/nortsEffect2.png", 100, 100);
 
 	//ƒWƒƒƒbƒWƒGƒtƒFƒNƒg‰Šú‰»
 	judgeEffect = new JudgeEffect(U"resources/images/items/judgeeffect/");
@@ -116,6 +119,7 @@ NotesManager::~NotesManager() {
 	TextureAsset::Unregister(U"note");
 	TextureAsset::Unregister(U"longnote");
 	TextureAsset::Unregister(U"cri");
+	TextureAsset::Unregister(U"judgeline");
 	delete judgeEffect;
 }
 
@@ -338,10 +342,11 @@ void NotesManager::draw(void){
 	for (int i = 0; i < 4; i++) {
 		Print << judgecount.cnt[i];
 	}
-	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//”»’èü‚Ì•`‰æ
+	TextureAsset(U"judgeline").drawAt(Window::Width() / 2, laneJudgeY);
+	//Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//”»’èü‚Ì•`‰æ
 
 	for(int i = 0; i < LANESIZE; i++){
-		Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//ƒŒ[ƒ“‚Ì•`‰æ
+		//Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//ƒŒ[ƒ“‚Ì•`‰æ
 		for (noteitr itr = displayitr[i]; itr != notelist[i].end(); itr++) {
 			if (nowtime < itr->time - timeRequired)//•`‰æ‘O‚È‚ç•`‰æ‘Å‚¿Ø‚è
 				break;

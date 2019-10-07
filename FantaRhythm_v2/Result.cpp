@@ -19,7 +19,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	FontAsset::Register(U"resultfont", 50);
 	FontAsset::Preload(U"resultfont");
 
-	if (!isClear) {//ゲームクリア
+	if (isClear) {//ゲームクリア
 		//テクスチャ初期化
 		TextureAsset::Register(U"resultback", U"resources/images/back/result.png");
 
