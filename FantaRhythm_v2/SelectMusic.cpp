@@ -18,7 +18,6 @@ SelectMusic::SelectMusic(void)  {
 	musicrotation = difrotation = 0;
 	initMusic();
 	initDifficulty();
-
 	changeState(MUSIC);//初期状態を曲選択へ
 }
 
@@ -167,9 +166,14 @@ void SelectMusic::drawMusic(void) {
 		//描画
 		TextureAsset(U"selectmusictitle").drawAt(x, y);
 		FontAsset(U"selectmusicfont")(FileSystem::BaseName(musicarray[(musiccursor - 2 + i + musiccount) % musiccount])).drawAt(x, y, Color(0, 0, 0));
+		
+		s3d::Array<FilePath> dif;
+		int difcnt;
+		setArray(dif, getDiffilepath((musiccursor - 2 + i + musiccount) % musiccount), difcnt);
+		
 		Rect(x - 230, y - 30, 20, 10).draw(Palette::Green);			//難易度の付け
 		Rect(x - 230, y - 20, 20, 10).draw(Palette::Orange);
-		if (difcount == 3) {
+		if (difcnt == 3) {
 			Rect(x - 230, y - 10, 20, 10).draw(Palette::Red);
 		}
 	}

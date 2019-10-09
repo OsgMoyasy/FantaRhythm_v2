@@ -23,7 +23,7 @@ Title::~Title(void) {
 }
 
 void Title::update(void) {
-	if (MyKey::getDecisionKey()) {//‹È‘I‘ð‰æ–Ê‚Ö
+	if (MyKey::getDecisionKey()) {
 		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
 	}
 	else {
@@ -32,12 +32,12 @@ void Title::update(void) {
 }
 
 void Title::draw(void) {
-	//”wŒi‰æ‘œ•`‰æ
+	
 	TextureAsset(U"titleback").draw();
 
-	//•¶Žš—ñ•`‰æ
-	FontAsset(U"titlefont")(U"` Press Button To Start `").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
-	FontAsset(U"titlefont")(U"` Press Button To Start `").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
+	
+	FontAsset(U"titlefont")(U"�`Press Button To Start�`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
+	FontAsset(U"titlefont")(U"�`Press Button To Start�`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
 }
 
 void Title::changeAlpha(void) {
