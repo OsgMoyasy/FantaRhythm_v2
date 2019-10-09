@@ -7,7 +7,7 @@ constexpr int RECOVERYMAX = 15;
 
 Sage::Sage(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"sage", csv, ix, iy, row) {
 	recoveryClear();
-	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, RECOVERYMAX, Color(Palette::Black), Color(Palette::Burlywood));
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, U"resources/images/effects/sage", RECOVERYMAX, Color(Palette::Black), Color(Palette::Burlywood));
 	chargeGauge->update(recoverycount);
 }
 

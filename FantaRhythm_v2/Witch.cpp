@@ -7,7 +7,7 @@ constexpr int CHARGEMAX = 10;
 Witch::Witch(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) : Character(csubject, U"witch", csv, ix, iy, row) {
 	chargeClear();
 	chargedamage = 0;
-	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, getW(), 20, CHARGEMAX, Color(Palette::Black), Color(Palette::Orangered));
+	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, U"resources/images/effects/witch", CHARGEMAX, Color(Palette::Black), Color(Palette::Orangered));
 	chargeGauge->update(chargeCount);
 }
 

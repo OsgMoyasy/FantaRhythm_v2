@@ -164,6 +164,11 @@ void SelectMusic::drawMusic(void) {
 		//•`‰æ
 		TextureAsset(U"title").drawAt(x, y);
 		FontAsset(U"font")(FileSystem::BaseName(musicarray[(musiccursor - 2 + i + musiccount) % musiccount])).drawAt(x, y, Color(0, 0, 0));
+		Rect(x - 230, y - 30, 20, 10).draw(Palette::Green);			//“ïˆÕ“x‚Ì•t‚¯
+		Rect(x - 230, y - 20, 20, 10).draw(Palette::Orange);
+		if (difcount == 3) {
+			Rect(x - 230, y - 10, 20, 10).draw(Palette::Red);
+		}
 	}
 }
 void SelectMusic::drawDifficulty(void) {
