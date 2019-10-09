@@ -7,6 +7,8 @@
 #include "Judge.h"
 #include "GameEffect.h"
 #include "MusicManager.h"
+#include "MyKey.h"
+#include "JudgeEffect.h"
 
 class NotesManager {
 private:
@@ -15,6 +17,7 @@ private:
 	struct Notes;
 
 	class NotesSubject* notessubject;
+	class JudgeEffect* judgeEffect;
 	
 	std::list<Notes> notelist[LANESIZE];
 	using noteitr = std::list<Notes>::iterator;
@@ -79,6 +82,7 @@ private:
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
+	Color longLineColor(int linex, int lane, int time);
 	void displayCritical(int lane, int time);			//敵の攻撃ノーツを表示
 	void playNotesEffect(ProPos pos, JUDGE::TYPE type);	//ノーツ破壊時のエフェクト再生
 

@@ -10,10 +10,10 @@ void MusicManager::playMusicPrev(String path) {
 	audio->play();
 }
 
-void MusicManager::playMusicGame(String path) {
+void MusicManager::setMusicGame(String path) {
 	delete audio;
+	stopwatch.reset();
 	audio = new Audio(path+ U"/game.wav");
-	audio->play();
 }
 
 double MusicManager::getMusicTime() {
@@ -37,6 +37,14 @@ bool MusicManager::musicEndCheck() {
 	return false;
 }
 
-void MusicManager::stopMusicGame() {
+void MusicManager::pauseMusic() {
+	audio->pause();
+}
+
+void MusicManager::playMusic() {
+	audio->play();
+}
+
+void MusicManager::setEndMusic() {
 	audio->setPosSec(audio->lengthSec());
 }

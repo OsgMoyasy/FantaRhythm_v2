@@ -2,20 +2,23 @@
 
 
 
-Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(100){
+Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(1100){
 	TextureAsset::Register(U"enemy", path + U"/enemy.png");
 	TextureAsset::Preload(U"enemy");
 
-	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effect/magic.png", 200, 200, initx, inity);
-	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effect/magic.png", 200, 200, initx, inity);
-	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effect/magic.png", 200, 200, initx, inity);
+	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
+	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
+	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
 	x = initx;
 	y = inity;
 	framecnt = 0;
 	totalDamage = 0;
 }
 Enemy::~Enemy(){
-	TextureAsset::UnregisterAll();
+	TextureAsset::Unregister(U"enemy");
+	for (int i = 0; i < EffectType::SIZE; i++) {
+		delete flipeffect[i];
+	}
 }
 void Enemy::update() {
 	moveUpDown();

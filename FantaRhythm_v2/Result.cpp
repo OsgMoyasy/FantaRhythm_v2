@@ -11,20 +11,20 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	this->judgeCnt = judgeCnt;
 	this->totalDamage = totalDamage;
 	this->isClear = isClear;
-	stopwatch.start();
+
 	alphaBack = 0;
 	alphaFont = 0;
+	isEffectEnd = false;
 
-	FontAsset::Register(U"font", 50);
-	FontAsset::Preload(U"font");
+	FontAsset::Register(U"resultfont", 50);
+	FontAsset::Preload(U"resultfont");
 
 	if (isClear) {//ƒQ[ƒ€ƒNƒŠƒA
 		//ƒeƒNƒXƒ`ƒƒ‰Šú‰»
-		TextureAsset::Register(U"back", U"resources/images/back/result.png");
+		TextureAsset::Register(U"resultback", U"resources/images/back/result.png");
 
 		//Œø‰Ê‰¹‰Šú‰»
 		se = new SE(U"resources/musics/effects/Congratulations.wav");
-		se->play();
 
 		//ƒNƒŠƒA—pƒ|ƒCƒ“ƒ^Š„‚è“–‚Ä
 		stateUpdate = &Result::successUpdate;
@@ -36,23 +36,47 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		damageStr = Format(totalDamage);
 
 		//•¶š—ñ‚ğ‰æ‘œ•ÏŠ·
-		imNumberInit();
+		scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
+		damageNumEffect = new NumWithEffect(numberImPath, damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
+		judgeImNum = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
+
+		judgeDrawRow = 0;
+		judgePrevTime = 0;
 	}
 	else {//ƒQ[ƒ€ƒI[ƒo[
-		TextureAsset::Register(U"back", U"resources/images/back/gameOver.jpg");
+		TextureAsset::Register(U"resultback", U"resources/images/back/gameOver.jpg");
+		//Œø‰Ê‰¹‰Šú‰»
+		se = new SE(U"resources/musics/effects/orehamou.mp3");
 		//ƒQ[ƒ€ƒI[ƒo[—pƒ|ƒCƒ“ƒ^Š„‚è“–‚Ä
 		stateUpdate = &Result::failedUpdate;
 		stateDraw = &Result::failedDraw;
 	}
-	TextureAsset::Preload(U"back");//”wŒi‚Ìƒ[ƒh
+	TextureAsset::Preload(U"resultback");//”wŒi‚Ìƒ[ƒh
+	
 }
+
 Result::~Result(void) {
-	FontAsset::Unregister(U"font");
-	TextureAsset::UnregisterAll();
+	TextureAsset::Unregister(U"resultback");
+	FontAsset::Unregister(U"resultfont");
+	delete se;
+	delete scoreNumEffect;
+	delete damageNumEffect;
+	delete judgeImNum;
 }
+
+void Result::start(void) {
+	MyKey::setKeyLock(true);
+	stopwatch.start();
+	se->play();
+}
+
 void Result::update(void) {
 	(this->*stateUpdate)();
+	if (MyKey::getReturnKey()) {
+		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
+	}
 }
+
 void Result::draw(void) {
 	(this->*stateDraw)();
 	
@@ -66,23 +90,29 @@ void Result::changeFontAlpha(void) {
 
 //ƒQ[ƒ€ƒNƒŠƒA—p
 void Result::successUpdate(void) {
+	
 	double msF = stopwatch.msF();
 	//‡”Ô‚ÉŠÔ‚³‚Å•`‰æ‚·‚éˆ×‚É•`‰æI—¹‚µ‚Ä‚¢‚é‚È‚ç‚ÎŸ‚Éi‚Ş
 	if (scoreNumEffect->update(msF) == false) {
 		if (damageNumEffect->update(msF) == false) {
 			if (judgeUpdate() == false) {
 				//‘S‚Ä‚Ì•`‰æ‚ªI—¹
+				if (!isEffectEnd) {
+					MyKey::setKeyLock(false);
+					isEffectEnd = true;
+				}
 				changeFontAlpha();//Esc‚ÅI—¹‚ÌƒƒbƒZ[ƒW•\¦ŠJn
+				
 			}
 		}
 	}
 }
 void Result::successDraw(void) {
-	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2);
+	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2);
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
 	judgeImNum->draw();
-	FontAsset(U"font")(U"` EscƒL[‚ÅI—¹ `").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
+	FontAsset(U"resultfont")(U"` ZZƒL[‚Åƒ^ƒCƒgƒ‹‚Ö `").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//ƒXƒRƒAŒvZ ”»’è‚Ì”‚Æd‚İ‚ğŠ|‚¯‚½‘˜a‚ğƒXƒRƒA‚Æ‚·‚é
@@ -94,22 +124,14 @@ int Result::calcScore(JUDGE::JudgeCount& jc) {//ƒXƒRƒAŒvZ ”»’è‚Ì”‚Æd‚İ‚ğŠ|‚¯‚
 	return score;
 }
 
-void Result::imNumberInit() {
-	scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
-	damageNumEffect = new NumWithEffect(numberImPath, damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
-	judgeImNum = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
-}
-
 bool Result::judgeUpdate() {
-	static int row = 0;//1 = damage 2 = parfectEEE
-	static double prevtime = stopwatch.msF();
-	if (row >= JUDGE::TYPE_SIZE) {//‘S‚Ä’Ç‰Á‚µI‚í‚Á‚½‚ç
+	if (judgeDrawRow >= JUDGE::TYPE_SIZE) {//‘S‚Ä’Ç‰Á‚µI‚í‚Á‚½‚ç
 		return false;
 	}
-	if (stopwatch.msF() - prevtime >= NUM_MAXTIME ) {//’Ç‰Á‚³‚¹‚éŠÔ‚ª—ˆ‚½‚ç”š‚ğ’Ç‰Á‚µ‰º•ûŒü‚Ö
-		judgeImNum->addMulti(judgeCnt.cnt[row], SCOREX, SCOREY + NUMIM_HEIGHT * (row + 2));
-		prevtime = stopwatch.msF();
-		row++;
+	if (stopwatch.msF() - judgePrevTime >= NUM_MAXTIME ) {//’Ç‰Á‚³‚¹‚éŠÔ‚ª—ˆ‚½‚ç”š‚ğ’Ç‰Á‚µ‰º•ûŒü‚Ö
+		judgeImNum->addMulti(judgeCnt.cnt[judgeDrawRow], SCOREX, SCOREY + NUMIM_HEIGHT * (judgeDrawRow + 2));
+		judgePrevTime = stopwatch.msF();
+		judgeDrawRow++;
 	}
 	return true;
 }
@@ -119,16 +141,21 @@ void Result::failedUpdate(void) {
 	constexpr int alphaBackMaxMs = 3000;//”wŒi‰æ‘œ‚ÌƒAƒ‹ƒtƒ@’l‚ªŒ³‚É–ß‚é‚Ü‚Å‚ÌŠÔ
 	//”wŒi‚â•¶š‚ğŠÔŒo‰ß‚Å•\¦‚³‚¹‚é‚½‚ß‚Ìˆ—
 	if (stopwatch.ms() <= alphaBackMaxMs) {
+		MyKey::setKeyLock(true);
 		alphaBack = (double)stopwatch.ms() / alphaBackMaxMs;
 	}
 	else {
+		if (!isEffectEnd) {
+			MyKey::setKeyLock(false);
+			isEffectEnd = true;
+		}
 		changeFontAlpha();
 	}
 }
 
 void Result::failedDraw(void) {
-	TextureAsset(U"back").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//”wŒi•`‰æ
-	FontAsset(U"font")(U"` EscƒL[‚ÅI—¹ `").drawAt(Window::Width() / 2, Window::Height() - 100, AlphaF(alphaFont));
+	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//”wŒi•`‰æ
+	FontAsset(U"resultfont")(U"` EscƒL[‚ÅI—¹ `").drawAt(Window::Width() / 2, Window::Height() - 100, AlphaF(alphaFont));
 }
 
 

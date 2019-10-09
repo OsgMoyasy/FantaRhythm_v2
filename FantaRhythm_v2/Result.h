@@ -4,12 +4,14 @@
 #include "ImageNumber.h"
 #include "GameEffect.h"
 #include <Siv3D.hpp>
-
+#include "MyKey.h"
+#include "SceneManager.h"
 
 class Result : public Scene {
 public:
 	Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear);
 	~Result(void);
+	void start(void);
 	void update(void);
 	void draw(void);
 
@@ -24,7 +26,7 @@ private:
 	int totalDamage;
 	JUDGE::JudgeCount judgeCnt;
 	bool isClear;
-
+	bool isEffectEnd;
 	
 	double alphaBack;
 	double alphaFont;
@@ -38,6 +40,8 @@ private:
 
 	String scoreStr;//スコアを文字列変換
 	String damageStr;//ダメージを文字列変換
+	int judgeDrawRow;//判定数描画の現在の対象
+	double judgePrevTime;
 
 	void successUpdate(void);
 	void successDraw(void);
@@ -46,7 +50,6 @@ private:
 	void imNumberInit(void);//画像の数字に関する初期化　※使用する文字列の初期化より後に呼び出すこと
 	bool judgeUpdate();//判定数を順番に下方向に描画していくための関数
 	
-
 	//ゲームオーバー用
 	void failedUpdate(void);
 	void failedDraw(void);

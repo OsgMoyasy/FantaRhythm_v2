@@ -13,7 +13,7 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	CSVData csv;
 	csv.load(U"resources/testcharadata.csv");
 	for (int lane = 0; lane < CHANUMBER; lane++) {
-		int initx = 900 + lane * 90, inity = 250 + lane * 80;//初期座標の設定後で見直す
+		int initx = 70 + lane * 90, inity = 250 + lane * 80;//初期座標の設定後で見直す
 		
 		switch (csv.get<int>(save[lane], 1)) {//キャラ番号の行のジョブを取得
 		case JOB::SOLDIER:
@@ -48,15 +48,18 @@ CharacterSet::CharacterSet(int save[], const String& musicpath) {
 	//HPゲージの作成
 	constexpr int HPWIDTH = 400;
 	constexpr int HPHEIGHT = 30;
-	constexpr int HPX = 800;//HPゲージ左上の位置
+	constexpr int HPX = 50;//HPゲージ左上の位置
 	constexpr int HPY = 30;
-	hpGauge = new Gauge(HPX, HPY, HPWIDTH, HPHEIGHT, totalhp, Color(Palette::Red), Color(Palette::Green));
+	hpGauge = new Gauge(HPX, HPY, U"resources/images/items", totalhp, Color(Palette::Red), Color(Palette::Green));
 }
 
 CharacterSet::~CharacterSet() {
 	for (int i = 0; i < CHANUMBER; i++) {
 		delete cha[i];
 	}
+	delete enemy;
+	delete hpGauge;
+	delete csubject;
 }
 
 void CharacterSet::update() {

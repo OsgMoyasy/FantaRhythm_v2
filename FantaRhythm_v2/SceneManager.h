@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Result.h"
 #include "Judge.h"
+#include "LoadEffect.h"
 
 class SceneManager {
 public:
@@ -27,5 +28,7 @@ private:
 	static Scene *scene;
 	static SCENE nowscene;
 	static SCENE nextscene;//シーン移行時にはNONE以外が入る
+	static LoadEffect *loadeffect;
+	static bool isLoadFinished;
 	static void changeScene();//シーン移行
 };
