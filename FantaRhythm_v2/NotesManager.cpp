@@ -290,9 +290,11 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 	judgecount.cnt[type]++;//判定をカウントアップ
 	judgeEffect->setEffect(type);//判定エフェクトセット
 	if(type == JUDGE::BAD){
+		combo.reset();
 		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
+		combo.add();
 		switch (down[lane]) {//成功イベント送信
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
@@ -344,8 +346,10 @@ void NotesManager::draw(void){
 	for (int i = 0; i < 4; i++) {
 		Print << judgecount.cnt[i];
 	}
+	Print << U"NotesCombo=" << combo.get();
+
 	TextureAsset(U"judgeline").drawAt(Window::Width() / 2, laneJudgeY);
-	//Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//判定線の描画
+	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//�����̕`��
 
 	for(int i = 0; i < LANESIZE; i++){
 		//Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//レーンの描画
@@ -479,3 +483,15 @@ void NotesManager::setEvent(Massage msg, int val) {
 	notessubject->notifyObservers();//イベント起動
 }
 
+NotesManager::Combo::Combo() {
+	count = 0;
+}
+void NotesManager::Combo::add(int val) {
+	count += val;
+}
+void NotesManager::Combo::reset() {
+	count = 0;
+}
+int NotesManager::Combo::get() {
+	return count;
+}
