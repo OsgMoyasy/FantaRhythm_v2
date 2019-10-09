@@ -9,10 +9,10 @@ enum class NotesManager::NOTESTYPE {
 };
 
 namespace JUDGE_RANGE{
-	constexpr int BAD = 200;//”»’è‚ÌÅ‘å”ÍˆÍ[ms]€2
-	constexpr int GOOD = 100;//GOOD”»’è”ÍˆÍ[ms]€2
-	constexpr int GREAT = 25;//GREAT”»’è”ÍˆÍ[ms]€2
-	constexpr int PERFECT = 5;//PERFECT”»’è”ÍˆÍ[ms]€2
+	constexpr int BAD = 200;//åˆ¤å®šã®æœ€å¤§ç¯„å›²[ms]Ã·2
+	constexpr int GOOD = 100;//GOODåˆ¤å®šç¯„å›²[ms]Ã·2
+	constexpr int GREAT = 25;//GREATåˆ¤å®šç¯„å›²[ms]Ã·2
+	constexpr int PERFECT = 5;//PERFECTåˆ¤å®šç¯„å›²[ms]Ã·2
 }
 
 struct NotesManager::Notes {
@@ -37,21 +37,23 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	TextureAsset::Register(U"cri", U"resources/images/items/Nort2.png");
 	TextureAsset::Preload(U"cri");
 
+  
 	TextureAsset::Register(U"judgeline", U"resources/images/items/judgeline.png");
 	TextureAsset::Preload(U"judgeline");
 
 	effect.set(JUDGE::GOOD, U"resources/images/effects/nortsEffect.png", 100, 100);
 	effect.set(JUDGE::GREAT, U"resources/images/effects/nortsEffect2.png", 100, 100);
 
-	//ƒWƒƒƒbƒWƒGƒtƒFƒNƒg‰Šú‰»
+	//ã‚¸ãƒ£ãƒƒã‚¸ã‚¨ãƒ•ã‚§ã‚¯ãƒˆåˆæœŸåŒ–
 	judgeEffect = new JudgeEffect(U"resources/images/items/judgeeffect/");
 
-	CSVData csv;//•ˆ–Ê‚Ìæ“¾@‘½ŸŒ³”z—ñ‚ÅŠÇ— 0 ”»’èŠÔ(ms) 1 ’·‚³H 2 —¬‚·ƒŒ[ƒ“[0-3]
+
+	CSVData csv;//è­œé¢ã®å–å¾—ã€€å¤šæ¬¡å…ƒé…åˆ—ã§ç®¡ç† 0 åˆ¤å®šæ™‚é–“(ms) 1 é•·ã•ï¼Ÿ 2 æµã™ãƒ¬ãƒ¼ãƒ³[0-3]
 	Print << difpath;
 
-	notessubject = sub;//ƒTƒuƒWƒFƒNƒg‚Ì“o˜^
+	notessubject = sub;//ã‚µãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç™»éŒ²
 
-	csv.load(difpath);//•ˆ–Ê‚Ìƒ[ƒh
+	csv.load(difpath);//è­œé¢ã®ãƒ­ãƒ¼ãƒ‰
 	NotesManager::Notes note;
 	for (int row = 0; row < csv.rows(); row++) {
 		note.time = csv.get<int>(row, 0);
@@ -74,7 +76,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		note.display = true;
 		notelist[lane].push_back(note);
 	}
-	note.type = NOTESTYPE::SENTINEL;//”Ô•º‚Ì’Ç‰Á
+	note.type = NOTESTYPE::SENTINEL;//ç•ªå…µã®è¿½åŠ 
 	note.time = 0;
 	note.longtime = 0;
 	note.display = false;
@@ -82,29 +84,29 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	for (int i = 0; i < JUDGE::TYPE::TYPE_SIZE; i++) {
 		judgecount.cnt[i] = 0;
 	}
-	for (int lane = 0; lane < LANESIZE; lane++) {//ƒŒ[ƒ“‚²‚Æ‚É“’…ŠÔ‚ğŠi”[
-		notelist[lane].push_back(note);//”Ô•º‚Ìİ’u
-		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//ƒ`ƒFƒbƒN—p‚ÌƒCƒeƒŒ[ƒ^‰Šú
+	for (int lane = 0; lane < LANESIZE; lane++) {//ãƒ¬ãƒ¼ãƒ³ã”ã¨ã«åˆ°ç€æ™‚é–“ã‚’æ ¼ç´
+		notelist[lane].push_back(note);//ç•ªå…µã®è¨­ç½®
+		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//ãƒã‚§ãƒƒã‚¯ç”¨ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿åˆæœŸ
 		pressedkey[lane] = 0;
 	}
 
-	//•`‰æŠÖŒW‚Ì•Ï”‚Ì‰Šú‰»
-	//XÀ•W
-	int Center = Window::Width() / 2;//ƒŒ[ƒ“ŒQ‚Ì’†S
-	int StartBetween = 80;//ã’[‚Å‚ÌƒŒ[ƒ“ŠÔ‚Ì‹——£
-	int JudgeBetween = 140;//”»’èü‚Å‚ÌƒŒ[ƒ“ŠÔ‚Ì‹——£
+	//æç”»é–¢ä¿‚ã®å¤‰æ•°ã®åˆæœŸåŒ–
+	//Xåº§æ¨™
+	int Center = Window::Width() / 2;//ãƒ¬ãƒ¼ãƒ³ç¾¤ã®ä¸­å¿ƒ
+	int StartBetween = 80;//ä¸Šç«¯ã§ã®ãƒ¬ãƒ¼ãƒ³é–“ã®è·é›¢
+	int JudgeBetween = 140;//åˆ¤å®šç·šã§ã®ãƒ¬ãƒ¼ãƒ³é–“ã®è·é›¢
 	for (int i = 0;i < LANESIZE;i++) {
 		laneStartX[i] = Center + (int)((i - (LANESIZE - 1) / 2.0) * StartBetween);
 		laneJudgeX[i] = Center + (int)((i - (LANESIZE - 1) / 2.0) * JudgeBetween);
 	}
-	//YÀ•W
+	//Yåº§æ¨™
 	laneStartY = 100;
 	laneJudgeY = 570;
-	laneGoalY = 730;//(‰æ–ÊYÀ•WŒÀŠE + 10)
-	//‘¬‚³
+	laneGoalY = 730;//(ç”»é¢Yåº§æ¨™é™ç•Œ + 10)
+	//é€Ÿã•
 	notespeed = 1.2;
 	timeRequired = 1500 / notespeed;
-	//ƒm[ƒc‚Ì‘å‚«‚³
+	//ãƒãƒ¼ãƒ„ã®å¤§ãã•
 	notewidth = TextureAsset(U"note").width();
 	laneStartScale = 0.2;
 	laneJudgeScale = 1.0;
@@ -134,7 +136,7 @@ void NotesManager::update(void)
 
 
 void NotesManager::plusItr(noteitr& itr) {
-	if (itr->type != NOTESTYPE::SENTINEL)//”Ô•º‚©‚Ç‚¤‚©”»’è
+	if (itr->type != NOTESTYPE::SENTINEL)//ç•ªå…µã‹ã©ã†ã‹åˆ¤å®š
 		itr++;
 }
 
@@ -143,10 +145,10 @@ void NotesManager::checkAttack(void) {
 	MyKey::getGameDownKey(down);
 	MyKey::getGamePressKey(press);
 }
-JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//”»’è‚·‚éƒ^ƒCƒ~ƒ“ƒO‚©‚çJUDGE‚Ìƒ^ƒCƒv‚ğ•Ô‚·
+JUDGE::TYPE NotesManager::NoteisHit(int judgetime) {//åˆ¤å®šã™ã‚‹ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‹ã‚‰JUDGEã®ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™
 	return judgeType(abs(nowtime - judgetime));
 }
-JUDGE::TYPE NotesManager::judgeType(int checktime) {//”»’è‚Ìƒ^ƒCƒv‚ğ•Ô‚·
+JUDGE::TYPE NotesManager::judgeType(int checktime) {//åˆ¤å®šã®ã‚¿ã‚¤ãƒ—ã‚’è¿”ã™
 	if (checktime <= JUDGE_RANGE::PERFECT) {//PERFECT
 		return JUDGE::PERFECT;
 	}
@@ -185,7 +187,7 @@ void NotesManager::controlJudge(void) {
 void NotesManager::judgeNormal(int lane) {
 	int time = checkitr[lane]->time;
 	JUDGE::TYPE type = NoteisHit(time);
-	if (down[lane] && type != JUDGE::NONE) {//”»’èŠÔ‰ß‚¬‚é‚©”»’è‰Â”\‚Åƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é
+	if (down[lane] && type != JUDGE::NONE) {//åˆ¤å®šæ™‚é–“éãã‚‹ã‹åˆ¤å®šå¯èƒ½ã§ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹æ™‚
 		playNotesEffect(getProPos(lane, time), type);
 		judgeEvent(type, lane);
 		return;
@@ -198,50 +200,50 @@ void NotesManager::judgeNormal(int lane) {
 void NotesManager::judgeLong(int lane) {
 	if (pressedkey[lane] == false && down[lane]) {
 		JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
-		if (type <= JUDGE::GOOD) {//‰º’[‚Å‰Ÿ‚³‚ê‚½‚ç(‚±‚Ì”»’è‚ÍJUDGEenum‚Ì•À‚Ñ‡‚ÉˆË‘¶‚µ‚Ä‚¢‚é)
+		if (type <= JUDGE::GOOD) {//ä¸‹ç«¯ã§æŠ¼ã•ã‚ŒãŸã‚‰(ã“ã®åˆ¤å®šã¯JUDGEenumã®ä¸¦ã³é †ã«ä¾å­˜ã—ã¦ã„ã‚‹)
 			playNotesEffect(getProPos(lane, nowtime), type);
-			pressedkey[lane] = down[lane];//‚»‚Ìƒƒ“ƒOƒm[ƒc‚Ì”»’è‚ğ—LŒø‰»
+			pressedkey[lane] = down[lane];//ãã®ãƒ­ãƒ³ã‚°ãƒãƒ¼ãƒ„ã®åˆ¤å®šã‚’æœ‰åŠ¹åŒ–
 			return judgeEvent(type, lane, false);
 		}
 	}
 
-	if (pressedkey[lane] > 0) {//—£‚·‚Æ‚«‚Ìˆ—
-		if ((press[lane] & pressedkey[lane]) == pressedkey[lane]) {//ƒ{ƒ^ƒ“‰Ÿ‰º’†
-			checkitr[lane]->time = (int)(nowtime);//”»’èˆÊ’uˆÈ~‚Å‰º‘¤‚ğ~‚ß‚é
-			if (nowtime >= checkitr[lane]->judgetime) {//‰Ÿ‚³‚ê‚Ä‚¢‚é‚Ü‚Üƒm[ƒc‚Ìã’[‚ğ‰ß‚¬‚½
-				checkitr[lane]->longtime = (int)(nowtime);//”»’èˆÊ’uˆÈ~‚Åã‘¤‚ğ~‚ß‚é
-				if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//‰ß‚¬‚½‚Æ‚«‚Ì”»’è‚àæ‚é‚½‚ß
-					return judgeLongEvent(JUDGE::BAD, lane);//‹­§“I‚ÉŸ‚Ìƒm[ƒc‚Öˆ—‚ğˆÚs
+	if (pressedkey[lane] > 0) {//é›¢ã™ã¨ãã®å‡¦ç†
+		if ((press[lane] & pressedkey[lane]) == pressedkey[lane]) {//ãƒœã‚¿ãƒ³æŠ¼ä¸‹ä¸­
+			checkitr[lane]->time = (int)(nowtime);//åˆ¤å®šä½ç½®ä»¥é™ã§ä¸‹å´ã‚’æ­¢ã‚ã‚‹
+			if (nowtime >= checkitr[lane]->judgetime) {//æŠ¼ã•ã‚Œã¦ã„ã‚‹ã¾ã¾ãƒãƒ¼ãƒ„ã®ä¸Šç«¯ã‚’éããŸæ™‚
+				checkitr[lane]->longtime = (int)(nowtime);//åˆ¤å®šä½ç½®ä»¥é™ã§ä¸Šå´ã‚’æ­¢ã‚ã‚‹
+				if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//éããŸã¨ãã®åˆ¤å®šã‚‚å–ã‚‹ãŸã‚
+					return judgeLongEvent(JUDGE::BAD, lane);//å¼·åˆ¶çš„ã«æ¬¡ã®ãƒãƒ¼ãƒ„ã¸å‡¦ç†ã‚’ç§»è¡Œ
 				}
 				
 			}
 		}
-		else {//—£‚µ‚½
+		else {//é›¢ã—ãŸ
 			JUDGE::TYPE type = NoteisHit(checkitr[lane]->judgetime);
 			playNotesEffect(getProPos(lane, checkitr[lane]->longtime), type);
-			if (type == JUDGE::TYPE::NONE) {//‘‚·‚¬‚½‚Æ‚«none‚É‚È‚é‚Ì‚ÅbadŠi”[
+			if (type == JUDGE::TYPE::NONE) {//æ—©ã™ããŸã¨ãnoneã«ãªã‚‹ã®ã§badæ ¼ç´
 				type = JUDGE::TYPE::BAD;
 			}
 			return judgeLongEvent(type, lane);
 		}
 	}
 	
-	if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//”»’è‚ğ’´‚¦‚½
+	if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//åˆ¤å®šã‚’è¶…ãˆãŸæ™‚
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
 void NotesManager::judgeCritical(int lane) {
-	static int prevTime[LANESIZE] = {0, 0, 0, 0};	//‰Ÿ‚³‚ên‚ß‚ÌŠÔ•Û
-	static int pressHold[LANESIZE] = {0, 0, 0, 0};	//‰Ÿ‚³‚ên‚ß‚Ìƒ{ƒ^ƒ“ó‘Ô•Û(ã‚¾‚¯‚È‚Ì‚©‰º‚¾‚¯‚È‚Ì‚©—¼•û‚È‚Ì‚©j
-	static JUDGE::TYPE typeHold[LANESIZE] = { JUDGE::NONE,JUDGE::NONE,JUDGE::NONE,JUDGE::NONE };//‰Ÿ‚³‚ên‚ß‚Ì”»’è‚ğ•Û
-	//judgeCriticalEvent‚ğŒÄ‚Ñ,ã‹L‚Ìƒ[ƒJƒ‹Ã“I•Ï”‚ğ‰Šú‰»‚·‚éƒ}ƒNƒ
+	static int prevTime[LANESIZE] = {0, 0, 0, 0};	//æŠ¼ã•ã‚Œå§‹ã‚ã®æ™‚é–“ä¿æŒ
+	static int pressHold[LANESIZE] = {0, 0, 0, 0};	//æŠ¼ã•ã‚Œå§‹ã‚ã®ãƒœã‚¿ãƒ³çŠ¶æ…‹ä¿æŒ(ä¸Šã ã‘ãªã®ã‹ä¸‹ã ã‘ãªã®ã‹ä¸¡æ–¹ãªã®ã‹ï¼‰
+	static JUDGE::TYPE typeHold[LANESIZE] = { JUDGE::NONE,JUDGE::NONE,JUDGE::NONE,JUDGE::NONE };//æŠ¼ã•ã‚Œå§‹ã‚ã®åˆ¤å®šã‚’ä¿æŒ
+	//judgeCriticalEventã‚’å‘¼ã³,ä¸Šè¨˜ã®ãƒ­ãƒ¼ã‚«ãƒ«é™çš„å¤‰æ•°ã‚’åˆæœŸåŒ–ã™ã‚‹ãƒã‚¯ãƒ­
 	#define JUDGE_CRITICAL_EVENT  judgeCriticalEvent(typeHold[lane], lane, pressHold[lane]);\
 								  pressHold[lane] = 0; prevTime[lane] = 0;\
 								  typeHold[lane] = JUDGE::NONE;
 
 	JUDGE::TYPE type = NoteisHit(checkitr[lane]->time);
-	if (down[lane] ){//ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ên‚ß‚©‚Ç‚¤‚©‚ğ”»’è
-		if (type < JUDGE::NONE) {//”»’è‰Â”\‚È‚ç
+	if (down[lane] ){//ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œå§‹ã‚ã‹ã©ã†ã‹ã‚’åˆ¤å®š
+		if (type < JUDGE::NONE) {//åˆ¤å®šå¯èƒ½ãªã‚‰
 			if (typeHold[lane] == JUDGE::NONE) {
 				pressHold[lane] = down[lane];
 				typeHold[lane] = type;
@@ -250,26 +252,26 @@ void NotesManager::judgeCritical(int lane) {
 		}
 	}
 
-	//ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½Œã‚Ì
+	//ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå¾Œã®æ™‚
 	if (pressHold[lane] > 0) {
-		if (press[lane] == PSHBTN::BOTH) {//“¯‰Ÿ‚µ‚Ìê‡
+		if (press[lane] == PSHBTN::BOTH) {//åŒæ™‚æŠ¼ã—ã®å ´åˆ
 			pressHold[lane] = PSHBTN::BOTH;
 			playNotesEffect(getProPos(lane, checkitr[lane]->time), typeHold[lane]);
-			JUDGE_CRITICAL_EVENT;//“¯‰Ÿ‚µƒCƒxƒ“ƒg
+			JUDGE_CRITICAL_EVENT;//åŒæ™‚æŠ¼ã—ã‚¤ãƒ™ãƒ³ãƒˆ
 			return;
 		}
-		else if (press[lane] == 0 ||				//ƒ{ƒ^ƒ“‚ª“r’†‚Å—£‚³‚ê‚é‚©
-			nowtime - prevTime[lane] > 50) {	//“¯‰Ÿ‚µ‚³‚ê‚Ä‚È‚¢ê‡‚Ìˆ—
+		else if (press[lane] == 0 ||				//ãƒœã‚¿ãƒ³ãŒé€”ä¸­ã§é›¢ã•ã‚Œã‚‹ã‹
+			nowtime - prevTime[lane] > 50) {	//åŒæ™‚æŠ¼ã—ã•ã‚Œã¦ãªã„å ´åˆã®å‡¦ç†
 			playNotesEffect(getProPos(lane, checkitr[lane]->time), typeHold[lane]);
-			JUDGE_CRITICAL_EVENT;//Å‰‚É‰Ÿ‚µ‚½“_‚ÌƒCƒxƒ“ƒg‚ğ‹N‚±‚·
+			JUDGE_CRITICAL_EVENT;//æœ€åˆã«æŠ¼ã—ãŸæ™‚ç‚¹ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã™
 			return;
 		}
 	}
 	else {
-		if (nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD ||//‰Ÿ‚³‚¸‚ÉŠÔØ‚ê
-			typeHold[lane] == JUDGE::BAD) {//BAD”»’è
+		if (nowtime > checkitr[lane]->time + JUDGE_RANGE::BAD ||//æŠ¼ã•ãšã«æ™‚é–“åˆ‡ã‚Œ
+			typeHold[lane] == JUDGE::BAD) {//BADåˆ¤å®š
 			typeHold[lane] = JUDGE::BAD;
-			JUDGE_CRITICAL_EVENT;//BADƒCƒxƒ“ƒg
+			JUDGE_CRITICAL_EVENT;//BADã‚¤ãƒ™ãƒ³ãƒˆ
 			return;
 		}
 	}
@@ -279,19 +281,19 @@ void NotesManager::judgeCritical(int lane) {
 void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	down[lane] = pressedkey[lane];
 	judgeEvent(type, lane);
-	pressedkey[lane] = 0;//”»’è‚µ‚½‚Ì‚Å’·‰Ÿ‚µ‚Ìó‘Ô‚ğ‰Šú‰»
+	pressedkey[lane] = 0;//åˆ¤å®šã—ãŸã®ã§é•·æŠ¼ã—ã®çŠ¶æ…‹ã‚’åˆæœŸåŒ–
 }
 void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 	if (next) {
 		noteNext(lane);
 	}
-	judgecount.cnt[type]++;//”»’è‚ğƒJƒEƒ“ƒgƒAƒbƒv
-	judgeEffect->setEffect(type);//”»’èƒGƒtƒFƒNƒgƒZƒbƒg
+	judgecount.cnt[type]++;//åˆ¤å®šã‚’ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
+	judgeEffect->setEffect(type);//åˆ¤å®šã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚»ãƒƒãƒˆ
 	if(type == JUDGE::BAD){
 		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
-		switch (down[lane]) {//¬Œ÷ƒCƒxƒ“ƒg‘—M
+		switch (down[lane]) {//æˆåŠŸã‚¤ãƒ™ãƒ³ãƒˆé€ä¿¡
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
 			break;
@@ -304,13 +306,13 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 
 void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType) {
 	noteNext(lane);
-	judgecount.cnt[type]++;//”»’è‚ğƒJƒEƒ“ƒgƒAƒbƒv
-	judgeEffect->setEffect(type);//”»’èƒGƒtƒFƒNƒgƒZƒbƒg
-	if (type == JUDGE::BAD) {//BADƒCƒxƒ“ƒg‘—M
+	judgecount.cnt[type]++;//åˆ¤å®šã‚’ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—
+	judgeEffect->setEffect(type);//åˆ¤å®šã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚»ãƒƒãƒˆ
+	if (type == JUDGE::BAD) {//BADã‚¤ãƒ™ãƒ³ãƒˆé€ä¿¡
 		setEvent(Massage::CRITICALDAMAGE, lane);
 	}
 	else {
-		switch (buttonType) {//¬Œ÷ƒCƒxƒ“ƒg‘—M
+		switch (buttonType) {//æˆåŠŸã‚¤ãƒ™ãƒ³ãƒˆé€ä¿¡
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
 			setEvent(Massage::CRITICALDAMAGE, lane);
@@ -326,8 +328,8 @@ void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType
 	}
 }
 void NotesManager::noteNext(int lane) {
-	checkitr[lane]->display = false;//ƒfƒBƒXƒvƒŒƒC•\¦ƒIƒt
-	plusItr(checkitr[lane]);//”»’è‘ÎÛ‚ğŸ‚Éi‚ß‚é
+	checkitr[lane]->display = false;//ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤è¡¨ç¤ºã‚ªãƒ•
+	plusItr(checkitr[lane]);//åˆ¤å®šå¯¾è±¡ã‚’æ¬¡ã«é€²ã‚ã‚‹
 }
 
 
@@ -338,17 +340,17 @@ JUDGE::JudgeCount* NotesManager::getJudgeCount() {
 
 void NotesManager::draw(void){
 
-	//ƒfƒoƒbƒO—p
+	//ãƒ‡ãƒãƒƒã‚°ç”¨
 	for (int i = 0; i < 4; i++) {
 		Print << judgecount.cnt[i];
 	}
 	TextureAsset(U"judgeline").drawAt(Window::Width() / 2, laneJudgeY);
-	//Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//”»’èü‚Ì•`‰æ
+	//Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//åˆ¤å®šç·šã®æç”»
 
 	for(int i = 0; i < LANESIZE; i++){
-		//Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//ƒŒ[ƒ“‚Ì•`‰æ
+		//Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//ãƒ¬ãƒ¼ãƒ³ã®æç”»
 		for (noteitr itr = displayitr[i]; itr != notelist[i].end(); itr++) {
-			if (nowtime < itr->time - timeRequired)//•`‰æ‘O‚È‚ç•`‰æ‘Å‚¿Ø‚è
+			if (nowtime < itr->time - timeRequired)//æç”»å‰ãªã‚‰æç”»æ‰“ã¡åˆ‡ã‚Š
 				break;
 			if (itr->display == false)
 				continue;
@@ -368,8 +370,8 @@ void NotesManager::draw(void){
 			}
 		}	
 	}
-	effect.draw();//Ä¶’†‚Ì‘S‚Ä‚ÌƒGƒtƒFƒNƒg‚ğ•`‰æ
-	judgeEffect->draw();//”»’èƒGƒtƒFƒNƒg•`‰æ
+	effect.draw();//å†ç”Ÿä¸­ã®å…¨ã¦ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æç”»
+	judgeEffect->draw();//åˆ¤å®šã‚¨ãƒ•ã‚§ã‚¯ãƒˆæç”»
 }
 
 
@@ -379,8 +381,8 @@ double NotesManager::getProgress(int time) {
 double NotesManager::progressByAngle(double progressRate) {
 	using namespace std;
 	constexpr double EYE_HEIGHT = 1.0;
-	constexpr double START_ANGLE = 0.4_pi;//’PˆÊ‚Íƒ‰ƒWƒAƒ“(0.5ˆÈã‚ğİ’è‚µ‚Ä‚Í‚È‚ç‚È‚¢)
-	constexpr double JUDGE_ANGLE = 0.1_pi;//’PˆÊ‚Íƒ‰ƒWƒAƒ“
+	constexpr double START_ANGLE = 0.4_pi;//å˜ä½ã¯ãƒ©ã‚¸ã‚¢ãƒ³(0.5ä»¥ä¸Šã‚’è¨­å®šã—ã¦ã¯ãªã‚‰ãªã„)
+	constexpr double JUDGE_ANGLE = 0.1_pi;//å˜ä½ã¯ãƒ©ã‚¸ã‚¢ãƒ³
 	const static double START_RANGE = EYE_HEIGHT * tan(START_ANGLE);
 	const static double JUDGE_RANGE = EYE_HEIGHT * tan(JUDGE_ANGLE);
 	double nowRange = START_RANGE - (START_RANGE - JUDGE_RANGE) * progressRate;
@@ -407,22 +409,22 @@ void NotesManager::displayNormal(int lane, int time) {
 	TextureAsset(U"note").scaled(now.scale).drawAt(now.x, now.y);
 }
 void NotesManager::displayLong(int lane, int time, int longtime) {
-	//•`‰æˆÊ’u‚ÌŒvZ
-	//ã‘¤
+	//æç”»ä½ç½®ã®è¨ˆç®—
+	//ä¸Šå´
 	int longt = longtime < nowtime + timeRequired ? longtime : nowtime + timeRequired;
 	ProPos end = getProPos(lane, longt);
 	if (end.y > laneGoalY) {
 		plusItr(displayitr[lane]);
 		return;
 	}
-	//‰º‘¤
+	//ä¸‹å´
 	ProPos bgn = getProPos(lane, time);
 
-	//•`‰æˆ—
+	//æç”»å‡¦ç†
 	ProPos a, b = end;
-	constexpr int BETW = 50;//L‚Î‚µ–_‚Ì‘¾‚³‚ÌÄŒvZ‚ÌŠÔŠu[ms]
+	constexpr int BETW = 50;//ä¼¸ã°ã—æ£’ã®å¤ªã•ã®å†è¨ˆç®—ã®é–“éš”[ms]
 
-	Color lineColor;	//L‚Î‚µ–_@Fw’è
+	Color lineColor;	//ä¼¸ã°ã—æ£’ã€€è‰²æŒ‡å®š
 
 	for (int i = longt - BETW;i > time;i -= BETW) {
 		a = b;
@@ -473,7 +475,7 @@ void NotesManager::playNotesEffect(ProPos pos, JUDGE::TYPE type) {
 
 
 void NotesManager::setEvent(Massage msg, int val) {
-	notessubject->setEvent(msg, val);//ƒCƒxƒ“ƒgƒIƒuƒWƒFƒNƒgƒZƒbƒg
-	notessubject->notifyObservers();//ƒCƒxƒ“ƒg‹N“®
+	notessubject->setEvent(msg, val);//ã‚¤ãƒ™ãƒ³ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚»ãƒƒãƒˆ
+	notessubject->notifyObservers();//ã‚¤ãƒ™ãƒ³ãƒˆèµ·å‹•
 }
 

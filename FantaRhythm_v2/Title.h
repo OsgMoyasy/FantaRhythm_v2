@@ -11,6 +11,7 @@ public:
 	void update(void);
 	void draw(void);
 private:
+	Audio *TitleAudio;
 	double alpha;
 	void changeAlpha(void);
 };

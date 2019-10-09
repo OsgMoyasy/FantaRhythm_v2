@@ -10,17 +10,20 @@ Title::Title(void) {
 	TextureAsset::Register(U"titleback", U"resources/images/back/start_back_image.jpg");
 	TextureAsset::Preload(U"titleback");
 }
-
-Title::~Title(void) {
-
+void Title::start(void) {
+	delete TitleAudio;
+	TitleAudio = new Audio(U"resources/musics/main/attacking ready!/attacking ready!.wav");
+	TitleAudio->play();
 }
 
-void Title::start(void) {
-
+Title::~Title(void) {
+	FontAsset::Unregister(U"titlefont");
+	TextureAsset::Unregister(U"titleback");
+	delete TitleAudio;
 }
 
 void Title::update(void) {
-	if (MyKey::getDecisionKey()) {//‹È‘I‘ğ‰æ–Ê‚Ö
+	if (MyKey::getDecisionKey()) {//â€¹Ãˆâ€˜Iâ€˜Ã°â€°Ã¦â€“ÃŠâ€šÃ–
 		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
 	}
 	else {
@@ -29,12 +32,12 @@ void Title::update(void) {
 }
 
 void Title::draw(void) {
-	//”wŒi‰æ‘œ•`‰æ
+	//â€wÅ’iâ€°Ã¦â€˜Å“â€¢`â€°Ã¦
 	TextureAsset(U"titleback").draw();
 
-	//•¶š—ñ•`‰æ
-	FontAsset(U"titlefont")(U"` Press Button To Start `").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
-	FontAsset(U"titlefont")(U"` Press Button To Start `").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
+	//â€¢Â¶Å½Å¡â€”Ã±â€¢`â€°Ã¦
+	FontAsset(U"titlefont")(U"Â` Press Button To Start Â`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
+	FontAsset(U"titlefont")(U"Â` Press Button To Start Â`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
 }
 
 void Title::changeAlpha(void) {
