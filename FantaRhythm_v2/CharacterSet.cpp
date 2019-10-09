@@ -57,6 +57,9 @@ CharacterSet::~CharacterSet() {
 	for (int i = 0; i < CHANUMBER; i++) {
 		delete cha[i];
 	}
+	delete enemy;
+	delete hpGauge;
+	delete csubject;
 }
 
 void CharacterSet::update() {

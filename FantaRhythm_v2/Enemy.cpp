@@ -15,7 +15,10 @@ Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(1100){
 	totalDamage = 0;
 }
 Enemy::~Enemy(){
-	TextureAsset::UnregisterAll();
+	TextureAsset::Unregister(U"enemy");
+	for (int i = 0; i < EffectType::SIZE; i++) {
+		delete flipeffect[i];
+	}
 }
 void Enemy::update() {
 	moveUpDown();

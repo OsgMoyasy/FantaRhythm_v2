@@ -132,6 +132,15 @@
     <ClCompile Include="Combostar.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
+    <ClCompile Include="MyKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JudgeEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -373,6 +382,15 @@
       <Filter>Header Files\Jobs</Filter>
     </ClInclude>
     <ClInclude Include="Gauge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JudgeEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

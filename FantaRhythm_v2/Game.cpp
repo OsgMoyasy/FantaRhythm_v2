@@ -7,41 +7,43 @@ Game::Game(const String& music, const String& dif) {
 	notessubject = new NotesSubject();
 	
 	notes = new NotesManager(notessubject,difpath);
+
+	int save[4] = { 1,4,5,6 };//ãƒ†ã‚¹ãƒˆç”¨ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿
+	characterm = new CharacterSet(save, musicpath);
+
+
+	notessubject->addObserver(characterm);//ã‚ªãƒ–ã‚¶ãƒ¼ãƒãƒ¼ã¸ç™»éŒ²
 	
-	int save[4] = {0,4,5,6 };//ƒeƒXƒg—pƒZ[ƒuƒf[ƒ^
-	characterm = new CharacterSet(save,musicpath);
+	isClear = true;//falseã«ãªã‚Œã°ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
+	TextureAsset::Register(U"gameback", U"resources/images/back/first.jpg");
+	TextureAsset::Preload(U"gameback");
 
-	notessubject->addObserver(characterm);//ƒIƒuƒU[ƒo[‚Ö“o˜^
-	
-	isClear = true;//false‚É‚È‚ê‚ÎƒQ[ƒ€ƒI[ƒo[
-	TextureAsset::Register(U"back", U"resources/images/back/first.jpg");
-	TextureAsset::Preload(U"back");
-
-	FontAsset::Register(U"font", 30);
-	FontAsset::Preload(U"font");
-
-
-	MusicManager::playMusicGame(musicpath);
-
-	
+	FontAsset::Register(U"gamefont", 30);
+	FontAsset::Preload(U"gamefont");
+	MusicManager::setMusicGame(musicpath);
 }
 Game::~Game() {
 	delete notes;
-	TextureAsset::UnregisterAll();
-	FontAsset::Unregister(U"font");
-	MusicManager::stopMusicGame();
+	delete characterm;
+	delete notessubject;
+	TextureAsset::Unregister(U"gameback");
+	FontAsset::Unregister(U"gamefont");
+	MusicManager::setEndMusic();
+}
+
+void Game::start() {
+	MusicManager::playMusic();
 }
 
 void Game::update() {
 	gameEndCheck();
 	notes->update();
 	characterm->update();
-	
 }
 
 void Game::draw() {
-	//”wŒi‰æ‘œ•`‰æ
-	TextureAsset(U"back").draw();
+	//èƒŒæ™¯ç”»åƒæç”»
+	TextureAsset(U"gameback").draw();
 	notes->draw();
 	characterm->draw();
 }
@@ -57,11 +59,11 @@ JUDGE::JudgeCount* Game::getJudgeCount(void) {
 }
 void Game::gameEndCheck(void) {
 	if (characterm->getCurrentHp() <= 0 && isClear == true) {
-		MusicManager::stopMusicGame();
+		MusicManager::setEndMusic();
 		isClear = false;
 		characterm->gameEndEffect();
 	}
-	if (MusicManager::musicEndCheck() ) {//‹È‚ªI‚í‚Á‚Ä‚¢‚é@or ƒQ[ƒ€¸”s‚µ‚Ä‚¢‚é
-		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//ƒV[ƒ“ˆÚs
+	if (MusicManager::musicEndCheck() ) {//æ›²ãŒçµ‚ã‚ã£ã¦ã„ã‚‹ã€€or ã‚²ãƒ¼ãƒ å¤±æ•—ã—ã¦ã„ã‚‹
+		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//ã‚·ãƒ¼ãƒ³ç§»è¡Œ
 	}
 }

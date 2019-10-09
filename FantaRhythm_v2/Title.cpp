@@ -5,23 +5,25 @@
 #define TWOPI 6.28318
 
 Title::Title(void) {
-	FontAsset::Register(U"font", 50);
-	FontAsset::Preload(U"font");
-	TextureAsset::Register(U"back", U"resources/images/back/start_back_image.jpg");
-	TextureAsset::Preload(U"back");
+	FontAsset::Register(U"titlefont", 50);
+	FontAsset::Preload(U"titlefont");
+	TextureAsset::Register(U"titleback", U"resources/images/back/start_back_image.jpg");
+	TextureAsset::Preload(U"titleback");
+}
+void Title::start(void) {
 	delete TitleAudio;
 	TitleAudio = new Audio(U"resources/musics/main/attacking ready!/attacking ready!.wav");
 	TitleAudio->play();
 }
 
 Title::~Title(void) {
-	FontAsset::Unregister(U"font");
-	TextureAsset::Unregister(U"back");
+	FontAsset::Unregister(U"titlefont");
+	TextureAsset::Unregister(U"titleback");
 	delete TitleAudio;
 }
 
 void Title::update(void) {
-	if (KeyA.down()) {//‹È‘I‘ğ‰æ–Ê‚Ö
+	if (MyKey::getDecisionKey()) {//â€¹Ãˆâ€˜Iâ€˜Ã°â€°Ã¦â€“ÃŠâ€šÃ–
 		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
 	}
 	else {
@@ -30,12 +32,12 @@ void Title::update(void) {
 }
 
 void Title::draw(void) {
-	//”wŒi‰æ‘œ•`‰æ
-	TextureAsset(U"back").draw();
+	//â€wÅ’iâ€°Ã¦â€˜Å“â€¢`â€°Ã¦
+	TextureAsset(U"titleback").draw();
 
-	//•¶š—ñ•`‰æ
-	FontAsset(U"font")(U"` Press Button To Start `").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
-	FontAsset(U"font")(U"` Press Button To Start `").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
+	//â€¢Â¶Å½Å¡â€”Ã±â€¢`â€°Ã¦
+	FontAsset(U"titlefont")(U"Â` Press Button To Start Â`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
+	FontAsset(U"titlefont")(U"Â` Press Button To Start Â`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
 }
 
 void Title::changeAlpha(void) {
