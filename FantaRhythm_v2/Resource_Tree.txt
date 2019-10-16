@@ -10,13 +10,13 @@ resources/
 			result.png
 			start_back_image.jpg
 		character/
-			R[E3].png
+			R[E1].png
 		effects/
 			archer/
 				arrow.png
-			[E1]/
-				gauge.png
 			[E2]/
+				gauge.png
+			[E3]/
 				attack.png
 				ult.png
 				damage.png
@@ -54,22 +54,7 @@ resources/
 
 
 
-[E1] = {
-	berserker
-	combostar
-	sage
-	soldier
-	witch		}
-
-[E2] = {
-	archer
-	Berserker
-	combostar
-	sage
-	soldier
-	tanker		}
-
-[E3] = {	//¦resources/testcharadata.csv‚Ì2—ñ–Ú‚É‹Lq
+[E1] = {	//¦resources/testcharadata.csv‚Ì2—ñ–Ú‚É‹Lq
 	archar
 	berserker
 	combostar
@@ -77,6 +62,21 @@ resources/
 	soldier
 	tanker
 	witch		}
+
+[E2] = {
+	berserker
+	combostar
+	sage
+	soldier
+	witch		}
+
+[E3] = {
+	archer
+	Berserker
+	combostar
+	sage
+	soldier
+	tanker		}
 
 [‘S‚Ä‚ÌƒtƒHƒ‹ƒ_] = {
 	attacking ready!
