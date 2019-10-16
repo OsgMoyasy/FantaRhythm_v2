@@ -302,7 +302,7 @@
     <Text Include="Resource_Tree.txt">
       <Filter>Documents</Filter>
     </Text>
-    <Text Include="Resource_FullPath.txt">
+    <Text Include="Resource_RelativePath.txt">
       <Filter>Documents</Filter>
     </Text>
   </ItemGroup>
