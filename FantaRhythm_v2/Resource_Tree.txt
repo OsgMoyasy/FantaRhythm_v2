@@ -61,14 +61,16 @@ resources/
 	sage
 	soldier
 	tanker
-	witch		}
+	witch
+}
 
 [職2] = {
 	berserker
 	combostar
 	sage
 	soldier
-	witch		}
+	witch
+}
 
 [職3] = {
 	archer
@@ -76,7 +78,8 @@ resources/
 	combostar
 	sage
 	soldier
-	tanker		}
+	tanker
+}
 
 [全てのフォルダ] = {
 	attacking ready!
@@ -87,10 +90,12 @@ resources/
 	In search of hope
 	NightFlight
 	SP
-	Who dirty hand for		}
+	Who dirty hand for
+}
 
 [全てのcsvファイル] = {
 	Easy.csv
 	Hard.csv	//フォルダによっては無い場合もある
-	Normal.csv		}
+	Normal.csv
+}
 
