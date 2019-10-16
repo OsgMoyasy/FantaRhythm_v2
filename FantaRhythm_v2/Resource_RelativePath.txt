@@ -1,3 +1,5 @@
+//参照されているリソースの相対パス一覧
+
 "resources/images/back/BackScreen.jpg"
 "resources/images/back/first.jpg"
 "resources/images/back/gameOver.jpg"
