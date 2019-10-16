@@ -299,7 +299,7 @@
     <Text Include="App\engine\font\fontawesome\LICENSE.txt">
       <Filter>Resource Files\engine\font\fontawesome</Filter>
     </Text>
-    <Text Include="ResourceFile_Tree.txt">
+    <Text Include="Resource_Tree.txt">
       <Filter>Documents</Filter>
     </Text>
   </ItemGroup>
