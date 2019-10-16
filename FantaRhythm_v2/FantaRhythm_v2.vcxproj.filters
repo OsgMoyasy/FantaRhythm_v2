@@ -302,6 +302,9 @@
     <Text Include="Resource_Tree.txt">
       <Filter>Documents</Filter>
     </Text>
+    <Text Include="Resource_FullPath.txt">
+      <Filter>Documents</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="App\example\test.xml">
