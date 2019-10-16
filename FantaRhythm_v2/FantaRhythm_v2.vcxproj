@@ -278,6 +278,8 @@
     <Text Include="App\example\LICENSE.txt" />
     <Text Include="App\example\script.txt" />
     <Text Include="App\example\test.txt" />
+    <Text Include="Resource_RelativePath.txt" />
+    <Text Include="Resource_Tree.txt" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="App\example\test.xml" />

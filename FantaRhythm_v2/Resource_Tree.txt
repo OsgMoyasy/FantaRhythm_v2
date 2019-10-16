@@ -1,0 +1,101 @@
+//参照されているリソースをresourceフォルダから階層状に纏めた。
+//[職1]等、[]で囲まれた部分は複数フォルダを纏めたもの。一番下に説明あり。
+
+resources/
+	images/
+		back/
+			BackScreen.jpg
+			first.jpg
+			gameOver.jpg
+			result.png
+			start_back_image.jpg
+		character/
+			R[職1].png
+		effects/
+			archer/
+				arrow.png
+			[職2]/
+				gauge.png
+			[職3]/
+				attack.png
+				ult.png
+				damage.png
+			magic.png
+			nortsEffect.png
+			nortsEffect2.png
+			shield.png
+		items/
+			judgeeffect/
+				bad.png
+				good.png
+				great.png
+				perfect.png
+			num/
+				num2.png
+			gauge.png
+			judgeline.png
+			Nort2.png
+			Nort2nd.png
+			Nort3rd.png
+	musics/
+		effects/
+			Congratulations.wav
+			orehamou.mp3
+		main/
+			[全てのフォルダ]/
+				score/
+					[全てのcsvファイル]
+				enemy.png
+				game.wav
+				preview.wav
+			attacking ready!/
+				attacking ready!.wav
+	testcharadata.csv
+
+
+
+[職1] = {	//※resources/testcharadata.csvの2列目に記述
+	archar
+	berserker
+	combostar
+	sage
+	soldier
+	tanker
+	witch
+}
+
+[職2] = {
+	berserker
+	combostar
+	sage
+	soldier
+	witch
+}
+
+[職3] = {
+	archer
+	Berserker
+	combostar
+	sage
+	soldier
+	tanker
+}
+
+[全てのフォルダ] = {
+	attacking ready!
+	AxisDrive
+	glassland
+	Gradius
+	Himmel_s wander
+	In search of hope
+	NightFlight
+	SP
+	Who dirty hand for
+}
+
+[全てのcsvファイル] = {
+	Easy.csv
+	Hard.csv	//フォルダによっては無い場合もある
+	Normal.csv
+}
+
