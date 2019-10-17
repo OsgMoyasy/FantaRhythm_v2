@@ -83,54 +83,46 @@ void MyKey::getGamePressKey(int(&press)[4]) {
 bool MyKey::getDecisionKey(void) {
 	if (!lock) {
 		if (padflag) {
-
+			return Gamepad(0).buttons[0].down();//決定きー
 		}
 		else {
 			return KeyEnter.down();
 		}
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 bool MyKey::getReturnKey(void) {
 	if (!lock) {
 		if (padflag) {
-
+			return Gamepad(0).buttons[1].down();//リターンキー
 		}
 		else {
 			return KeyBackspace.down();
 		}
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 bool MyKey::getUpKey(void) {
 	if (!lock) {
 		if (padflag) {
-
+			return Gamepad(0).buttons[2].down();//上
 		}
 		else {
 			return KeyUp.pressed();
 		}
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 bool MyKey::getDownKey(void) {
 	if (!lock) {
 		if (padflag) {
-
+			return Gamepad(0).buttons[3].down();//下
 		}
 		else {
 			return KeyDown.pressed();
 		}
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 
 void MyKey::setKeyLock(bool lock) {
