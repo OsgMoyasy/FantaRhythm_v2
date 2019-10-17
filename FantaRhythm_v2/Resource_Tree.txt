@@ -74,7 +74,7 @@ resources/
 
 [E3] = {
 	archer
-	Berserker
+	berserker
 	combostar
 	sage
 	soldier
