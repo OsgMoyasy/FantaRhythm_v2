@@ -34,6 +34,7 @@ resources/
 				num2.png
 			gauge.png
 			judgeline.png
+			title.png
 			Nort2.png
 			Nort2nd.png
 			Nort3rd.png
@@ -79,6 +80,7 @@ resources/
 	sage
 	soldier
 	tanker
+	witch
 }
 
 [全てのフォルダ] = {
