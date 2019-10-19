@@ -2,6 +2,7 @@
 #include <Siv3D.hpp>
 #include "Scene.h"
 #include "MyKey.h"
+#include "HttpClient.h"
 
 class Title : public Scene{
 public:
@@ -11,6 +12,7 @@ public:
 	void update(void);
 	void draw(void);
 private:
+	HttpClient* httpClient;
 	Audio *TitleAudio;
 	double alpha;
 	void changeAlpha(void);

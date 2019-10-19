@@ -9,6 +9,7 @@ Title::Title(void) {
 	FontAsset::Preload(U"titlefont");
 	TextureAsset::Register(U"titleback", U"resources/images/back/start_back_image.jpg");
 	TextureAsset::Preload(U"titleback");
+	httpClient = new HttpClient();
 }
 void Title::start(void) {
 	delete TitleAudio;
@@ -20,6 +21,7 @@ Title::~Title(void) {
 	FontAsset::Unregister(U"titlefont");
 	TextureAsset::Unregister(U"titleback");
 	delete TitleAudio;
+	delete httpClient;
 }
 
 void Title::update(void) {
@@ -28,6 +30,9 @@ void Title::update(void) {
 	}
 	else {
 		changeAlpha();
+	}
+	if (MyKey::getUpKey()) {
+		httpClient->testSend();
 	}
 }
 
@@ -38,6 +43,11 @@ void Title::draw(void) {
 	
 	FontAsset(U"titlefont")(U"Å`Press Button To StartÅ`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
 	FontAsset(U"titlefont")(U"Å`Press Button To StartÅ`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
+	//ÉeÉXÉgópèoóÕ
+	Print << s3d::Unicode::Widen(httpClient->getStatusMassage());
+	Print << s3d::Unicode::Widen(httpClient->getResultJsonString());
+	JSONReader reader(U"test.json");
+	Print << reader[U"slideshow"][U"title"].getString();
 }
 
 void Title::changeAlpha(void) {
