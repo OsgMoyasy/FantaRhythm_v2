@@ -28,6 +28,9 @@ public:
 	~HttpClient();
 	void testSend();
 	void request(int chaNum[4]);
+
+	void testPost(std::string postMassage);//テストPOST
+
 	std::string getStatusMassage();
 	std::string getResult();
 	std::string getResultJsonString();//json形式に整形された形で返す

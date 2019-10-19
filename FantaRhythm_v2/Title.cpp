@@ -32,7 +32,7 @@ void Title::update(void) {
 		changeAlpha();
 	}
 	if (MyKey::getUpKey()) {
-		httpClient->testSend();
+		httpClient->testPost("{test:\"massage\"}");
 	}
 }
 
@@ -45,7 +45,7 @@ void Title::draw(void) {
 	FontAsset(U"titlefont")(U"～Press Button To Start～").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
 	//テスト用出力
 	Print << s3d::Unicode::Widen(httpClient->getStatusMassage());
-	Print << s3d::Unicode::Widen(httpClient->getResultJsonString());
+	Print << s3d::Unicode::Widen(httpClient->getResult());
 	JSONReader reader(U"test.json");
 	Print << reader[U"slideshow"][U"title"].getString();
 }
