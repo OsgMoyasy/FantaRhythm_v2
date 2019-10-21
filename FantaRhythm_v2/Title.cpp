@@ -32,7 +32,7 @@ void Title::update(void) {
 		changeAlpha();
 	}
 	if (MyKey::getUpKey()) {
-		httpClient->testPost("{test:\"massage\"}");
+		httpClient->testPost("{ \"test\": \"massage\" }");
 	}
 }
 
