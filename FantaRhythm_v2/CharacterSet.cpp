@@ -1,6 +1,6 @@
 #include"CharacterSet.h"
 #include "Jobs.h"
-#include <typeinfo.h>
+#include <typeinfo>
 
 
 
