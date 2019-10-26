@@ -145,6 +145,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HttpClient.cpp">
+       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QrRead.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -406,6 +409,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HttpClient.h">
+　　　　<Filter>Header Files</Filter>
+    <ClInclude Include="QrRead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

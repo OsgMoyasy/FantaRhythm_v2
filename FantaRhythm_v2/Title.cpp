@@ -26,7 +26,7 @@ Title::~Title(void) {
 
 void Title::update(void) {
 	if (MyKey::getDecisionKey()) {
-		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+		SceneManager::setNextScene(SceneManager::SCENE_QRREAD);
 	}
 	else {
 		changeAlpha();

@@ -22,8 +22,9 @@ void Gauge::draw(void) {
 	imChaGauge.draw(x,y);
 }
 void Gauge::draw(double y) {
-	Rect(x, y, w, h).draw(backColor);
-	Rect(x, y, currentW, h).draw(frontColor);
+	Rect(x, y + 2, w, h - 2).draw(backColor);
+	Rect(x, y + 2, currentW, h - 2).draw(frontColor);
+	imChaGauge.draw(x, y);
 }
 
 void Gauge::calcCurrentW(double ratio) {

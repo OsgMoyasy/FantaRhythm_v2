@@ -47,6 +47,8 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//ジャッジエフェクト初期化
 	judgeEffect = new JudgeEffect(U"resources/images/items/judgeeffect/");
 
+	comboImNum = new ComboImNumber(Window::Width() - 400, Window::Height() - 180, 200);
+
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
 	Print << difpath;
@@ -122,6 +124,7 @@ NotesManager::~NotesManager() {
 	TextureAsset::Unregister(U"longnote");
 	TextureAsset::Unregister(U"cri");
 	TextureAsset::Unregister(U"judgeline");
+	delete comboImNum;
 	delete judgeEffect;
 }
 
@@ -132,6 +135,7 @@ void NotesManager::update(void)
 	checkAttack();
 	controlJudge();
 	judgeEffect->update();
+	comboImNum->update();
 }
 
 
@@ -291,10 +295,12 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 	judgeEffect->setEffect(type);//判定エフェクトセット
 	if(type == JUDGE::BAD){
 		combo.reset();
+		comboImNum->resetCombo();
 		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
 		combo.add();
+		comboImNum->setCombo(combo.get());
 		switch (down[lane]) {//成功イベント送信
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
@@ -376,6 +382,7 @@ void NotesManager::draw(void){
 	}
 	effect.draw();//再生中の全てのエフェクトを描画
 	judgeEffect->draw();//判定エフェクト描画
+	comboImNum->draw();//コンボエフェクト描画
 }
 
 
