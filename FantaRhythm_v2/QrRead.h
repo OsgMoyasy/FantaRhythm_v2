@@ -1,5 +1,7 @@
 #pragma once
-#include<Siv3D.hpp>
+#include <Siv3D.hpp>
+#include <vector>
+#include <thread>
 #include"MyKey.h"
 #include"Scene.h"
 #include "HttpClient.h"
@@ -16,6 +18,7 @@ private:
 	int msgX;
 	int msgY;
 	bool isRead;
+	bool changeFlag;
 
 	Webcam webcam;
 	String msg;
@@ -23,5 +26,6 @@ private:
 	Image image;
 	DynamicTexture camtexture;
 	HttpClient* client;
+	std::thread th;
 
 };

@@ -1,5 +1,4 @@
 #include "QrRead.h"
-
 QrRead::QrRead(void) {
 	TextureAsset::Register(U"qrreadback", U"resources/images/back/BackScreen.jpg");
 	TextureAsset::Preload(U"qrreadback");
@@ -16,12 +15,13 @@ QrRead::QrRead(void) {
 	webcam = Webcam(0);
 	client = new HttpClient();
 	isRead = false;
+	changeFlag = true;
 }
 QrRead::~QrRead(void) {
 	TextureAsset::Unregister(U"qrreadback");
 	TextureAsset::Unregister(U"qrreadmsg");
 	FontAsset::Unregister(U"qrreadfont");
-	
+	th.join();
 	delete client;
 }
 void QrRead::start(void) {
@@ -46,10 +46,24 @@ void QrRead::update(void) {
 	else {
 		//読み込みが終了しネットワーク送受信も完了したら移行させる
 		//HTTP GET 取得するファイルパス リクエスト先IP
-		client->Get("/get","httpbin.org");//※ブロッキング 時間あればスレッド化
-		client->jsonWriter();
-		//移行
-		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+		if (client->getStatus() == S_NONE) {
+			std::vector<std::string> chaNum;
+			std::stringstream ss{ readText.narrow() };
+			std::string buf;
+			while (std::getline(ss, buf, ',')) {
+				chaNum.push_back(buf);
+			}
+			std::stringstream st;
+			st << "/json?cha1=" << chaNum[0] << "&cha2=" << chaNum[1] << "&cha3=" << chaNum[2] << "&cha4=" << chaNum[3];
+			th = std::thread(&HttpClient::Get, client, "/get", "httpbin.org");
+		}
+		else if(client->getStatus() == S_FINISH){
+			if (changeFlag) {
+				SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+				changeFlag = false;
+			}
+		}
+
 	}
 }
 void QrRead::draw(void) {

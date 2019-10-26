@@ -7,7 +7,12 @@
 #include<fstream>
 #include <sstream>
 
-
+enum STATUS {//スレッド用現在の状態
+	S_NONE,
+	S_ERR,
+	S_ACTIVE,
+	S_FINISH,
+};
 
 class HttpClient {
 private:
@@ -16,6 +21,7 @@ private:
 	SOCKET sock;
 	char buf[1024];
 	unsigned int** addrptr;
+	STATUS status;
 
 	std::string statusMassage;
 	std::string result;
@@ -32,12 +38,14 @@ public:
 	HttpClient();
 	~HttpClient();
 	void testGet();
-	void characterDataRequest(int chaNum[4]);
+	//void characterDataRequest(int chaNum[4]);
 
 	void testPost(std::string postMassage);//テストPOST　未完成
 	void jsonWriter();
 	void Get(std::string path, std::string deststr);
 	void Post(std::string postMassage, std::string contentType, std::string path, std::string deststr);
+	
+	STATUS getStatus();
 
 	
 };

@@ -12,6 +12,7 @@ HttpClient::HttpClient() {
 		statusMassage = "‰Šú‰»¸”s";
 		return;
 	}
+	status = S_NONE;
 }
 HttpClient::~HttpClient() {
 	WSACleanup();//winsockI—¹
@@ -42,6 +43,7 @@ void HttpClient::testPost(std::string postMassage) {
 }
 
 void HttpClient::Get(std::string path, std::string deststr) {
+	status = S_ACTIVE;
 	result.clear();
 	try {
 		sock = socket(AF_INET, SOCK_STREAM, 0);//ipv4 tcpw’è
@@ -105,6 +107,8 @@ void HttpClient::Get(std::string path, std::string deststr) {
 		statusMassage = err;
 	}
 	closesocket(sock);
+	jsonWriter();
+	status = S_FINISH;
 }
 
 void HttpClient::Post(std::string postMassage, std::string contentType, std::string path, std::string deststr) {
@@ -216,3 +220,6 @@ std::string HttpClient::getFilePath() {
 	return filepath;
 }
 
+STATUS HttpClient::getStatus() {
+	return status;
+}
