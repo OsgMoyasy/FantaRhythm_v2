@@ -14,22 +14,22 @@ QrRead::QrRead(void) {
 	msg = U"QRをかざしてください";
 	readText = U"";
 	webcam = Webcam(0);
+	client = new HttpClient();
+	isRead = false;
 }
 QrRead::~QrRead(void) {
 	TextureAsset::Unregister(U"qrreadback");
 	TextureAsset::Unregister(U"qrreadmsg");
 	FontAsset::Unregister(U"qrreadfont");
-	isRead = false;
 	
+	delete client;
 }
 void QrRead::start(void) {
-	
-}
-void QrRead::update(void) {
 	if (!webcam.start()) {
 		msg = U"Webカメラが接続されていません。";
 	}
-	
+}
+void QrRead::update(void) {
 	if (!isRead) {
 		if (webcam.hasNewFrame()) {
 			webcam.getFrame(image);
@@ -39,10 +39,18 @@ void QrRead::update(void) {
 			if (decoder.decode(image, qr)) {
 				readText = qr.text;
 				isRead = true;
+				webcam.stop();
 			}
 		}
-	}	
-	
+	}
+	else {
+		//読み込みが終了しネットワーク送受信も完了したら移行させる
+		//HTTP GET 取得するファイルパス リクエスト先IP
+		client->Get("/get","httpbin.org");//※ブロッキング 時間あればスレッド化
+		client->jsonWriter();
+		//移行
+		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+	}
 }
 void QrRead::draw(void) {
 	TextureAsset(U"qrreadback").draw();

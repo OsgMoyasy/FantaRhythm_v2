@@ -22,7 +22,11 @@ private:
 
 	std::string filepath;
 
-	void jsonWriter();
+	std::string getStatusMassage();
+	std::string getResult();
+	std::string getResultJson();//json形式に整形された形で返す
+	std::string getFilePath();
+	
 
 public:
 	HttpClient();
@@ -31,12 +35,9 @@ public:
 	void characterDataRequest(int chaNum[4]);
 
 	void testPost(std::string postMassage);//テストPOST　未完成
-
+	void jsonWriter();
 	void Get(std::string path, std::string deststr);
 	void Post(std::string postMassage, std::string contentType, std::string path, std::string deststr);
 
-	std::string getStatusMassage();
-	std::string getResult();
-	std::string getResultJson();//json形式に整形された形で返す
-	std::string getFilePath();
+	
 };

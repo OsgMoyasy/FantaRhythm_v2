@@ -54,8 +54,8 @@ void SelectMusic::changeState(SELECTSTATE nextstate) {
 		stateUpdate = &SelectMusic::updateDifficulty;
 		stateDraw = &SelectMusic::drawDifficulty;
 		break;
-	case TITLE:
-		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
+	case QRREAD:
+		SceneManager::setNextScene(SceneManager::SCENE_QRREAD);
 		break;
 	case GAME:
 		SceneManager::setNextScene(SceneManager::SCENE_GAME);
@@ -88,7 +88,7 @@ void SelectMusic::updateMusic(void) {
 		if (MyKey::getDecisionKey()) {//難易度へ
 			changeState(DIFFICULTY);
 		}else if (MyKey::getReturnKey()) {//タイトルへ戻る
-			changeState(TITLE);
+			changeState(QRREAD);
 		}
 	}
 	else {

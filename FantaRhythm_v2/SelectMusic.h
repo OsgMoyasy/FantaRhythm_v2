@@ -19,7 +19,7 @@ private:
 	enum SELECTSTATE {
 		MUSIC,
 		DIFFICULTY,
-		TITLE,
+		QRREAD,
 		GAME
 	};
 

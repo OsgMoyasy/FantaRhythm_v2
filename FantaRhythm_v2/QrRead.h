@@ -2,6 +2,8 @@
 #include<Siv3D.hpp>
 #include"MyKey.h"
 #include"Scene.h"
+#include "HttpClient.h"
+#include "SceneManager.h"
 
 class QrRead : public Scene {
 public:
@@ -20,5 +22,6 @@ private:
 	String readText;
 	Image image;
 	DynamicTexture camtexture;
+	HttpClient* client;
 
 };
