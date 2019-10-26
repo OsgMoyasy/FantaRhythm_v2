@@ -12,11 +12,12 @@ QrRead::QrRead(void) {
 	msgY = 100;
 	msg = U"QRをかざしてください";
 	readText = U"";
-	webcam = Webcam(0);
 	client = new HttpClient();
 	isRead = false;
-	changeFlag = true;
+	isChange = true;
+	th_status = TH_NONE;
 }
+
 QrRead::~QrRead(void) {
 	TextureAsset::Unregister(U"qrreadback");
 	TextureAsset::Unregister(U"qrreadmsg");
@@ -46,7 +47,7 @@ void QrRead::update(void) {
 	else {
 		//読み込みが終了しネットワーク送受信も完了したら移行させる
 		//HTTP GET 取得するファイルパス リクエスト先IP
-		if (client->getStatus() == S_NONE) {
+		if (th_status == TH_NONE) {
 			std::vector<std::string> chaNum;
 			std::stringstream ss{ readText.narrow() };
 			std::string buf;
@@ -55,12 +56,12 @@ void QrRead::update(void) {
 			}
 			std::stringstream st;
 			st << "/json?cha1=" << chaNum[0] << "&cha2=" << chaNum[1] << "&cha3=" << chaNum[2] << "&cha4=" << chaNum[3];
-			th = std::thread(&HttpClient::Get, client, "/get", "httpbin.org");
+			th = std::thread(&HttpClient::Get, client, "/get", "httpbin.org",std::ref(th_status));
 		}
-		else if(client->getStatus() == S_FINISH){
-			if (changeFlag) {
+		else if(th_status == TH_FINISH){
+			if (isChange) {
 				SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
-				changeFlag = false;
+				isChange = false;
 			}
 		}
 

@@ -18,7 +18,8 @@ private:
 	int msgX;
 	int msgY;
 	bool isRead;
-	bool changeFlag;
+	bool isChange;
+	TH_STATUS th_status;
 
 	Webcam webcam;
 	String msg;

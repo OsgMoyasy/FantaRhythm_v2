@@ -12,38 +12,33 @@ HttpClient::HttpClient() {
 		statusMassage = "初期化失敗";
 		return;
 	}
-	status = S_NONE;
 }
 HttpClient::~HttpClient() {
 	WSACleanup();//winsock終了
 }
-void HttpClient::testGet() {
-	Get("/json", deststr);
-	//テスト用 Jsonで書き出し
-	jsonWriter();
-}
+
 
 void HttpClient::jsonWriter() {
 	std::ofstream outputfile(filepath);
 	outputfile << getResultJson();
 	outputfile.close();
 }
-
+/*
 void HttpClient::characterDataRequest(int chaNum[4]){
 	std::stringstream st;
 	st << "/json?cha1=" << chaNum[0] << "&cha2=" << chaNum[1] << "&cha3=" << chaNum[2] << "&cha4=" << chaNum[3];
 	Get(st.str(), deststr);
 	jsonWriter();
 }
-
+*/
 void HttpClient::testPost(std::string postMassage) {
 	Post(postMassage, "Content - Type: application / json; charset = utf8", "/post", deststr);
 	//テスト用 Jsonで書き出し
 	jsonWriter();
 }
 
-void HttpClient::Get(std::string path, std::string deststr) {
-	status = S_ACTIVE;
+void HttpClient::Get(std::string path, std::string deststr, TH_STATUS& isFinish) {
+	isFinish = TH_ACTIVE;
 	result.clear();
 	try {
 		sock = socket(AF_INET, SOCK_STREAM, 0);//ipv4 tcp指定
@@ -108,7 +103,7 @@ void HttpClient::Get(std::string path, std::string deststr) {
 	}
 	closesocket(sock);
 	jsonWriter();
-	status = S_FINISH;
+	isFinish = TH_FINISH;
 }
 
 void HttpClient::Post(std::string postMassage, std::string contentType, std::string path, std::string deststr) {
@@ -220,6 +215,3 @@ std::string HttpClient::getFilePath() {
 	return filepath;
 }
 
-STATUS HttpClient::getStatus() {
-	return status;
-}
