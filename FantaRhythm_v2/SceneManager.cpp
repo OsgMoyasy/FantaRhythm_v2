@@ -44,6 +44,10 @@ void SceneManager::changeScene() {
 		loadeffect->setTimer(2, scene);
 		scene = new Title();
 		break;
+	case SCENE_QRREAD:
+		loadeffect->setTimer(2, scene);
+		scene = new QrRead();
+		break;
 	case SCENE_SELECTMUSIC:
 		loadeffect->setTimer(2, scene);
 		scene = new SelectMusic();
