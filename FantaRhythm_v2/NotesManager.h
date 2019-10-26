@@ -9,6 +9,7 @@
 #include "MusicManager.h"
 #include "MyKey.h"
 #include "JudgeEffect.h"
+#include "ImageNumber.h"
 
 class NotesManager {
 private:
@@ -18,6 +19,7 @@ private:
 
 	class NotesSubject* notessubject;
 	class JudgeEffect* judgeEffect;
+	class ComboImNumber* comboImNum;
 	
 	std::list<Notes> notelist[LANESIZE];
 	using noteitr = std::list<Notes>::iterator;

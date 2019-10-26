@@ -22,10 +22,12 @@ private:
 
 public:
 	ImageNumber(FilePath path, int w, int h);
+	ImageNumber(FilePath path);
 	~ImageNumber();
 	void addOne(int num, int x, int y);//”š‚ğ‚P•¶š’Ç‰Á‚·‚é
 	void ImageNumber::addMulti(int num, int x, int y);//”š—ñ‚ğ’Ç‰Á‚·‚é
-	void draw();
+	void clear();
+	void draw(double alphaF = 1);
 
 };
 
@@ -44,4 +46,25 @@ public:
 	~NumWithEffect(void);
 	bool update(double msF);
 	void draw(void);
+};
+
+class ComboImNumber {
+private:
+	ImageNumber* imnumber;
+	Texture* comboIm;
+	int x, y;
+	const double ALPHAMS;
+	double alphaMs;	//Á‚¦‚é‚Ü‚Å‚ÌŠÔ
+	double alpha;
+	Stopwatch stopwatch;
+	
+	void calcAlpha();
+public:
+	ComboImNumber(int x, int y, double alphaMs);
+	~ComboImNumber();
+	void update();
+	void draw();
+	void setCombo(int combo);
+	void resetCombo();
+
 };

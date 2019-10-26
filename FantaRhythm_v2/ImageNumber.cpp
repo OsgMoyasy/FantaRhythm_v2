@@ -10,6 +10,13 @@ ImageNumber::ImageNumber(FilePath path, int w, int h) {//‰¡ˆê—ñ‚É•À‚ñ‚Å‚¢‚é‰æ‘œ
 	imw = w;
 	imh = h;
 }
+ImageNumber::ImageNumber(FilePath path) {//numƒtƒHƒ‹ƒ_‚ÉØ‚è•ª‚¯‚ç‚ê‚½”š‚ª“ü‚Á‚Ä‚¢‚éê‡
+	for (int i = 0; i < 10; i++) {
+		imNumber[i] = Texture(path + Format(i) + U".png");
+	}
+	imw = imNumber[0].width();
+	imh = imNumber[0].height();
+}
 ImageNumber::~ImageNumber() {
 
 }
@@ -23,6 +30,7 @@ void ImageNumber::addOne(int num, int x, int y) {
 
 void ImageNumber::addMulti(int num, int x, int y) {
 	constexpr char32_t zero = U'0';
+	numberp.clear();	//”š—ñ‰Šú‰»
 	String nums = Format(num);
 	for (int i = 0; i < nums.size(); i++) {
 		int n = nums.at(i) - zero;
@@ -30,9 +38,13 @@ void ImageNumber::addMulti(int num, int x, int y) {
 	}
 }
 
-void ImageNumber::draw() {
+void ImageNumber::clear() {
+	numberp.clear();
+}
+
+void ImageNumber::draw(double alphaF) {
 	for (int i = 0; i < numberp.size(); i++) {
-		imNumber[numberp.at(i).num].drawAt(numberp.at(i).x, numberp.at(i).y);
+		imNumber[numberp.at(i).num].drawAt(numberp.at(i).x, numberp.at(i).y, AlphaF(alphaF));
 	}
 }
 
@@ -76,3 +88,39 @@ void NumWithEffect::draw(void) {
 	numEffect->draw();
 }
 
+
+
+void ComboImNumber::calcAlpha() {
+	alpha = stopwatch.msF() / alphaMs;
+}
+ComboImNumber::ComboImNumber(int x, int y, double alphaMs) : ALPHAMS(alphaMs) {
+	this->x = x;
+	this->y = y;
+	this->alphaMs = 0;
+	alpha = 0;
+	stopwatch.restart();
+	imnumber = new ImageNumber(U"resources/images/items/combonum/");
+	comboIm = new Texture(U"resources/images/items/combo.png");
+}
+ComboImNumber::~ComboImNumber() {
+	delete imnumber;
+	delete comboIm;
+}
+void ComboImNumber::update() {
+	calcAlpha();
+}
+void ComboImNumber::draw() {
+	imnumber->draw(alpha);
+	comboIm->drawAt(x + comboIm->width()/2 - 10, y + 5, AlphaF(alpha));
+}
+void ComboImNumber::setCombo(int combo) {
+	alphaMs = ALPHAMS;
+	stopwatch.restart();
+	imnumber->addMulti(combo, x, y);
+}
+void ComboImNumber::resetCombo() {
+	alphaMs = 0;
+	imnumber->clear();
+	stopwatch.restart();
+	alpha = 0;
+}

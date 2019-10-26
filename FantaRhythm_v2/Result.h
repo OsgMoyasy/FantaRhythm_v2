@@ -20,7 +20,7 @@ private:
 	class SE* se;
 	class NumWithEffect* scoreNumEffect;
 	class NumWithEffect* damageNumEffect;
-	class ImageNumber* judgeImNum;
+	class ImageNumber* judgeImNum[JUDGE::TYPE_SIZE];
 	
 	int score;
 	int totalDamage;

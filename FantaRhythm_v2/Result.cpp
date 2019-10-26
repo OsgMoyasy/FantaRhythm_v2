@@ -19,7 +19,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	FontAsset::Register(U"resultfont", 50);
 	FontAsset::Preload(U"resultfont");
 
-	if (isClear) {//ゲームクリア
+	if (!isClear) {//ゲームクリア
 		//テクスチャ初期化
 		TextureAsset::Register(U"resultback", U"resources/images/back/result.png");
 
@@ -38,7 +38,15 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		//文字列を画像変換
 		scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
 		damageNumEffect = new NumWithEffect(numberImPath, damageStr, 1, SCOREX, SCOREY + NUMIM_HEIGHT, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
-		judgeImNum = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
+		/*
+		for (auto judgeimnum : judgeImNum) {
+			judgeimnum = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
+		}
+		*/
+
+		for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
+			judgeImNum[i] = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
+		}
 
 		judgeDrawRow = 0;
 		judgePrevTime = 0;
@@ -61,7 +69,9 @@ Result::~Result(void) {
 	delete se;
 	delete scoreNumEffect;
 	delete damageNumEffect;
-	delete judgeImNum;
+	for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
+		delete judgeImNum[i];
+	}
 }
 
 void Result::start(void) {
@@ -111,7 +121,9 @@ void Result::successDraw(void) {
 	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2);
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
-	judgeImNum->draw();
+	for (auto judgeimnum : judgeImNum) {
+		judgeimnum->draw();
+	}
 	FontAsset(U"resultfont")(U"～ 〇〇キーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
@@ -129,7 +141,7 @@ bool Result::judgeUpdate() {
 		return false;
 	}
 	if (stopwatch.msF() - judgePrevTime >= NUM_MAXTIME ) {//追加させる時間が来たら数字を追加し下方向へ
-		judgeImNum->addMulti(judgeCnt.cnt[judgeDrawRow], SCOREX, SCOREY + NUMIM_HEIGHT * (judgeDrawRow + 2));
+		judgeImNum[judgeDrawRow]->addMulti(judgeCnt.cnt[judgeDrawRow], SCOREX, SCOREY + NUMIM_HEIGHT * (judgeDrawRow + 2));
 		judgePrevTime = stopwatch.msF();
 		judgeDrawRow++;
 	}
