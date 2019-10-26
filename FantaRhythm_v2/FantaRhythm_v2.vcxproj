@@ -206,7 +206,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameEffect.cpp" />
     <ClCompile Include="Gauge.cpp" />
-    <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="ImageNumber.cpp" />
     <ClCompile Include="JudgeEffect.cpp" />
     <ClCompile Include="LoadEffect.cpp" />
@@ -299,7 +298,6 @@
     <ClInclude Include="GameEffect.h" />
     <ClInclude Include="Gauge.h" />
     <ClInclude Include="Healer.h" />
-    <ClInclude Include="HttpClient.h" />
     <ClInclude Include="ImageNumber.h" />
     <ClInclude Include="Jobs.h" />
     <ClInclude Include="Judge.h" />
@@ -324,5 +322,6 @@
     <ResourceCompile Include="App\Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
 </Project>
