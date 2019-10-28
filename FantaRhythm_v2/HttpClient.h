@@ -7,6 +7,7 @@
 #include<fstream>
 #include <sstream>
 #include "MyThread.h"
+#include <iomanip>
 
 
 class HttpClient {
@@ -25,7 +26,6 @@ private:
 	std::string getResult();
 	std::string getResultJson();//json形式に整形された形で返す
 	std::string getFilePath();
-	
 
 public:
 	HttpClient();
@@ -36,4 +36,5 @@ public:
 	void jsonWriter();
 	void Get(std::string path, std::string deststr, TH_STATUS& isFinish);//スレッドに対応
 	void Post(std::string postMassage, std::string contentType, std::string path, std::string deststr);	
+	std::string percentEnc(std::string str);
 };

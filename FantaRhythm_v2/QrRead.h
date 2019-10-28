@@ -6,7 +6,7 @@
 #include"Scene.h"
 #include "HttpClient.h"
 #include "SceneManager.h"
-
+#include "PlayerName.h"
 class QrRead : public Scene {
 public:
 	QrRead(void);

@@ -46,7 +46,7 @@ void QrRead::update(void) {
 	}
 	else {
 		//読み込みが終了しネットワーク送受信も完了したら移行させる
-		//HTTP GET 取得するファイルパス リクエスト先IP
+		//HTTP GET 取得するファイルパス リクエスト先IP ※日本語GETは％エンコードしてないので無理
 		if (th_status == TH_NONE) {
 			std::vector<std::string> chaNum;
 			std::stringstream ss{ readText.narrow() };
@@ -54,9 +54,13 @@ void QrRead::update(void) {
 			while (std::getline(ss, buf, ',')) {
 				chaNum.push_back(buf);
 			}
+			
+			PlayerName::setName(s3d::Unicode::Widen(chaNum.at(chaNum.size() - 1)));
 			std::stringstream st;
-			st << "/json?cha1=" << chaNum[0] << "&cha2=" << chaNum[1] << "&cha3=" << chaNum[2] << "&cha4=" << chaNum[3];
-			th = std::thread(&HttpClient::Get, client, "/get", "httpbin.org",std::ref(th_status));
+			st << "/hello?cha1=" << chaNum[0] << "&cha2=" << chaNum[1] << "&cha3=" << chaNum[2] << "&cha4=" << chaNum[3];
+			th = std::thread(&HttpClient::Get, client, st.str(), "192.168.0.50",std::ref(th_status));
+			
+			//th = std::thread(&HttpClient::Get, client, "/hello", "192.168.0.50", std::ref(th_status));
 		}
 		else if(th_status == TH_FINISH){
 			if (isChange) {
