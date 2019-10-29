@@ -16,7 +16,7 @@ public:
 		GUARD,
 		SIZE,
 	};
-
+	bool isReady();
 	void update(void);
 	void draw(void);
 	void getEvent(Massage msg);//CharacterSetからイベント受取
@@ -52,6 +52,7 @@ private:
 	double initx, inity;//基本位置
 	double x, y;		//現在位置
 	int framecnt;		//上下移動に使うフレームカウント
+
 	//キャラ移動
 	void moveUpDown(void);
 	void characterDraw(void);

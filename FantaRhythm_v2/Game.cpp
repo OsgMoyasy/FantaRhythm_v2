@@ -14,7 +14,7 @@ Game::Game(const String& music, const String& dif) {
 	notessubject->addObserver(characterm);//オブザーバーへ登録
 	
 	isClear = true;//falseになればゲームオーバー
-	TextureAsset::Register(U"gameback", U"resources/images/back/first.jpg");
+	TextureAsset::Register(U"gameback", U"resources/images/back/first.jpg", AssetParameter::LoadAsync());
 	TextureAsset::Preload(U"gameback");
 
 	FontAsset::Register(U"gamefont", 30);
@@ -28,6 +28,13 @@ Game::~Game() {
 	TextureAsset::Unregister(U"gameback");
 	FontAsset::Unregister(U"gamefont");
 	MusicManager::setEndMusic();
+}
+
+bool Game::isReady() {
+	if (TextureAsset::IsReady(U"gameback") && characterm->isReady()) {
+		return true;
+	}
+	return false;
 }
 
 void Game::start() {

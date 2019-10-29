@@ -68,6 +68,16 @@ CharacterSet::~CharacterSet() {
 	delete csubject;
 }
 
+bool CharacterSet::isReady(void) {
+	for (int i = 0; i < CHANUMBER; i++) {
+		if (!cha[i]->isReady()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
 void CharacterSet::update() {
 	for (int i = 0; i < CHANUMBER; i++) {
 		cha[i]->update();

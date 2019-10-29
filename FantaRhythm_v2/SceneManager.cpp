@@ -2,8 +2,9 @@
 
 
 Scene* SceneManager::scene;
-SceneManager::SCENE SceneManager::nowscene;
-SceneManager::SCENE SceneManager::nextscene;
+Scene* SceneManager::tmpscene;
+SceneManager::SCENE SceneManager::NOWSCENE;
+SceneManager::SCENE SceneManager::NEXTSCENE;
 LoadEffect* SceneManager::loadeffect;
 bool SceneManager::isLoadFinished;
 
@@ -17,15 +18,20 @@ void SceneManager::finalize() {
 	delete scene;
 }
 void SceneManager::updateScene() {
-	if (nowscene != nextscene) {
-		changeScene();
+	if (NOWSCENE != NEXTSCENE) {
 		isLoadFinished = false;
+		loadeffect->setTimer(2);
+		NOWSCENE = NEXTSCENE;
 	}
 	if (!isLoadFinished) {
-		if (!loadeffect->isUpdate()) {
+		if (loadeffect->isLoadStanby()) {
+			changeScene();
+		}
+		if (!loadeffect->isUpdate(scene->isReady())) {
 			scene->start();
 			isLoadFinished = true;
 		}
+		
 	}
 	scene->update();
 }
@@ -35,50 +41,49 @@ void SceneManager::drawScene() {
 }
 
 void SceneManager::setNextScene(SCENE next) {
-	nextscene = next;
+	NEXTSCENE = next;
 }
 
 void SceneManager::changeScene() {
-	switch (nextscene) {//nextsceneがNONE以外の時シーン移行する
+	
+	switch (NEXTSCENE) {//nextsceneがNONE以外の時シーン移行する
 	case SCENE_TITLE:
-		loadeffect->setTimer(2, scene);
+		delete scene;
+		loadeffect->setTimer(2);
 		scene = new Title();
 		break;
 	case SCENE_QRREAD:
-		loadeffect->setTimer(2, scene);
+		delete scene;
+		loadeffect->setTimer(2);
 		scene = new QrRead();
 		break;
 	case SCENE_SELECTMUSIC:
-		loadeffect->setTimer(2, scene);
+		delete scene;
+		loadeffect->setTimer(2);
 		scene = new SelectMusic();
 		break;
-	case SCENE_GAME:
-		if (nowscene == SCENE_SELECTMUSIC) {
-			loadeffect->setTimer(2, scene);
-			//曲のパスと難易度選択のパスを退避
-			String musicpath = ((SelectMusic*)scene)->getMusicPath();
-			String filepath = ((SelectMusic*)scene)->getDifPath();
-			scene = new Game(musicpath,filepath);
-		}
-		else {
-			nextscene = SCENE_NONE;
-		}
+	case SCENE_GAME: {
+		loadeffect->setTimer(2);
+		//曲のパスと難易度選択のパスを退避
+
+		static String musicpath = ((SelectMusic*)scene)->getMusicPath();
+		static String filepath = ((SelectMusic*)scene)->getDifPath();
+		delete scene;
+		scene = new Game(musicpath, filepath);
 		break;
-	case SCENE_RESULT:
-		if (nowscene == SCENE_GAME) {
-			loadeffect->setTimer(2, scene);
-			//判定のカウント数と敵への総ダメージ量を退避
-			int totalDamage = ((Game*)scene)->getTotalDamage();
-			bool isClear = ((Game*)scene)->getClearFlag();
-			JUDGE::JudgeCount jc = *((Game*)scene)->getJudgeCount();
-			scene = new Result(jc, totalDamage, isClear);
-		}
-		else {
-			nextscene = SCENE_NONE;
-		}
+	}
+	case SCENE_RESULT: {
+		loadeffect->setTimer(2);
+		//判定のカウント数と敵への総ダメージ量を退避
+		int totalDamage = ((Game*)scene)->getTotalDamage();
+		bool isClear = ((Game*)scene)->getClearFlag();
+		JUDGE::JudgeCount jc = *((Game*)scene)->getJudgeCount();
+		delete scene;
+		scene = new Result(jc, totalDamage, isClear);
 		break;
+	}
 	default:
 		break;
 	}
-	nowscene = nextscene;
+
 }

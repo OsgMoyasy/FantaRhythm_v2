@@ -11,6 +11,7 @@ class QrRead : public Scene {
 public:
 	QrRead(void);
 	~QrRead(void);
+	bool isReady(void);
 	void start(void);
 	void update(void);
 	void draw(void);

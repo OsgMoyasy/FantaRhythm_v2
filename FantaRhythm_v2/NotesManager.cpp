@@ -30,16 +30,13 @@ struct NotesManager::ProPos {
 };
 
 NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
-	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png");
-	TextureAsset::Preload(U"note");
-	TextureAsset::Register(U"longnote", U"resources/images/items/Nort2nd.png");
-	TextureAsset::Preload(U"longnote");
-	TextureAsset::Register(U"cri", U"resources/images/items/Nort2.png");
-	TextureAsset::Preload(U"cri");
+	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png", AssetParameter::LoadAsync());
+	TextureAsset::Register(U"longnote", U"resources/images/items/Nort2nd.png", AssetParameter::LoadAsync());
+	TextureAsset::Register(U"cri", U"resources/images/items/Nort2.png", AssetParameter::LoadAsync());
+
 
   
-	TextureAsset::Register(U"judgeline", U"resources/images/items/judgeline.png");
-	TextureAsset::Preload(U"judgeline");
+	TextureAsset::Register(U"judgeline", U"resources/images/items/judgeline.png", AssetParameter::LoadAsync());
 
 	effect.set(JUDGE::GOOD, U"resources/images/effects/nortsEffect.png", 100, 100);
 	effect.set(JUDGE::GREAT, U"resources/images/effects/nortsEffect2.png", 100, 100);
@@ -128,6 +125,15 @@ NotesManager::~NotesManager() {
 	delete judgeEffect;
 }
 
+bool NotesManager::isReady() {
+	if (TextureAsset::IsReady(U"note") &&
+		TextureAsset::IsReady(U"longnote")&&
+		TextureAsset::IsReady(U"cri")&&
+		TextureAsset::IsReady(U"judgeline")) {
+		return true;
+	}
+	return false;
+}
 
 void NotesManager::update(void)
 {

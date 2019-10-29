@@ -11,6 +11,7 @@ class CharacterSet:public Observer{
 public:
 	CharacterSet(const String& musicpath);
 	~CharacterSet();
+	bool isReady();
 	void draw();
 	void update();
 	void funcEvent(Obj obj);

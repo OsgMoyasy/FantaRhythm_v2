@@ -28,8 +28,9 @@ public:
 	static void setNextScene(SCENE next);//次フレームにてシーンが移行する
 private:
 	static Scene *scene;
-	static SCENE nowscene;
-	static SCENE nextscene;//シーン移行時にはNONE以外が入る
+	static Scene* tmpscene;//先行ロードする用
+	static SCENE NOWSCENE;
+	static SCENE NEXTSCENE;//シーン移行時にはNONE以外が入る
 	static LoadEffect *loadeffect;
 	static bool isLoadFinished;
 	static void changeScene();//シーン移行

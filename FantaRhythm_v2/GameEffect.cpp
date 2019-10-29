@@ -73,6 +73,7 @@ FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, in
 FlipEffect::~FlipEffect() {
 	if (existSE) { delete se; }
 }
+
 void FlipEffect::setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight) {
 	Texture tmp(path);
 	map = tmp;

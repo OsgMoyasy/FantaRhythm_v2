@@ -21,7 +21,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 
 	if (!isClear) {//ゲームクリア
 		//テクスチャ初期化
-		TextureAsset::Register(U"resultback", U"resources/images/back/result.png");
+		TextureAsset::Register(U"resultback", U"resources/images/back/result.png", AssetParameter::LoadAsync());
 
 		//効果音初期化
 		se = new SE(U"resources/musics/effects/Congratulations.wav");
@@ -73,6 +73,14 @@ Result::~Result(void) {
 		delete judgeImNum[i];
 	}
 }
+
+bool Result::isReady() {
+	if (TextureAsset::IsReady(U"resultback")) {
+		return true;
+	}
+	return false;
+}
+
 
 void Result::start(void) {
 	MyKey::setKeyLock(true);

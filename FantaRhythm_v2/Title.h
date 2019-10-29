@@ -7,6 +7,7 @@ class Title : public Scene{
 public:
 	Title(void);
 	~Title(void);
+	bool isReady(void);
 	void start(void);
 	void update(void);
 	void draw(void);

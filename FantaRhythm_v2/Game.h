@@ -13,6 +13,7 @@ class Game : public Scene {
 public:
 	Game(const String& music, const String& dif);
 	~Game();
+	bool isReady(void);
 	void start(void);
 	void update(void);
 	void draw(void);

@@ -1,9 +1,7 @@
 #include "QrRead.h"
 QrRead::QrRead(void) {
-	TextureAsset::Register(U"qrreadback", U"resources/images/back/BackScreen.jpg");
-	TextureAsset::Preload(U"qrreadback");
-	TextureAsset::Register(U"qrreadmsg", U"resources/images/items/massage.png");
-	TextureAsset::Preload(U"qrreadmsg");
+	TextureAsset::Register(U"qrreadback", U"resources/images/back/BackScreen.jpg", AssetParameter::LoadAsync());
+	TextureAsset::Register(U"qrreadmsg", U"resources/images/items/massage.png", AssetParameter::LoadAsync());
 
 	FontAsset::Register(U"qrreadfont", 50);
 	FontAsset::Preload(U"qrreadfont");
@@ -22,15 +20,29 @@ QrRead::~QrRead(void) {
 	TextureAsset::Unregister(U"qrreadback");
 	TextureAsset::Unregister(U"qrreadmsg");
 	FontAsset::Unregister(U"qrreadfont");
-	th.join();
+	if (th.joinable()) {
+		th.join();
+	}
 	delete client;
 }
+
+bool QrRead::isReady(void) {
+	if (TextureAsset::IsReady(U"qrreadback") &&
+		TextureAsset::IsReady(U"qrreadmsg")) {
+		return true;
+	}
+	return false;
+}
+
 void QrRead::start(void) {
 	if (!webcam.start()) {
 		msg = U"WebƒJƒƒ‰‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
 	}
 }
 void QrRead::update(void) {
+	if (MyKey::getReturnKey()) {
+		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
+	}
 	if (!isRead) {
 		if (webcam.hasNewFrame()) {
 			webcam.getFrame(image);
