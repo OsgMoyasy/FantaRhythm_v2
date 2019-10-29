@@ -30,11 +30,8 @@ private:
 public:
 	HttpClient();
 	~HttpClient();
-	//void characterDataRequest(int chaNum[4]);
-
-	void testPost(std::string postMassage);//テストPOST　未完成
 	void jsonWriter();
 	void Get(std::string path, std::string deststr, TH_STATUS& isFinish);//スレッドに対応
-	void Post(std::string postMassage, std::string contentType, std::string path, std::string deststr);	
-	std::string percentEnc(std::string str);
+	void Post(std::u8string postMassage, std::string contentType, std::string path, std::string deststr);	
+	std::string encode(const std::u8string& str);
 };

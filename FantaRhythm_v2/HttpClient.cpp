@@ -23,19 +23,7 @@ void HttpClient::jsonWriter() {
 	outputfile << getResultJson();
 	outputfile.close();
 }
-/*
-void HttpClient::characterDataRequest(int chaNum[4]){
-	std::stringstream st;
-	st << "/json?cha1=" << chaNum[0] << "&cha2=" << chaNum[1] << "&cha3=" << chaNum[2] << "&cha4=" << chaNum[3];
-	Get(st.str(), deststr);
-	jsonWriter();
-}
-*/
-void HttpClient::testPost(std::string postMassage) {
-	Post(postMassage, "Content - Type: application / json; charset = utf8", "/post", deststr);
-	//テスト用 Jsonで書き出し
-	jsonWriter();
-}
+
 
 void HttpClient::Get(std::string path, std::string deststr, TH_STATUS& isFinish) {
 	isFinish = TH_ACTIVE;
@@ -118,8 +106,8 @@ void HttpClient::Get(std::string path, std::string deststr, TH_STATUS& isFinish)
 	isFinish = TH_FINISH;
 }
 
-void HttpClient::Post(std::string postMassage, std::string contentType, std::string path, std::string deststr) {
-	postMassage = percentEnc(postMassage);
+void HttpClient::Post(std::u8string post, std::string contentType, std::string path, std::string deststr) {
+	std::string postMassage = encode(post);
 	result.clear();
 	try {
 		sock = socket(AF_INET, SOCK_STREAM, 0);//ipv4 tcp指定
@@ -171,14 +159,6 @@ void HttpClient::Post(std::string postMassage, std::string contentType, std::str
 		if (n < 0) {
 			throw "送信エラー";
 		}
-		/*
-		memset(buf, 0, sizeof(buf));
-		_snprintf(buf, sizeof(buf), "Content-Type: %s\r\n", contentType.c_str());
-		n = send(sock, buf, (int)strlen(buf), 0);
-		if (n < 0) {
-			throw "送信エラー";
-		}
-		*/
 		memset(buf, 0, sizeof(buf));
 		_snprintf(buf, sizeof(buf), "Content-Length: %d\r\n", postMassage.size());
 		n = send(sock, buf, (int)strlen(buf), 0);
@@ -230,35 +210,23 @@ std::string HttpClient::getFilePath() {
 	return filepath;
 }
 
-std::string HttpClient::percentEnc(std::string str) {
-	const int NUM_BEGIN_UTF8 = 48;
-	const int CAPITAL_BEGIN_UTF8 = 65;
-	const int LOWER_BEGIN_UTF8 = 97;
 
-	int charCode = -1;
-	std::string encoded;
-	std::stringstream out;
+std::string HttpClient::encode(const std::u8string& str) {
+	std::ostringstream os;
 
-	//for文で1byteずつストリームに入れていく
-	for (int i = 0; str[i] != 0; i++) {
-		//文字列中の1byte分のデータを整数値として代入
-		charCode = (int)(unsigned char)str[i];
-
-		//エンコードする必要の無い文字の判定
-		if ((NUM_BEGIN_UTF8 <= charCode && charCode <= NUM_BEGIN_UTF8 + 9)
-			|| (CAPITAL_BEGIN_UTF8 <= charCode && charCode <= CAPITAL_BEGIN_UTF8 + 25)
-			|| (LOWER_BEGIN_UTF8 <= charCode && charCode <= LOWER_BEGIN_UTF8 + 25)
-			|| str[i] == '.' || str[i] == '_' || str[i] == '-' || str[i] == '~')
-		{
-			//エンコードの必要が無い文字はそのままストリームに入れる
-			out << str[i];
+	for (int i = 0; i < str.size(); i++) {
+		char c = str[i];
+		if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+			(c >= '0' && c <= '9') ||
+			c == '-' || c == '_' || c == '.' || c == '~'|| c == '=') {
+			os << c;
 		}
 		else {
-			//エンコードする場合は%記号と文字コードの16進数表示をストリームに入れる
-			out << '%' << std::hex << std::uppercase << charCode;
+			char s[4];
+			snprintf(s, sizeof(s), "%%%02x", c & 0xff);
+			os << s;
 		}
 	}
-	//ストリームの文字列をstringのインスタンスに代入しreturn
-	encoded = out.str();
-	return encoded;
+
+	return os.str();
 }
