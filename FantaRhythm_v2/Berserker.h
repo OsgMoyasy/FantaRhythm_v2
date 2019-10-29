@@ -5,7 +5,7 @@
 
 class Berserker :public Character {
 public:
-	Berserker(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
+	Berserker(CharacterSubject* csubject, String& char_name, int hp, int attack, double generic1, double generic2, double ix, double iy);
 	~Berserker();
 private:
 	int mydamage;

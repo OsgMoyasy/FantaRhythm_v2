@@ -5,7 +5,7 @@ constexpr int ARROWSMAX = 5;
 //上ボタンで弓を蓄える(最大5本)
 //下ボタンで確率攻撃
 
-Archer::Archer(CharacterSubject* csubject, const CSVData & csv, double ix, double iy, int row) :Character(csubject, U"archer",csv, ix, iy, row ) {
+Archer::Archer(CharacterSubject* csubject, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :Character(csubject, U"archer", char_name, hp, power, generic1, generic2, ix, iy) {
 	arrowscount = 0;
 	arrowsdamage = 0;
 	arrowEffect = new ArrowEffect(ix,iy);

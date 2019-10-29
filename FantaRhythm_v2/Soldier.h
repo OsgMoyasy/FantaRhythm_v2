@@ -5,7 +5,7 @@
 
 class Soldier :public Character {
 public:	
-	Soldier(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
+	Soldier(CharacterSubject* csubject, String& char_name, int hp, int attack, double generic1, double generic2, double ix, double iy);
 	~Soldier();
 private:
 

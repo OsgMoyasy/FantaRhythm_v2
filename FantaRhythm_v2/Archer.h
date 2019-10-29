@@ -5,7 +5,7 @@
 
 class Archer :public Character {
 public:
-	Archer(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
+	Archer(CharacterSubject* csubject, String& char_name, int hp, int attack, double generic1, double generic2, double ix, double iy);
 	~Archer();
 private:
 	class ArrowEffect* arrowEffect;

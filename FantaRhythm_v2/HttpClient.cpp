@@ -1,6 +1,6 @@
 #include "HttpClient.h"
 #pragma warning( disable : 4996)
-std::string deststr = "httpbin.org";//送信先(IPアドレスorドメイン名)
+//std::string deststr = "httpbin.org";//送信先(IPアドレスorドメイン名)
 //std::string deststr = "postman-echo.com";//送信先(IPアドレス)
 const int port = 3000;
 HttpClient::HttpClient() {

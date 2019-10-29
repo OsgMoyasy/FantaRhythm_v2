@@ -4,7 +4,7 @@
 
 class Tanker :public Character {
 public:
-	Tanker(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
+	Tanker(CharacterSubject* csubject, String& char_name, int hp, int attack, double generic1, double generic2, double ix, double iy);
 	~Tanker();
 private:
 	int sealedcount;

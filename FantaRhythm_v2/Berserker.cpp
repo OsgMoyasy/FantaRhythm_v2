@@ -1,7 +1,7 @@
 #include "Berserker.h"
 constexpr int CHARGEMAX = 5;
 
-Berserker::Berserker(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"berserker", csv, ix, iy, row) {
+Berserker::Berserker(CharacterSubject* csubject, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :Character(csubject, U"berserker", char_name, hp, power, generic1, generic2, ix, iy) {
 	attackdamage = 0;		//‚±‚Ì“ñ‚Â‚Í‚½‚Ô‚ñŽg‚í‚È‚¢
 	busterdamage = 0;	
 	upcount = 0;

@@ -5,7 +5,7 @@ constexpr int RECOVERYMAX = 15;
 //上ボタンで回復量のチャージ
 //下ボタンである一定のチャージ量があれば回復
 
-Sage::Sage(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"sage", csv, ix, iy, row) {
+Sage::Sage(CharacterSubject* csubject, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :Character(csubject, U"sage", char_name, hp, power, generic1, generic2, ix, iy) {
 	recoveryClear();
 	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, U"resources/images/effects/sage", RECOVERYMAX, Color(Palette::Black), Color(Palette::Burlywood));
 	chargeGauge->update(recoverycount);

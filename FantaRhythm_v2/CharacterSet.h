@@ -7,11 +7,9 @@
 
 #define CHANUMBER 4
 
-
-
 class CharacterSet:public Observer{
 public:
-	CharacterSet(int save[], const String& musicpath);
+	CharacterSet(const String& musicpath);
 	~CharacterSet();
 	void draw();
 	void update();

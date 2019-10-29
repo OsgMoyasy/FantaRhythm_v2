@@ -1,7 +1,7 @@
 #include "Combostar.h"
 constexpr int COMBOMAX = 30;
 
-Combostar::Combostar(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"combostar", csv, ix, iy, row) {
+Combostar::Combostar(CharacterSubject* csubject, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :Character(csubject, U"combostar", char_name, hp, power, generic1, generic2, ix, iy) {
 	comboClear();
 	combodamage = 0;
 	updamage = 0;

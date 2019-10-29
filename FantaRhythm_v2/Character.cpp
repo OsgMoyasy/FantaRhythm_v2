@@ -5,7 +5,7 @@ constexpr int MOVERANGE = 70;	//キャラの上下移動高さ
 constexpr int MOVEFREQ = 4 * 60;//キャラ移動周期（フレーム数＊時間(s))
 constexpr int EFFECTSIZE = 200; //エフェクトの画像サイズ
 
-Character::Character(CharacterSubject* csubject, const FilePath& jobname,const CSVData &csv , double ix, double iy,int row) {
+Character::Character(CharacterSubject* csubject, const FilePath& jobname, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) {
 	this->csubject = csubject;
 	//エフェクトの作成
 	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
@@ -13,15 +13,14 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.1);
 	//CSVファイルの読み込み
-	characterNum = csv.get<int>(row, 0);
-	name = csv.get<String>(row, 2);
-	hp = csv.get<int>(row, 3);
-	power = csv.get<int>(row,4);
-	args1 = csv.get<double>(row, 5);
-	args2 = csv.get<double>(row, 6);
+	this->char_name = char_name;
+	this->hp = hp;
+	this->power = power;
+	this->generic1 = generic1;
+	this->generic2 = generic2;
 	//キャラ画像の読み込み
-	TextureAsset::Register(name,U"resources/images/character/R"+name+U".png");
-	TextureAsset::Preload(name);
+	TextureAsset::Register(char_name,U"resources/images/character/R"+char_name+U".png");
+	TextureAsset::Preload(char_name);
 	initx = ix;
 	inity = iy;
 	framecnt = 0;
@@ -29,7 +28,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname,const C
 }
 
 Character::~Character(void) {
-	TextureAsset::Unregister(name);
+	TextureAsset::Unregister(char_name);
 	for (int i = 0; i < EffectType::SIZE; i++) {
 		delete flipeffect[i];
 	}
@@ -83,11 +82,11 @@ int Character::getPower() {
 }
 
 double Character::getArgs1() {
-	return args1;
+	return generic1;
 }
 
 double Character::getArgs2() {
-	return args2;
+	return generic2;
 }
 
 double Character::getX() {
@@ -97,13 +96,13 @@ double Character::getY() {
 	return y;
 }
 int Character::getW() {
-	return TextureAsset(name).width();
+	return TextureAsset(char_name).width();
 }
 int Character::getH() {
-	return TextureAsset(name).height();
+	return TextureAsset(char_name).height();
 }
 String Character::getName() {
-	return name;
+	return char_name;
 }
 
 void Character::setAttackEvent(int attack, EffectType type) {
@@ -119,7 +118,7 @@ void Character::moveUpDown(void) {
 }
 
 void Character::characterDraw() {
-	TextureAsset(name).drawAt(x, y);
+	TextureAsset(char_name).drawAt(x, y);
 }
 
 void Character::playEffect(EffectType type) {
