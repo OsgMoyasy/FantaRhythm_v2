@@ -74,15 +74,15 @@ private:
 	void judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType);
 	void noteNext(int lane);
 	
-	double getProgress(int time);//レーン上端から判定線までの進んだ割合を返す
-	double progressByAngle(double progressRate);//レーンの角度による補正をprogressRateに行う
-	double getCurrentPosition(double startPos, double endPos, double progressRate);//現在座標を返す
-	struct ProPos;//progressRateと現在座標(X,Y)
-	ProPos getProPos(int lane, int time);//progressRateと現在座標(X,Y)を返す
+	double getProgress(int time);													//レーン上端から判定線までの進んだ割合を返す
+	double progressByAngle(double progressRate);									//レーンの角度による補正をprogressRateに行う
+	double getCurrentPosition(double startPos, double endPos, double progressRate);	//現在座標を返す
+	struct ProPos;							//progressRateと現在座標(X,Y)
+	ProPos getProPos(int lane, int time);	//progressRateと現在座標(X,Y)を返す
 
 	void displayNormal(int lane, int time);				//ノーマルノーツを表示
 	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
-	Color longLineColor(int linex, int lane, int time);
+	Color longLineColor(int linex, int lane, int time);	//ロングノーツの色を決定
 	void displayCritical(int lane, int time);			//敵の攻撃ノーツを表示
 	void playNotesEffect(ProPos pos, JUDGE::TYPE type);	//ノーツ破壊時のエフェクト再生
 
