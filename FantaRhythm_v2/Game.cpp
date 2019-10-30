@@ -11,11 +11,10 @@ Game::Game(const String& music, const String& dif) {
 	int save[4] = { 1,4,5,6 };//テスト用セーブデータ
 	characterm = new CharacterSet(save, musicpath);
 
-
 	notessubject->addObserver(characterm);//オブザーバーへ登録
 	
 	isClear = true;//falseになればゲームオーバー
-	TextureAsset::Register(U"gameback", U"resources/images/back/first.jpg");
+	TextureAsset::Register(U"gameback", U"resources/images/back/"+ FileSystem::FileName(musicpath) +U".jpg");
 	TextureAsset::Preload(U"gameback");
 
 	FontAsset::Register(U"gamefont", 30);
