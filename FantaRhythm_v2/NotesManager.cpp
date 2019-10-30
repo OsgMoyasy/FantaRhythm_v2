@@ -91,25 +91,33 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	}
 
 	//描画関係の変数の初期化
-	//X座標
-	int Center = Window::Width() / 2;//レーン群の中心
-	int StartBetween = 80;//上端でのレーン間の距離
-	int JudgeBetween = 140;//判定線でのレーン間の距離
-	for (int i = 0;i < LANESIZE;i++) {
-		laneStartX[i] = Center + (int)((i - (LANESIZE - 1) / 2.0) * StartBetween);
-		laneJudgeX[i] = Center + (int)((i - (LANESIZE - 1) / 2.0) * JudgeBetween);
+	//レーン基準円の位置
+	int centerX = Window::Width() / 2;
+	int centerY = 0;
+
+	int startRange = 100;			//  上端の基準円の原点からの距離
+	int judgeRange = 600;			//判定線の基準円の原点からの距離
+	double laneBetween = 0.08_pi;	//レーン間の角度(基準円上の)
+	double laneCenter = 1.5_pi;		//レーン群の中心の角度(基準円上の)
+
+	for (int lane = 0;lane < LANESIZE;lane++) {
+		double angleInCircle = laneCenter + (lane - (LANESIZE - 1) / 2.0) * laneBetween;	//当該レーンの角度(基準円上の)
+		laneStartX[lane] = centerX + (int)(cos(angleInCircle) * startRange);
+		laneStartY[lane] = centerY - (int)(sin(angleInCircle) * startRange);
+
+		laneJudgeX[lane] = centerX + (int)(cos(angleInCircle) * judgeRange);
+		laneJudgeY[lane] = centerY - (int)(sin(angleInCircle) * judgeRange);
 	}
 	//Y座標
-	laneStartY = 100;
-	laneJudgeY = 570;
 	laneGoalY = 730;//(画面Y座標限界 + 10)
+
 	//速さ
 	notespeed = 1.2;
 	timeRequired = 1500 / notespeed;
 	//ノーツの大きさ
 	notewidth = TextureAsset(U"note").width();
 	laneStartScale = 0.2;
-	laneJudgeScale = 1.0;
+	laneJudgeScale = 1.2;
 
 	for (int i = 0; i < LANESIZE; i++) {
 		down[i] = 0;
@@ -348,12 +356,11 @@ void NotesManager::draw(void){
 	}
 	Print << U"NotesCombo=" << combo.get();
 
-	TextureAsset(U"judgeline").drawAt(Window::Width() / 2, laneJudgeY);
-	Line(0, laneJudgeY, 1920, laneJudgeY).draw(3, Palette::Black);	//�����̕`��
+	for(int lane = 0; lane < LANESIZE; lane++){
+		displayLane(lane);
+		displayButton(lane);
 
-	for(int i = 0; i < LANESIZE; i++){
-		//Line(laneStartX[i], laneStartY, laneJudgeX[i], laneJudgeY).draw(1, Palette::Red);	//レーンの描画
-		for (noteitr itr = displayitr[i]; itr != notelist[i].end(); itr++) {
+		for (noteitr itr = displayitr[lane]; itr != notelist[lane].end(); itr++) {
 			if (nowtime < itr->time - timeRequired)//描画前なら描画打ち切り
 				break;
 			if (itr->display == false)
@@ -361,21 +368,64 @@ void NotesManager::draw(void){
 
 			switch (itr->type){
 			case NOTESTYPE::NORMAL:
-				displayNormal(i, itr->time);
+				displayNormal(lane, itr->time);
 				break;
 			case NOTESTYPE::LONG:
-				displayLong(i, itr->time, itr->longtime);
+				displayLong(lane, itr->time, itr->longtime);
 				break;
 			case NOTESTYPE::CRITICAL:
-				displayCritical(i, itr->time);
+				displayCritical(lane, itr->time);
 				break;
 			default:
 				break;
 			}
 		}	
 	}
+
 	effect.draw();//再生中の全てのエフェクトを描画
 	judgeEffect->draw();//判定エフェクト描画
+}
+
+
+void NotesManager::displayLane(int lane) {
+	struct line{
+		Vec2 pos1;
+		Vec2 pos2;
+		double progressRate;
+	};
+	static Array<line> laneRoad[LANESIZE];
+
+	static bool first = true;
+	if (first) {
+		constexpr int LINEBETWEEN = 7;	//線の間隔[ms]
+
+		for (int lane = 0;lane < LANESIZE;lane++) {
+			for (int i = nowtime;i < nowtime + timeRequired;i += LINEBETWEEN) {
+				double progressRate = progressByAngle(getProgress(i));
+				double currentY = getCurrentPosition(laneStartY[lane], laneJudgeY[lane], progressRate);
+				double currentX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRate);
+				double nowNoteRadius = notewidth / 2 * getCurrentPosition(laneStartScale, laneJudgeScale, progressRate);
+
+				laneRoad[lane].push_back({
+					{ currentX - nowNoteRadius, currentY},
+					{ currentX + nowNoteRadius, currentY},
+					progressRate
+					});
+			}
+		}
+		first = false;
+	}
+
+	for (auto& line : laneRoad[lane]) {
+		double weight = line.progressRate * 8;	//線の太さ
+		ColorF color = ColorF(Palette::Blue, line.progressRate / 2);	//線の色と透明度
+		Line(line.pos1, line.pos2).draw(weight, color);
+	}
+}
+void NotesManager::displayButton(int lane) {
+	Color color = press[lane] ? Palette::Skyblue : Palette::White;	//押されているボタンに対応した円を変色
+	static double circleScale = notewidth / 2 * (double)laneJudgeScale;
+	Circle(laneJudgeX[lane], laneJudgeY[lane], circleScale).draw(color);
 }
 
 

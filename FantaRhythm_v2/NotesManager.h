@@ -47,9 +47,9 @@ private:
 	//描画関係の変数
 	FlipSet<JUDGE::TYPE> effect;//使用するエフェクト
 	int laneStartX[LANESIZE];	//Start = レーンの上端
-	int laneStartY;		
+	int laneStartY[LANESIZE];
 	int laneJudgeX[LANESIZE];	//Judge = レーンと判定線が交わる所
-	int laneJudgeY;
+	int laneJudgeY[LANESIZE];
 	int laneGoalY;		//Goal = 流れ切ったノーツの表示をやめる所
 	float timeRequired;	//ノーツの出現から判定まで流れる時間[ms]
 	float notespeed;	//ノーツ速度の補正倍率
@@ -74,6 +74,9 @@ private:
 	void judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType);
 	void noteNext(int lane);
 	
+	void displayLane(int lane);		//レーンを表示
+	void displayButton(int lane);	//ボタン押し状況 兼 判定円 を表示
+
 	double getProgress(int time);													//レーン上端から判定線までの進んだ割合を返す
 	double progressByAngle(double progressRate);									//レーンの角度による補正をprogressRateに行う
 	double getCurrentPosition(double startPos, double endPos, double progressRate);	//現在座標を返す
