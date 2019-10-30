@@ -71,7 +71,7 @@ FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, in
 	existSE = false;
 }
 FlipEffect::~FlipEffect() {
-	if (existSE) { delete se; }
+	delete se;
 }
 void FlipEffect::setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight) {
 	Texture tmp(path);
@@ -84,7 +84,7 @@ void FlipEffect::setPos(int xDraw, int yDraw) {
 	this->yDraw = yDraw;
 }
 void FlipEffect::setSE(FilePath& path) {
-	if (existSE) { delete se; }
+	delete se;
 	se = new SE(path);
 	existSE = true;
 }
