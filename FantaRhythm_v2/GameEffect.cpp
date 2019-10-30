@@ -40,7 +40,7 @@ FlipMovie::FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, in
 	mapflip = new MapFlip(map, xFlipWidth, yFlipHeight);
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
-	switchTime = 0;
+	switchTime = switchBetween;
 	this->switchBetween = switchBetween;//Ø‚èo‚µ‰æ‘œ‚ğØ‚è‘Ö‚¦‚éŠÔŠu[•b?]
 }
 
