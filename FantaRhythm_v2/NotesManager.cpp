@@ -176,16 +176,16 @@ JUDGE::TYPE NotesManager::judgeType(int checktime) {//判定のタイプを返�
 
 
 void NotesManager::controlJudge(void) {
-	for (int i = 0;i < LANESIZE;i++) {
-		switch (checkitr[i]->type) {
+	for (int lane = 0;lane < LANESIZE;lane++) {
+		switch (checkitr[lane]->type) {
 		case NOTESTYPE::NORMAL:
-			judgeNormal(i);
+			judgeNormal(lane);
 			break;
 		case NOTESTYPE::LONG:
-			judgeLong(i);
+			judgeLong(lane);
 			break;
 		case NOTESTYPE::CRITICAL:
-			judgeCritical(i);
+			judgeCritical(lane);
 			break;
 		default:
 			break;
@@ -447,7 +447,7 @@ double NotesManager::getCurrentPosition(double startPos, double endPos, double p
 }
 NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
 	double progressRate = progressByAngle(getProgress(time));
-	double currentY = getCurrentPosition(laneStartY, laneJudgeY, progressRate);
+	double currentY = getCurrentPosition(laneStartY[lane], laneJudgeY[lane], progressRate);
 	double currentX = getCurrentPosition(laneStartX[lane], laneJudgeX[lane], progressRate);
 	double scale = getCurrentPosition(laneStartScale, laneJudgeScale, progressRate);
 	return { scale ,currentX ,currentY };
