@@ -5,7 +5,7 @@
 //上ボタンで攻撃、下ボタンでも攻撃（攻撃ダメージも同じ）
 //↑↓↑↓のコンボでガードをはる
 
-Tanker::Tanker(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"tanker", csv, ix, iy, row) {
+Tanker::Tanker(CharacterSubject* csubject, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :Character(csubject, U"tanker", char_name, hp, power, generic1, generic2, ix, iy) {
 	chargeClear();
 }
 

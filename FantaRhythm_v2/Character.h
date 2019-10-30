@@ -6,7 +6,7 @@
 
 class Character {
 public:
-	Character(CharacterSubject* csubject, const FilePath& jobname, const CSVData& csv, double ix, double iy, int row);
+	Character(CharacterSubject* csubject, const FilePath& jobname, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy);
 	~Character(void);
 
 	enum EffectType {
@@ -16,7 +16,7 @@ public:
 		GUARD,
 		SIZE,
 	};
-
+	bool isReady();
 	void update(void);
 	void draw(void);
 	void getEvent(Massage msg);//CharacterSetからイベント受取
@@ -26,6 +26,7 @@ public:
 	void damage(int damage);	//キャラへのダメージ
 protected:
 	//jobで使用するゲッター
+	String Character::getName();
 	int getPower(void);
 	double getArgs1(void);
 	double getArgs2(void);
@@ -33,7 +34,6 @@ protected:
 	double getY(void);
 	int    getW(void);
 	int    getH(void);
-	String getName(void);
 	
 	void setAttackEvent(int attack, EffectType type);//敵への攻撃イベント
 	//ジョブクラスでオーバーライド
@@ -45,15 +45,14 @@ protected:
 private:
 	class CharacterSubject* csubject;
 	class FlipEffect* flipeffect[EffectType::SIZE];// nomarl ult damage 3種類
-	int characterNum;	//キャラの番号
-
-	String name;		//キャラの名前
+	String char_name;		//キャラの名前
 	int hp;				//ヒットポイント
 	int power;			//攻撃力ベース
-	double args1, args2;	//汎用値
+	double generic1, generic2;	//汎用値
 	double initx, inity;//基本位置
 	double x, y;		//現在位置
 	int framecnt;		//上下移動に使うフレームカウント
+
 	//キャラ移動
 	void moveUpDown(void);
 	void characterDraw(void);

@@ -8,10 +8,8 @@
 #define DEFAULT_ROTATION 30
 
 SelectMusic::SelectMusic(void)  {
-	TextureAsset::Register(U"selectmusicback", U"resources/images/back/BackScreen.jpg");
-	TextureAsset::Preload(U"selectmusicback");
-	TextureAsset::Register(U"selectmusictitle", U"resources/images/items/title.png");
-	TextureAsset::Preload(U"selectmusictitle");
+	TextureAsset::Register(U"selectmusicback", U"resources/images/back/BackScreen.jpg", AssetParameter::LoadAsync());
+	TextureAsset::Register(U"selectmusictitle", U"resources/images/items/title.png", AssetParameter::LoadAsync());
 
 	FontAsset::Register(U"selectmusicfont", 30);
 	FontAsset::Preload(U"selectmusicfont");
@@ -26,6 +24,14 @@ SelectMusic::~SelectMusic(void) {
 	FontAsset::Unregister(U"selectmusicfont");
 	TextureAsset::Unregister(U"selectmusicback");
 	TextureAsset::Unregister(U"selectmusictitle");
+}
+
+bool SelectMusic::isReady(void) {
+	if (TextureAsset::IsReady(U"selectmusictitle") &&
+		TextureAsset::IsReady(U"selectmusicback")) {
+		return true;
+	}
+	return false;
 }
 
 void SelectMusic::start(void) {
@@ -54,8 +60,8 @@ void SelectMusic::changeState(SELECTSTATE nextstate) {
 		stateUpdate = &SelectMusic::updateDifficulty;
 		stateDraw = &SelectMusic::drawDifficulty;
 		break;
-	case TITLE:
-		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
+	case QRREAD:
+		SceneManager::setNextScene(SceneManager::SCENE_QRREAD);
 		break;
 	case GAME:
 		SceneManager::setNextScene(SceneManager::SCENE_GAME);
@@ -88,7 +94,7 @@ void SelectMusic::updateMusic(void) {
 		if (MyKey::getDecisionKey()) {//難易度へ
 			changeState(DIFFICULTY);
 		}else if (MyKey::getReturnKey()) {//タイトルへ戻る
-			changeState(TITLE);
+			changeState(QRREAD);
 		}
 	}
 	else {

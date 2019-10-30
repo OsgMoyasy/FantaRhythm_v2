@@ -11,6 +11,7 @@ class Result : public Scene {
 public:
 	Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear);
 	~Result(void);
+	bool isReady(void);
 	void start(void);
 	void update(void);
 	void draw(void);

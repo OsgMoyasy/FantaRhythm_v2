@@ -144,6 +144,15 @@
     <ClCompile Include="JudgeEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QrRead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerName.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -400,6 +409,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JudgeEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QrRead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerName.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="URLEncode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

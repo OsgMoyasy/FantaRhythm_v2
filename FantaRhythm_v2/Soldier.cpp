@@ -2,7 +2,7 @@
 constexpr int CHARGEMAX = 10;
 
 
-Soldier::Soldier(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row) :Character(csubject, U"soldier", csv, ix, iy, row ){
+Soldier::Soldier(CharacterSubject* csubject, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :Character(csubject, U"soldier", char_name, hp, power, generic1, generic2, ix, iy){
 	chargeClear();
 	chargedamage = 0;
 	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, U"resources/images/effects/soldier", CHARGEMAX, Color(Palette::Black), Color(Palette::Blue));

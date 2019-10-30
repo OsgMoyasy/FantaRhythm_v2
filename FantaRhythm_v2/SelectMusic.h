@@ -9,6 +9,7 @@ class SelectMusic:public Scene{
 public:
 	SelectMusic(void);
 	~SelectMusic(void);	
+	bool isReady(void);
 	void start(void);
 	void update(void);
 	void draw(void);
@@ -19,7 +20,7 @@ private:
 	enum SELECTSTATE {
 		MUSIC,
 		DIFFICULTY,
-		TITLE,
+		QRREAD,
 		GAME
 	};
 

@@ -96,6 +96,7 @@ private:
 public:
 	NotesManager(NotesSubject* sub,const String& difpath);
 	~NotesManager();
+	bool isReady();
 	void update(void);
 	void draw(void);
 	JUDGE::JudgeCount* getJudgeCount(void);

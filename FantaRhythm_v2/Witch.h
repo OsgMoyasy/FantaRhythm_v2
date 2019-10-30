@@ -5,7 +5,7 @@
 
 class Witch :public Character {
 public:
-	Witch(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
+	Witch(CharacterSubject* csubject, String& char_name, int hp, int attack, double generic1, double generic2, double ix, double iy);
 	~Witch();
 private:
 	int chargeCount;

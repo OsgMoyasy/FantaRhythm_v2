@@ -7,13 +7,7 @@
 Title::Title(void) {
 	FontAsset::Register(U"titlefont", 50);
 	FontAsset::Preload(U"titlefont");
-	TextureAsset::Register(U"titleback", U"resources/images/back/start_back_image.jpg");
-	TextureAsset::Preload(U"titleback");
-}
-void Title::start(void) {
-	delete TitleAudio;
-	TitleAudio = new Audio(U"resources/musics/main/attacking ready!/attacking ready!.wav");
-	TitleAudio->play();
+	TextureAsset::Register(U"titleback", U"resources/images/back/start_back_image.jpg", AssetParameter::LoadAsync());
 }
 
 Title::~Title(void) {
@@ -22,9 +16,23 @@ Title::~Title(void) {
 	delete TitleAudio;
 }
 
+bool Title::isReady(void) {
+	if (TextureAsset::IsReady(U"titleback")) {
+		return true;
+	}
+	return false;
+}
+
+void Title::start(void) {
+	delete TitleAudio;
+	TitleAudio = new Audio(U"resources/musics/main/attacking ready!/attacking ready!.wav");
+	TitleAudio->play();
+}
+
+
 void Title::update(void) {
 	if (MyKey::getDecisionKey()) {
-		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+		SceneManager::setNextScene(SceneManager::SCENE_QRREAD);
 	}
 	else {
 		changeAlpha();

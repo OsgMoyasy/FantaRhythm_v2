@@ -206,6 +206,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameEffect.cpp" />
     <ClCompile Include="Gauge.cpp" />
+    <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="ImageNumber.cpp" />
     <ClCompile Include="JudgeEffect.cpp" />
     <ClCompile Include="LoadEffect.cpp" />
@@ -213,6 +214,8 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
+    <ClCompile Include="PlayerName.cpp" />
+    <ClCompile Include="QrRead.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Sage.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -297,6 +300,7 @@
     <ClInclude Include="GameEffect.h" />
     <ClInclude Include="Gauge.h" />
     <ClInclude Include="Healer.h" />
+    <ClInclude Include="HttpClient.h" />
     <ClInclude Include="ImageNumber.h" />
     <ClInclude Include="Jobs.h" />
     <ClInclude Include="Judge.h" />
@@ -304,16 +308,20 @@
     <ClInclude Include="LoadEffect.h" />
     <ClInclude Include="MyKey.h" />
     <ClInclude Include="MusicManager.h" />
+    <ClInclude Include="MyThread.h" />
     <ClInclude Include="NotesManager.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="QrRead.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Sage.h" />
+    <ClInclude Include="PlayerName.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectMusic.h" />
     <ClInclude Include="Soldier.h" />
     <ClInclude Include="Tanker.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="URLEncode.h" />
     <ClInclude Include="Witch.h" />
   </ItemGroup>
   <ItemGroup>

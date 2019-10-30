@@ -8,13 +8,14 @@ Game::Game(const String& music, const String& dif) {
 	
 	notes = new NotesManager(notessubject,difpath);
 
-	int save[4] = { 1,4,5,6 };//テスト用セーブデータ
-	characterm = new CharacterSet(save, musicpath);
+	characterm = new CharacterSet(musicpath);
 
 	notessubject->addObserver(characterm);//オブザーバーへ登録
 	
 	isClear = true;//falseになればゲームオーバー
+
 	TextureAsset::Register(U"gameback", U"resources/images/back/"+ FileSystem::FileName(musicpath) +U".jpg");
+
 	TextureAsset::Preload(U"gameback");
 
 	FontAsset::Register(U"gamefont", 30);
@@ -28,6 +29,13 @@ Game::~Game() {
 	TextureAsset::Unregister(U"gameback");
 	FontAsset::Unregister(U"gamefont");
 	MusicManager::setEndMusic();
+}
+
+bool Game::isReady() {
+	if (TextureAsset::IsReady(U"gameback") && characterm->isReady()) {
+		return true;
+	}
+	return false;
 }
 
 void Game::start() {

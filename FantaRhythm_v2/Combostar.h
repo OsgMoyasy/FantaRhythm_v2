@@ -5,7 +5,7 @@
 
 class Combostar :public Character {
 public:
-	Combostar(CharacterSubject* csubject, const CSVData& csv, double ix, double iy, int row);
+	Combostar(CharacterSubject* csubject, String& char_name, int hp, int attack, double generic1, double generic2, double ix, double iy);
 	~Combostar();
 private:
 	int updamage;
