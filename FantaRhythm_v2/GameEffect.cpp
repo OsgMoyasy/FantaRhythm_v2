@@ -40,7 +40,7 @@ FlipMovie::FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, in
 	mapflip = new MapFlip(map, xFlipWidth, yFlipHeight);
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
-	switchTime = 0;
+	switchTime = switchBetween;
 	this->switchBetween = switchBetween;//Ø‚èo‚µ‰æ‘œ‚ðØ‚è‘Ö‚¦‚éŠÔŠu[•b?]
 }
 
@@ -71,7 +71,7 @@ FlipEffect::FlipEffect(const FilePath& path, int xFlipWidth, int yFlipHeight, in
 	existSE = false;
 }
 FlipEffect::~FlipEffect() {
-	if (existSE) { delete se; }
+	delete se;
 }
 
 void FlipEffect::setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight) {
@@ -85,7 +85,7 @@ void FlipEffect::setPos(int xDraw, int yDraw) {
 	this->yDraw = yDraw;
 }
 void FlipEffect::setSE(FilePath& path) {
-	if (existSE) { delete se; }
+	delete se;
 	se = new SE(path);
 	existSE = true;
 }

@@ -10,11 +10,12 @@ Game::Game(const String& music, const String& dif) {
 
 	characterm = new CharacterSet(musicpath);
 
-
 	notessubject->addObserver(characterm);//オブザーバーへ登録
 	
 	isClear = true;//falseになればゲームオーバー
-	TextureAsset::Register(U"gameback", U"resources/images/back/first.jpg", AssetParameter::LoadAsync());
+
+	TextureAsset::Register(U"gameback", U"resources/images/back/"+ FileSystem::FileName(musicpath) +U".jpg");
+
 	TextureAsset::Preload(U"gameback");
 
 	FontAsset::Register(U"gamefont", 30);
