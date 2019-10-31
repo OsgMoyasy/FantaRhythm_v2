@@ -11,6 +11,7 @@
 #include "JudgeEffect.h"
 #include "ImageNumber.h"
 
+
 class NotesManager {
 private:
 	static constexpr int LANESIZE = 4;

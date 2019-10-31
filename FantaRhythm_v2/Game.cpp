@@ -14,12 +14,15 @@ Game::Game(const String& music, const String& dif) {
 	
 	isClear = true;//falseになればゲームオーバー
 
+
 	TextureAsset::Register(U"gameback", U"resources/images/back/"+ FileSystem::FileName(musicpath) +U".jpg");
 
 	TextureAsset::Preload(U"gameback");
 
 	FontAsset::Register(U"gamefont", 30);
 	FontAsset::Preload(U"gamefont");
+
+	RankingData::setMusic_name(FileSystem::FileName(musicpath));
 	MusicManager::setMusicGame(musicpath);
 }
 Game::~Game() {

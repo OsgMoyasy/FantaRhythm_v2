@@ -11,6 +11,7 @@ bool SceneManager::isLoadFinished;
 
 void SceneManager::initialize() {
 	scene = new Title();
+	((Title*)scene)->start();
 	loadeffect = new LoadEffect();
 	isLoadFinished = true;
 }

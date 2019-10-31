@@ -3,7 +3,7 @@
 constexpr double NUMBER_SWTIME = 0.05;						//数字エフェクトが切り替わる時間
 constexpr double NUM_MAXTIME = NUMBER_SWTIME * 9 * 1000;	//数字が確定するまでの時間
 constexpr int NUMIM_WIDTH = 50, NUMIM_HEIGHT = 75;
-constexpr int SCOREX = 800, SCOREY = 130;
+constexpr int SCOREX = 950, SCOREY = 130;
 const String numberImPath = U"resources/images/items/num/num2.png";
 
 
@@ -16,15 +16,21 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	alphaFont = 0;
 	isEffectEnd = false;
 
-	FontAsset::Register(U"resultfont", 50);
+	
+
+	FontAsset::Register(U"resultfont", 40);
 	FontAsset::Preload(U"resultfont");
 
 	if (!isClear) {//ゲームクリア
+		client = new HttpClient();
+
 		//テクスチャ初期化
-		TextureAsset::Register(U"resultback", U"resources/images/back/result.png", AssetParameter::LoadAsync());
+		TextureAsset::Register(U"resultback", U"resources/images/back/BackScreen.jpg", AssetParameter::LoadAsync());
+		TextureAsset::Register(U"resultscore", U"resources/images/items/Score.png", AssetParameter::LoadAsync());
+		TextureAsset::Register(U"waku", U"resources/images/items/waku.png", AssetParameter::LoadAsync());
 
 		//効果音初期化
-		se = new SE(U"resources/musics/effects/Congratulations.wav");
+		se = new SE(U"resources/musics/effects/Congratulations.mp3");
 
 		//クリア用ポインタ割り当て
 		stateUpdate = &Result::successUpdate;
@@ -34,6 +40,19 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		score = calcScore(this->judgeCnt);
 		scoreStr = Format(score);
 		damageStr = Format(totalDamage);
+
+		int char_id[4];
+		RankingData::getChar_id(char_id);
+		std::string str = Unicode::ToUTF8(RankingData::getName());
+		th = std::thread(&HttpClient::Post, client, "user_id=" + str
+			+ "&music_name="+RankingData::getMusic_name().narrow()
+			+ "&score="+ scoreStr.narrow() +"&damage=" + damageStr.narrow() +
+			"&character_id1=" + std::to_string(char_id[0])+
+			"&character_id2=" + std::to_string(char_id[1]) +
+			"&character_id3=" + std::to_string(char_id[2]) +
+			"&character_id4=" + std::to_string(char_id[3])
+			, "/postScore", "127.0.0.1", std::ref(th_status));
+
 
 		//文字列を画像変換
 		scoreNumEffect = new NumWithEffect(numberImPath, scoreStr, 1, SCOREX, SCOREY, NUMIM_WIDTH, NUMIM_HEIGHT, NUMBER_SWTIME);
@@ -47,7 +66,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
 			judgeImNum[i] = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
 		}
-
+		
 		judgeDrawRow = 0;
 		judgePrevTime = 0;
 	}
@@ -59,8 +78,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		stateUpdate = &Result::failedUpdate;
 		stateDraw = &Result::failedDraw;
 	}
-	TextureAsset::Preload(U"resultback");//背景のロード
-	
+	TextureAsset::Preload(U"resultback");//背景のロード	
 }
 
 Result::~Result(void) {
@@ -69,13 +87,21 @@ Result::~Result(void) {
 	delete se;
 	delete scoreNumEffect;
 	delete damageNumEffect;
+
 	for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
 		delete judgeImNum[i];
 	}
+
+	if (th.joinable()) {
+		th.join();
+	}
+	delete client;
 }
 
 bool Result::isReady() {
-	if (TextureAsset::IsReady(U"resultback")) {
+	if (TextureAsset::IsReady(U"resultback") &&
+		TextureAsset::IsReady(U"resultscore") &&
+		TextureAsset::IsReady(U"waku")) {
 		return true;
 	}
 	return false;
@@ -111,6 +137,7 @@ void Result::successUpdate(void) {
 	
 	double msF = stopwatch.msF();
 	//順番に時間さで描画する為に描画終了しているならば次に進む
+
 	if (scoreNumEffect->update(msF) == false) {
 		if (damageNumEffect->update(msF) == false) {
 			if (judgeUpdate() == false) {
@@ -127,12 +154,14 @@ void Result::successUpdate(void) {
 }
 void Result::successDraw(void) {
 	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2);
+	TextureAsset(U"waku").drawAt(Window::Width() / 2, Window::Height() / 2);
+	TextureAsset(U"resultscore").drawAt(500 , Window::Height()/2 - 39);
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
 	for (auto judgeimnum : judgeImNum) {
 		judgeimnum->draw();
 	}
-	FontAsset(U"resultfont")(U"～ 〇〇キーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 60, ColorF(0.0, 0.0, 0.0, alphaFont));
+	FontAsset(U"resultfont")(U"～ リターンキーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 120, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//スコア計算 判定の数と重みを掛けた総和をスコアとする
@@ -175,7 +204,7 @@ void Result::failedUpdate(void) {
 
 void Result::failedDraw(void) {
 	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//背景描画
-	FontAsset(U"resultfont")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 100, AlphaF(alphaFont));
+	FontAsset(U"resultfont")(U"～ Escキーで終了 ～").drawAt(Window::Width() / 2, Window::Height() - 130, AlphaF(alphaFont));
 }
 
 

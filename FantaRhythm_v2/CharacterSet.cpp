@@ -14,6 +14,7 @@ CharacterSet::CharacterSet(const String& musicpath) {
 	JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
 	for (int lane = 0; lane < CHANUMBER; lane++) {
 		int initx = 70 + lane * 90, inity = 250 + lane * 80;
+		
 
 		String char_name = jsonArray[lane][U"char_name"].get<String>();
 		int hp = jsonArray[lane][U"hp"].get<int>();
@@ -130,7 +131,7 @@ int CharacterSet::getTotalDamage(void) {
 
 
 void CharacterSet::damageToSelves(int lane, int damage) {
-	cha[lane]->damage(damage);
+	cha[lane]->damage(damage);//‚±‚êÁ‚¹‚ÎHPŒ¸‚ç‚È‚¢I
 	int currenthp = getCurrentHp();
 
 	if (currenthp > totalhp) {

@@ -59,23 +59,23 @@ void QrRead::update(void) {
 	else {
 		//読み込みが終了しネットワーク送受信も完了したら移行させる
 		//HTTP GET 取得するファイルパス リクエスト先IP 
-		if (th_status == TH_NONE) {
-			std::vector<std::string> chaNum;
-			std::stringstream ss{ readText.narrow() };
-			std::string buf;
-			while (std::getline(ss, buf, ',')) {
-				chaNum.push_back(buf);
-			}
-			
-			PlayerName::setName(s3d::Unicode::Widen(chaNum.at(chaNum.size() - 1)));
+		if (th_status == TH_NONE) {		
 			std::stringstream st;
-			st << "/getChar?cha1=" << chaNum[0] << "&cha2=" << chaNum[1] << "&cha3=" << chaNum[2] << "&cha4=" << chaNum[3];
+			st << "/getChar?user_id="+readText.narrow();
 			th = std::thread(&HttpClient::Get, client, st.str(), "127.0.0.1",std::ref(th_status));
 			msg = U"サーバーと通信中";
 			
 		}
 		else if(th_status == TH_FINISH){
 			if (isChange) {
+				JSONReader json(U"test.json");
+				JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
+				RankingData::setUser_id(json[U"user"][U"id"].get<String>());
+				RankingData::setName(json[U"user"][U"nickname"].get<String>());
+				for (int i = 0; i < 4; i++) {
+					RankingData::setChar_id(i, jsonArray[i][U"character_id"].get<int>());
+				}
+
 				SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
 				isChange = false;
 			}

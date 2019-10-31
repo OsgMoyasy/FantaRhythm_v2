@@ -150,7 +150,7 @@
     <ClCompile Include="HttpClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerName.cpp">
+    <ClCompile Include="RankingData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -420,10 +420,10 @@
     <ClInclude Include="MyThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerName.h">
+    <ClInclude Include="URLEncode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="URLEncode.h">
+    <ClInclude Include="RankingData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
