@@ -44,7 +44,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//ジャッジエフェクト初期化
 	judgeEffect = new JudgeEffect(U"resources/images/items/judgeeffect/");
 
-	comboImNum = new ComboImNumber(Window::Width() - 400, Window::Height() - 180, 200);
+	comboImNum = new ComboImNumber(Window::Width() - 270, Window::Height() - 230, 200);
 
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
