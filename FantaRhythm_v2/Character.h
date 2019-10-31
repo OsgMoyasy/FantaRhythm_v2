@@ -24,7 +24,7 @@ public:
 	void getEvent(Massage msg);//CharacterSetからイベント受取
 	int getHp();
 	
-	void recovery(int amount);	//キャラの回復
+	int recovery(int amount);	//キャラの回復
 	void damage(int damage);	//キャラへのダメージ
 protected:
 	AuraEffect* aura;
@@ -58,6 +58,7 @@ private:
 	double initx, inity;//基本位置
 	double x, y;		//現在位置
 	int framecnt;		//上下移動に使うフレームカウント
+	const int MAX_HP;
 
 	//キャラ移動
 	void moveUpDown(void);

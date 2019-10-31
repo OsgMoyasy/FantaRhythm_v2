@@ -5,7 +5,7 @@ constexpr int MOVERANGE = 70;	//キャラの上下移動高さ
 constexpr int MOVEFREQ = 4 * 60;//キャラ移動周期（フレーム数＊時間(s))
 constexpr int EFFECTSIZE = 200; //エフェクトの画像サイズ
 
-Character::Character(CharacterSubject* csubject, const FilePath& jobname, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) {
+Character::Character(CharacterSubject* csubject, const FilePath& jobname, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :MAX_HP(hp){
 	this->csubject = csubject;
 	//エフェクトの作成
 	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.05);
@@ -80,9 +80,17 @@ int Character::getHp() {
 	return hp;
 }
 
-void Character::recovery(int amount) {
+int Character::recovery(int amount) {
 	playEffect(EffectType::HEAL, x, y);
-	hp += amount;
+	int difference = 0;
+	if (MAX_HP > hp) {
+		hp = MAX_HP;
+		difference = MAX_HP - hp;
+	}
+	else {
+		hp += amount;
+	}
+	return difference;
 }
 
 void Character::damage(int damage) {

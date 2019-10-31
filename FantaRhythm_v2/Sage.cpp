@@ -29,7 +29,7 @@ void Sage::recoverycharge() {
 	if (recoverycount < RECOVERYMAX) {
 		recoverycount += 1;
 	}
-	else {
+	else if(recoverycount > 5){//‰ñ•œ‚Å‚«‚é‚È‚çƒI[ƒ‰’Ç‰Á
 		aura->setFlag(true);
 	}
 }

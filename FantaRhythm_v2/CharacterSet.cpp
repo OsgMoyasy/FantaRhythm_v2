@@ -53,7 +53,7 @@ CharacterSet::CharacterSet(const String& musicpath) {
 		
 	}
 	totalhp = getCurrentHp();
-	damage = 20;
+	damage = 15;
 	//HPゲージの作成
 	constexpr int HPWIDTH = 400;
 	constexpr int HPHEIGHT = 30;
@@ -117,8 +117,18 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 			int amount = ((Sage*)cha[i])->isHeal();
 			if (amount > 0) {
 				for (int j = 0; j < CHANUMBER; j++) {
-					cha[j]->recovery(amount);
+					int difference = cha[j]->recovery(amount);
+					amount += difference;//差分追加
 				}
+				int currenthp = getCurrentHp();
+
+				if (currenthp > totalhp) {
+					currenthp = totalhp;
+				}
+				else if (currenthp < 0) {
+					currenthp = 0;
+				}
+				hpGauge->update(currenthp);
 			}
 		}
 
