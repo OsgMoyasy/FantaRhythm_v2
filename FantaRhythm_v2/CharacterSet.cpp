@@ -10,7 +10,7 @@ CharacterSet::CharacterSet(const String& musicpath) {
 	enemy = new Enemy(musicpath);
 	csubject->addObserver(enemy);
 	
-	JSONReader json(U"test.json");
+	JSONReader json(U"chardata.json");
 	JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
 	for (int lane = 0; lane < CHANUMBER; lane++) {
 		int initx = 70 + lane * 90, inity = 250 + lane * 80;
@@ -41,9 +41,11 @@ CharacterSet::CharacterSet(const String& musicpath) {
 		case JOB::COMBOSTAR:
 			cha[lane] = new Combostar(csubject, char_name, hp, power, generic1, generic2, initx, inity);
 			break;
+			/*未実装
 		case JOB::TANKER:
 			cha[lane] = new Tanker(csubject, char_name, hp, power, generic1, generic2, initx, inity);
 			break;
+			*/
 		default:
 			//エラー
 			break;
@@ -132,7 +134,7 @@ int CharacterSet::getTotalDamage(void) {
 
 
 void CharacterSet::damageToSelves(int lane, int damage) {
-	//cha[lane]->damage(damage);//これ消せばHP減らない！
+	cha[lane]->damage(damage);//これ消せばHP減らない！
 	int currenthp = getCurrentHp();
 
 	if (currenthp > totalhp) {

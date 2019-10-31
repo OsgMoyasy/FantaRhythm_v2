@@ -4,7 +4,7 @@
 //std::string deststr = "postman-echo.com";//送信先(IPアドレス)
 const int port = 3000;
 HttpClient::HttpClient() {
-	filepath = "test.json";
+	filepath = "chardata.json";
 	statusMassage = "初期化成功";
 	result = "";
 	int err = WSAStartup(MAKEWORD(2, 0), &wsaData);//winsock初期化

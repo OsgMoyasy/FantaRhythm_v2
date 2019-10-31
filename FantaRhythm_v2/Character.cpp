@@ -21,7 +21,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname, String
 	this->generic1 = generic1;
 	this->generic2 = generic2;
 	//ƒLƒƒƒ‰‰æ‘œ‚Ì“Ç‚İ‚İ
-	TextureAsset::Register(char_name,U"resources/images/character/R"+char_name+U".png", AssetParameter::LoadAsync());
+	TextureAsset::Register(char_name,U"resources/images/character/"+char_name+U".png", AssetParameter::LoadAsync());
 	TextureAsset::Preload(char_name);
 	initx = ix;
 	inity = iy;

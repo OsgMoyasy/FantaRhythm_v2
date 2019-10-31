@@ -30,7 +30,7 @@ void Berserker::attack() {		//•’Ê‚ÌUŒ‚
 	if (upcount >= 3 && selfcount == 0) {
 		selfcount = 5;
 	}
-	setAttackEvent(attackdamage, EffectType::ULT);
+	setAttackEvent(attackdamage, EffectType::NOMAL);
 }
 
 
@@ -44,7 +44,8 @@ void Berserker::BusterAttack() {
 	if (selfcount == 0) {
 		upcount = 0;
 	}
-	setAttackEvent(busterdamage, EffectType::ULT);
+	setAttackEvent(busterdamage, EffectType::NOMAL);
+	playEffect(EffectType::ULT, getX(), getY() + 40);
 }
 
 void Berserker::upEvent(void) {

@@ -44,9 +44,12 @@ void QrRead::update(void) {
 		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
 	}
 	if (MyKey::getDecisionKey()) {//ゲストユーザー
+		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+		/*
 		isRead = true;
 		readText = U"gest";
 		webcam.stop();
+		*/
 	}
 	if (!isRead) {
 		if (webcam.hasNewFrame()) {

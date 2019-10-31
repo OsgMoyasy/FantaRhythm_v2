@@ -22,14 +22,19 @@ void Combostar::jobUpdate() {
 }
 
 void Combostar::combocharge() {		//小ダメージ　＆　コンボ加算
+	
 	updamage = getPower() + getArgs1();
 	setAttackEvent(updamage, EffectType::NOMAL);
 	if (combocount < COMBOMAX) {
 		combocount += 1;
 	}
+	if (combocount > 20) {
+		aura->setFlag(true);
+	}
 }
 
 void Combostar::comboClear() {
+	aura->setFlag(false);
 	combocount = 1;
 }
 
