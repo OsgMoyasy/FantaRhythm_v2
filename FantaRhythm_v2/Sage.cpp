@@ -22,7 +22,7 @@ void Sage::jobDraw() {
 }
 
 void Sage::jobUpdate() {
-	Print << U"recovery count=" << recoverycount;			
+	//Print << U"recovery count=" << recoverycount;			
 }
 
 void Sage::recoverycharge() {

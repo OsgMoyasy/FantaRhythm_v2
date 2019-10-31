@@ -48,7 +48,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 
 
 	CSVData csv;//譜面の取得　多次元配列で管理 0 判定時間(ms) 1 長さ？ 2 流すレーン[0-3]
-	Print << difpath;
+	//Print << difpath;
 
 	notessubject = sub;//サブジェクトの登録
 
@@ -363,10 +363,12 @@ JUDGE::JudgeCount* NotesManager::getJudgeCount() {
 void NotesManager::draw(void){
 
 	//デバッグ用
+	/*
 	for (int i = 0; i < 4; i++) {
 		Print << judgecount.cnt[i];
 	}
-	Print << U"NotesCombo=" << combo.get();
+	*/
+	//Print << U"NotesCombo=" << combo.get();
 
 	for(int lane = 0; lane < LANESIZE; lane++){
 		displayLane(lane);

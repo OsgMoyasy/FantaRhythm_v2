@@ -33,7 +33,7 @@ void Soldier::charge() {//小ダメージ　＆　チャージ
 
 void Soldier::chargeClear() {
 	aura->setFlag(false);
-	chargeCount = 10;
+	chargeCount = 0;
 }
 
 void Soldier::chargeAttack() {
