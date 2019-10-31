@@ -41,17 +41,20 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		scoreStr = Format(score);
 		damageStr = Format(totalDamage);
 
-		int char_id[4];
-		RankingData::getChar_id(char_id);
-		std::string str = Unicode::ToUTF8(RankingData::getName());
-		th = std::thread(&HttpClient::Post, client, "user_id=" + str
-			+ "&music_name="+RankingData::getMusic_name().narrow()
-			+ "&score="+ scoreStr.narrow() +"&damage=" + damageStr.narrow() +
-			"&character_id1=" + std::to_string(char_id[0])+
-			"&character_id2=" + std::to_string(char_id[1]) +
-			"&character_id3=" + std::to_string(char_id[2]) +
-			"&character_id4=" + std::to_string(char_id[3])
-			, "/postScore", "127.0.0.1", std::ref(th_status));
+		//ランキング送信
+		if (RankingData::getName() != U"gest") {//ゲストユーザーじゃなければ
+			int char_id[4];
+			RankingData::getChar_id(char_id);
+			std::string str = Unicode::ToUTF8(RankingData::getName());
+			th = std::thread(&HttpClient::Post, client, "user_id=" + str
+				+ "&music_name=" + RankingData::getMusic_name().narrow()
+				+ "&score=" + scoreStr.narrow() + "&damage=" + damageStr.narrow() +
+				"&character_id1=" + std::to_string(char_id[0]) +
+				"&character_id2=" + std::to_string(char_id[1]) +
+				"&character_id3=" + std::to_string(char_id[2]) +
+				"&character_id4=" + std::to_string(char_id[3])
+				, "/postScore", "127.0.0.1", std::ref(th_status));
+		}
 
 
 		//文字列を画像変換
