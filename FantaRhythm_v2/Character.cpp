@@ -8,10 +8,11 @@ constexpr int EFFECTSIZE = 200; //エフェクトの画像サイズ
 Character::Character(CharacterSubject* csubject, const FilePath& jobname, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) {
 	this->csubject = csubject;
 	//エフェクトの作成
-	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.05);
 	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
 	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.04);
 	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0.003);
+	flipeffect[EffectType::HEAL] = new FlipEffect(U"resources/images/effects/heal.png", EFFECTSIZE, EFFECTSIZE, 0, 0.003);
 	//CSVファイルの読み込み
 	this->char_name = char_name;
 	this->hp = hp;
@@ -75,6 +76,7 @@ int Character::getHp() {
 }
 
 void Character::recovery(int amount) {
+	playEffect(EffectType::HEAL, x, y);
 	hp += amount;
 }
 

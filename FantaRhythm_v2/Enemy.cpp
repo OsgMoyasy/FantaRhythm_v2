@@ -6,8 +6,8 @@ Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(1100){
 	TextureAsset::Register(U"enemy", path + U"/enemy.png");
 	TextureAsset::Preload(U"enemy");
 
-	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
-	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
+	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/ult.png", 200, 200, initx, inity,0.05);
+	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/ult.png", 200, 200, initx, inity,0.05);
 	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/enemydamage.png", 200, 200, initx, inity);
 	x = initx;
 	y = inity;
@@ -50,5 +50,5 @@ void Enemy::funcEvent(Obj obj) {//ダメージを受けるイベント受取
 }
 
 void Enemy::attack(void) {
-	flipeffect[EffectType::NOMAL]->play(x + 70, y);
+	flipeffect[EffectType::NOMAL]->play(x - 100, y);
 }

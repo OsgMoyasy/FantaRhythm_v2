@@ -21,7 +21,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	FontAsset::Register(U"resultfont", 40);
 	FontAsset::Preload(U"resultfont");
 
-	if (!isClear) {//ゲームクリア
+	if (isClear) {//ゲームクリア
 		client = new HttpClient();
 
 		//テクスチャ初期化
@@ -99,10 +99,17 @@ Result::~Result(void) {
 }
 
 bool Result::isReady() {
-	if (TextureAsset::IsReady(U"resultback") &&
-		TextureAsset::IsReady(U"resultscore") &&
-		TextureAsset::IsReady(U"waku")) {
-		return true;
+	if (TextureAsset::IsReady(U"resultback")) {
+		if(isClear){
+			if (
+				TextureAsset::IsReady(U"resultscore") &&
+				TextureAsset::IsReady(U"waku")) {
+				return true;
+			}
+		}
+		else {
+			return true;
+		}
 	}
 	return false;
 }

@@ -14,6 +14,7 @@ public:
 		ULT,
 		DAMAGE,
 		GUARD,
+		HEAL,
 		SIZE,
 	};
 	bool isReady();
@@ -34,6 +35,9 @@ protected:
 	double getY(void);
 	int    getW(void);
 	int    getH(void);
+	//エフェクト
+	void playEffect(EffectType type);
+	void playEffect(EffectType type, double x, double y);
 	
 	void setAttackEvent(int attack, EffectType type);//敵への攻撃イベント
 	//ジョブクラスでオーバーライド
@@ -57,8 +61,7 @@ private:
 	void moveUpDown(void);
 	void characterDraw(void);
 	//エフェクト
-	void playEffect(EffectType type);
-	void playEffect(EffectType type, double x, double y);
+
 	void drawEffect(void);
 	void guard(void);	//ガードイベント
 };

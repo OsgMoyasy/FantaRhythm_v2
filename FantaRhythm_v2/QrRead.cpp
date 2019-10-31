@@ -43,6 +43,9 @@ void QrRead::update(void) {
 	if (MyKey::getReturnKey()) {
 		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
 	}
+	if (MyKey::getDecisionKey()) {
+		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+	}
 	if (!isRead) {
 		if (webcam.hasNewFrame()) {
 			webcam.getFrame(image);

@@ -110,11 +110,12 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	}
 	
 	for (int i = 0; i < CHANUMBER; i++) {//回復判定 要修正
-		if (typeid(cha[i]) == typeid(Healer)){//回復キャラなのか判定
-			int amount = ((Healer*)cha[i])->isHeal();
+	
+		if (Healer* p = dynamic_cast<Healer*>(cha[i])){//回復キャラなのか判定
+			int amount = ((Sage*)cha[i])->isHeal();
 			if (amount > 0) {
 				for (int j = 0; j < CHANUMBER; j++) {
-					cha[i]->recovery(amount);
+					cha[j]->recovery(amount);
 				}
 			}
 		}
@@ -131,7 +132,7 @@ int CharacterSet::getTotalDamage(void) {
 
 
 void CharacterSet::damageToSelves(int lane, int damage) {
-	cha[lane]->damage(damage);//これ消せばHP減らない！
+	//cha[lane]->damage(damage);//これ消せばHP減らない！
 	int currenthp = getCurrentHp();
 
 	if (currenthp > totalhp) {
