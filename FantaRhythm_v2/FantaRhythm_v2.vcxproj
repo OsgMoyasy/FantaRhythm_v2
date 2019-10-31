@@ -198,6 +198,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="AuraEffect.cpp" />
     <ClCompile Include="Berserker.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterSet.cpp" />
@@ -289,6 +290,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archer.h" />
+    <ClInclude Include="AuraEffect.h" />
     <ClInclude Include="Berserker.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterSet.h" />

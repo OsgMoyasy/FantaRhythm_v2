@@ -29,6 +29,9 @@ void Sage::recoverycharge() {
 	if (recoverycount < RECOVERYMAX) {
 		recoverycount += 1;
 	}
+	else {
+		aura->setFlag(true);
+	}
 }
 
 void Sage::recoveryClear() {
@@ -39,12 +42,12 @@ int Sage::isHeal() {
 	if (canHeal) {
 		canHeal = false;
 		if (recoverycount > 5) {
+			aura->setFlag(false);
 			curehp = getPower() * recoverycount;
 			recoveryClear();
+			chargeGauge->update(recoverycount);
 			return curehp;
-		}
-	
-		
+		}		
 	}
 	return 0;
 }
@@ -57,7 +60,6 @@ void Sage::upEvent(void) {
 void Sage::downEvent(void) {
 	canHeal = true;
 	playEffect(EffectType::ULT, getX(), getY());
-	chargeGauge->update(recoverycount);
 }
 void Sage::damageEvent(void) {
 	chargeGauge->update(recoverycount);

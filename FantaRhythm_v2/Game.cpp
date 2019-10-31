@@ -55,6 +55,7 @@ void Game::draw() {
 	//背景画像描画
 	TextureAsset(U"gameback").draw();
 	notes->draw();
+	notes->draw();
 	characterm->draw();
 }
 

@@ -21,7 +21,7 @@ void Berserker::jobDraw() {
 
 
 void Berserker::jobUpdate() {
-	Print << U"Berserker=" << attackdamage;
+	//Print << U"Berserker=" << attackdamage;
 }
 
 void Berserker::attack() {		//•’Ê‚ÌUŒ‚

@@ -3,6 +3,7 @@
 #include "Observer.h"
 #include <Siv3D.hpp>
 #include "GameEffect.h"
+#include "AuraEffect.h"
 
 class Character {
 public:
@@ -22,10 +23,11 @@ public:
 	void draw(void);
 	void getEvent(Massage msg);//CharacterSetからイベント受取
 	int getHp();
-
+	
 	void recovery(int amount);	//キャラの回復
 	void damage(int damage);	//キャラへのダメージ
 protected:
+	AuraEffect* aura;
 	//jobで使用するゲッター
 	String Character::getName();
 	int getPower(void);

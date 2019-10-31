@@ -153,6 +153,9 @@
     <ClCompile Include="RankingData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AuraEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -424,6 +427,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RankingData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AuraEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

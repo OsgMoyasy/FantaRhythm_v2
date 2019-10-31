@@ -13,7 +13,7 @@ void Main(){
 		SceneManager::drawScene();
 
 		//デバッグ出力: FPSの表示
-		Print << Profiler::FPS();
+		//Print << Profiler::FPS();
 	}
 	SceneManager::finalize();
 }

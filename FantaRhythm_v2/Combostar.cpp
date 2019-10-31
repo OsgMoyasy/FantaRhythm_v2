@@ -18,7 +18,7 @@ void Combostar::jobDraw() {
 }
 
 void Combostar::jobUpdate() {
-	Print << U"combo=" << combocount;
+	//Print << U"combo=" << combocount;
 }
 
 void Combostar::combocharge() {		//小ダメージ　＆　コンボ加算

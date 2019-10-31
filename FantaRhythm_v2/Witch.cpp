@@ -20,16 +20,18 @@ void Witch::jobDraw() {
 }
 
 void Witch::jobUpdate() {
-	Print << U"charge=" << chargeCount;
+	//Print << U"charge=" << chargeCount;
 }
 
 void Witch::charge() {				//Witchは基本チャージだけ
+	aura->setFlag(true);
 	if (chargeCount < CHARGEMAX) {
 		chargeCount += 1;
 	}
 }
 
 void Witch::chargeClear() {
+	aura->setFlag(false);
 	chargeCount = 1;
 }
 

@@ -13,6 +13,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname, String
 	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.04);
 	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0.003);
 	flipeffect[EffectType::HEAL] = new FlipEffect(U"resources/images/effects/heal.png", EFFECTSIZE, EFFECTSIZE, 0, 0.003);
+	aura = new AuraEffect(jobname);
 	//CSVƒtƒ@ƒCƒ‹‚Ì“Ç‚Ýž‚Ý
 	this->char_name = char_name;
 	this->hp = hp;
@@ -33,6 +34,7 @@ Character::~Character(void) {
 	for (int i = 0; i < EffectType::SIZE; i++) {
 		delete flipeffect[i];
 	}
+	delete aura;
 }
 
 bool Character::isReady(void) {
@@ -45,12 +47,15 @@ bool Character::isReady(void) {
 void Character::update(void) {
 	moveUpDown();
 	jobUpdate();
+	aura->update();
 }
 
 void Character::draw(void) {
+	aura->draw(x, y);
 	characterDraw();
 	jobDraw();
 	drawEffect();
+	
 }
 
 void Character::getEvent(Massage msg) {
