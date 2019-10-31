@@ -8,7 +8,7 @@ Enemy::Enemy(String path) :inity(Window::Height() / 2), initx(1100){
 
 	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
 	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
-	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/magic.png", 200, 200, initx, inity);
+	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/enemydamage.png", 200, 200, initx, inity);
 	x = initx;
 	y = inity;
 	framecnt = 0;
