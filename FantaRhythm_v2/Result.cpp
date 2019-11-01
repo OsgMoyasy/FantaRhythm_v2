@@ -3,7 +3,7 @@
 constexpr double NUMBER_SWTIME = 0.05;						//”šƒGƒtƒFƒNƒg‚ªØ‚è‘Ö‚í‚éŠÔ
 constexpr double NUM_MAXTIME = NUMBER_SWTIME * 9 * 1000;	//”š‚ªŠm’è‚·‚é‚Ü‚Å‚ÌŠÔ
 constexpr int NUMIM_WIDTH = 50, NUMIM_HEIGHT = 75;
-constexpr int SCOREX = 950, SCOREY = 130;
+constexpr int SCOREX = 950, SCOREY = 100;
 const String numberImPath = U"resources/images/items/num/num2.png";
 
 
@@ -42,18 +42,18 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		damageStr = Format(totalDamage);
 
 		//ƒ‰ƒ“ƒLƒ“ƒO‘—M
-		if (RankingData::getName() != U"gest") {//ƒQƒXƒgƒ†[ƒU[‚¶‚á‚È‚¯‚ê‚Î
+		if (RankingData::getUser_id() != U"gest") {//ƒQƒXƒgƒ†[ƒU[‚¶‚á‚È‚¯‚ê‚Î
 			int char_id[4];
 			RankingData::getChar_id(char_id);
-			std::string str = Unicode::ToUTF8(RankingData::getName());
-			th = std::thread(&HttpClient::Post, client, "user_id=" + str
+			std::string str = Unicode::ToUTF8(RankingData::getUser_id());
+			th = std::thread(&HttpClient::Post, client, "user_hash=" + str
 				+ "&music_name=" + RankingData::getMusic_name().narrow()
 				+ "&score=" + scoreStr.narrow() + "&damage=" + damageStr.narrow() +
 				"&character_id1=" + std::to_string(char_id[0]) +
 				"&character_id2=" + std::to_string(char_id[1]) +
 				"&character_id3=" + std::to_string(char_id[2]) +
 				"&character_id4=" + std::to_string(char_id[3])
-				, "/postScore", "127.0.0.1", std::ref(th_status));
+				, "/postScore", "192.168.10.3", std::ref(th_status));
 		}
 
 
@@ -66,7 +66,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		}
 		*/
 
-		for (int i = 0; i < JUDGE::TYPE_SIZE; i++) {
+		for (int i = 0; i <= JUDGE::TYPE_SIZE; i++) {
 			judgeImNum[i] = new ImageNumber(numberImPath, NUMIM_WIDTH, NUMIM_HEIGHT);
 		}
 		
@@ -165,13 +165,13 @@ void Result::successUpdate(void) {
 void Result::successDraw(void) {
 	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2);
 	TextureAsset(U"waku").drawAt(Window::Width() / 2, Window::Height() / 2);
-	TextureAsset(U"resultscore").drawAt(500 , Window::Height()/2 - 39);
+	TextureAsset(U"resultscore").drawAt(500, Window::Height() / 2 -25);
 	scoreNumEffect->draw();
 	damageNumEffect->draw();
 	for (auto judgeimnum : judgeImNum) {
 		judgeimnum->draw();
 	}
-	FontAsset(U"resultfont")(U"` ƒŠƒ^[ƒ“ƒL[‚Åƒ^ƒCƒgƒ‹‚Ö `").drawAt(Window::Width() / 2, Window::Height() - 120, ColorF(0.0, 0.0, 0.0, alphaFont));
+	FontAsset(U"resultfont")(U"` ƒŠƒ^[ƒ“ƒL[‚Åƒ^ƒCƒgƒ‹‚Ö `").drawAt(Window::Width() / 2, Window::Height() - 80, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//ƒXƒRƒAŒvZ ”»’è‚Ì”‚Æd‚İ‚ğŠ|‚¯‚½‘˜a‚ğƒXƒRƒA‚Æ‚·‚é
@@ -185,6 +185,7 @@ int Result::calcScore(JUDGE::JudgeCount& jc) {//ƒXƒRƒAŒvZ ”»’è‚Ì”‚Æd‚İ‚ğŠ|‚¯‚
 
 bool Result::judgeUpdate() {
 	if (judgeDrawRow >= JUDGE::TYPE_SIZE) {//‘S‚Ä’Ç‰Á‚µI‚í‚Á‚½‚ç
+		judgeImNum[judgeDrawRow]->addMulti(judgeCnt.lastCombo, SCOREX, SCOREY + NUMIM_HEIGHT * (judgeDrawRow + 2));
 		return false;
 	}
 	if (stopwatch.msF() - judgePrevTime >= NUM_MAXTIME ) {//’Ç‰Á‚³‚¹‚éŠÔ‚ª—ˆ‚½‚ç”š‚ğ’Ç‰Á‚µ‰º•ûŒü‚Ö

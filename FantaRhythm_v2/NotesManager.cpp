@@ -150,6 +150,7 @@ void NotesManager::update(void)
 	controlJudge();
 	judgeEffect->update();
 	comboImNum->update();
+	
 }
 
 

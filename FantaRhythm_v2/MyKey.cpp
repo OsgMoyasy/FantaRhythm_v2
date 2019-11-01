@@ -83,7 +83,7 @@ void MyKey::getGamePressKey(int(&press)[4]) {
 bool MyKey::getDecisionKey(void) {
 	if (!lock) {
 		if (padflag) {
-			return Gamepad(0).buttons[0].down();//決定きー
+			return Gamepad(0).buttons[3].down();
 		}
 		else {
 			return KeyEnter.down();
@@ -94,7 +94,7 @@ bool MyKey::getDecisionKey(void) {
 bool MyKey::getReturnKey(void) {
 	if (!lock) {
 		if (padflag) {
-			return Gamepad(0).buttons[1].down();//リターンキー
+			return Gamepad(0).buttons[7].down();//リターンキー
 		}
 		else {
 			return KeyBackspace.down();

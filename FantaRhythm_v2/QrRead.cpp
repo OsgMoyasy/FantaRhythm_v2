@@ -69,8 +69,9 @@ void QrRead::update(void) {
 		//HTTP GET 取得するファイルパス リクエスト先IP 
 		if (th_status == TH_NONE) {		
 			std::stringstream st;
-			st << "/getChar?user_id="+readText.narrow();
-			th = std::thread(&HttpClient::Get, client, st.str(), "127.0.0.1",std::ref(th_status));
+			RankingData::setUser_id(readText);
+			st << "/getChar?user_hash="+readText.narrow();
+			th = std::thread(&HttpClient::Get, client, st.str(), "192.168.10.3",std::ref(th_status));
 			msg = U"サーバーと通信中";
 			
 		}
@@ -78,7 +79,6 @@ void QrRead::update(void) {
 			if (isChange) {
 				JSONReader json(U"test.json");
 				JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
-				RankingData::setUser_id(json[U"user"][U"id"].get<String>());
 				RankingData::setName(json[U"user"][U"nickname"].get<String>());
 				for (int i = 0; i < 4; i++) {
 					RankingData::setChar_id(i, jsonArray[i][U"character_id"].get<int>());
