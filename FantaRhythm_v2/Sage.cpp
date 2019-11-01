@@ -29,7 +29,8 @@ void Sage::recoverycharge() {
 	if (recoverycount < RECOVERYMAX) {
 		recoverycount += 1;
 	}
-	else if(recoverycount > 5){//回復できるならオーラ追加
+	
+	if(recoverycount > 5){//回復できるならオーラ追加
 		aura->setFlag(true);
 	}
 }
@@ -42,9 +43,12 @@ int Sage::isHeal() {
 	if (canHeal) {
 		canHeal = false;
 		if (recoverycount > 5) {
-			aura->setFlag(false);
 			curehp = getPower() * recoverycount;
-			recoveryClear();
+			recoverycount -= 5;
+			if (recoverycount <= 0) {
+				recoverycount = 0;
+				aura->setFlag(false);
+			}
 			chargeGauge->update(recoverycount);
 			return curehp;
 		}		

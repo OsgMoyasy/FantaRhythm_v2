@@ -356,6 +356,7 @@ void NotesManager::noteNext(int lane) {
 
 
 JUDGE::JudgeCount* NotesManager::getJudgeCount() {
+	judgecount.lastCombo = combo.get();
 	return &judgecount;
 }
 
