@@ -120,18 +120,18 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 					int difference = cha[j]->recovery(amount);
 					amount += difference;//差分追加
 				}
-				int currenthp = getCurrentHp();
 
-				if (currenthp > totalhp) {
-					currenthp = totalhp;
-				}
-				else if (currenthp < 0) {
-					currenthp = 0;
-				}
-				hpGauge->update(currenthp);
 			}
 		}
+		int currenthp = getCurrentHp();
 
+		if (currenthp > totalhp) {
+			currenthp = totalhp;
+		}
+		else if (currenthp < 0) {
+			currenthp = 0;
+		}
+		hpGauge->update(currenthp);
 	}
 }
 
