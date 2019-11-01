@@ -310,6 +310,7 @@
     <ClInclude Include="LoadEffect.h" />
     <ClInclude Include="MyKey.h" />
     <ClInclude Include="MusicManager.h" />
+    <ClInclude Include="MyKeySound.h" />
     <ClInclude Include="MyThread.h" />
     <ClInclude Include="NotesManager.h" />
     <ClInclude Include="Observer.h" />

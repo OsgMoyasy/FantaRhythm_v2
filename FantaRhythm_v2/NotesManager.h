@@ -34,8 +34,10 @@ private:
 		void add(int val = 1);
 		void reset();
 		int get();
+		int getMax();
 	private:
 		int count;//現在コンボ数
+		int max;//マックスコンボ数
 	} combo;
 
 	int nowtime;	//現在時間[ms]
@@ -86,10 +88,10 @@ private:
 	struct ProPos;							//progressRateと現在座標(X,Y)
 	ProPos getProPos(int lane, int time);	//progressRateと現在座標(X,Y)を返す
 
-	void displayNormal(int lane, int time);				//ノーマルノーツを表示
-	void displayLong(int lane, int time, int longtime);	//ロングノーツを表示
-	Color longLineColor(int linex, int lane, int time);	//ロングノーツの色を決定
-	void displayCritical(int lane, int time);			//敵の攻撃ノーツを表示
+	void displayNormal(int lane, int time, float shadow);				//ノーマルノーツを表示
+	void displayLong(int lane, int time, int longtime, float shadow);	//ロングノーツを表示
+	Color longLineColor(int linex, int lane, int time);					//ロングノーツの色を決定
+	void displayCritical(int lane, int time, float shadow);				//敵の攻撃ノーツを表示
 	void playNotesEffect(ProPos pos, JUDGE::TYPE type);	//ノーツ破壊時のエフェクト再生
 
 	void setEvent(Massage msg, int val);

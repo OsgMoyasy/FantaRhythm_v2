@@ -432,6 +432,9 @@
     <ClInclude Include="AuraEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyKeySound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc">
