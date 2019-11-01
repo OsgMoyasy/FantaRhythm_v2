@@ -41,8 +41,8 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 
 	effect.set(JUDGE::GOOD, U"resources/images/effects/nortsEffect.png", 100, 100);
 	effect.set(JUDGE::GREAT, U"resources/images/effects/nortsEffect2.png", 100, 100);
-	effect[JUDGE::GOOD]->setSE(U"resources/musics/effects/1nort.mp3");
-	effect[JUDGE::GREAT]->setSE(U"resources/musics/effects/1nort.mp3");
+	effect[JUDGE::GOOD]->setSE(U"");
+	effect[JUDGE::GREAT]->setSE(U"");
 
 	//ジャッジエフェクト初期化
 	judgeEffect = new JudgeEffect(U"resources/images/items/judgeeffect/");
