@@ -32,6 +32,6 @@ public:
 	~HttpClient();
 	void jsonWriter();
 	void Get(std::string path, std::string deststr, TH_STATUS& isFinish);//ƒXƒŒƒbƒh‚É‘Î‰
-	void Post(std::u8string postMassage, std::string contentType, std::string path, std::string deststr);	
-	std::string encode(const std::u8string& str);
+	void Post(std::string postMassage, std::string path, std::string deststr, TH_STATUS& isFinish);	
+	std::string encode(const std::string& str);
 };

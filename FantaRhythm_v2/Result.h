@@ -6,7 +6,9 @@
 #include <Siv3D.hpp>
 #include "MyKey.h"
 #include "SceneManager.h"
-
+#include "HttpClient.h"
+#include <thread>
+#include "RankingData.h"
 class Result : public Scene {
 public:
 	Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear);
@@ -43,6 +45,9 @@ private:
 	String damageStr;//ダメージを文字列変換
 	int judgeDrawRow;//判定数描画の現在の対象
 	double judgePrevTime;
+	std::thread th;
+	TH_STATUS th_status;
+	HttpClient* client;
 
 	void successUpdate(void);
 	void successDraw(void);
@@ -54,6 +59,7 @@ private:
 	//ゲームオーバー用
 	void failedUpdate(void);
 	void failedDraw(void);
+
 };
 
 

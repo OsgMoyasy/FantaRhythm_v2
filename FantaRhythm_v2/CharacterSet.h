@@ -4,6 +4,7 @@
 #include "Observer.h"
 #include "Enemy.h"
 #include "Gauge.h"
+#include "RankingData.h"
 
 #define CHANUMBER 4
 

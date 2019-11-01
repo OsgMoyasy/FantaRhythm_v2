@@ -17,7 +17,7 @@ void Tanker::jobDraw() {
 }
 
 void Tanker::jobUpdate() {
-	Print << U"sealed=" << sealedcount;
+	//Print << U"sealed=" << sealedcount;
 }
 
 void Tanker::upAttack() {		//小ダメージ　＆　シールドチャージ

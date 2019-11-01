@@ -5,13 +5,15 @@ constexpr int MOVERANGE = 70;	//キャラの上下移動高さ
 constexpr int MOVEFREQ = 4 * 60;//キャラ移動周期（フレーム数＊時間(s))
 constexpr int EFFECTSIZE = 200; //エフェクトの画像サイズ
 
-Character::Character(CharacterSubject* csubject, const FilePath& jobname, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) {
+Character::Character(CharacterSubject* csubject, const FilePath& jobname, String& char_name, int hp, int power, double generic1, double generic2, double ix, double iy) :MAX_HP(hp){
 	this->csubject = csubject;
 	//エフェクトの作成
-	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
+	flipeffect[EffectType::NOMAL] = new FlipEffect(U"resources/images/effects/"+ jobname +U"/attack.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.05);
 	flipeffect[EffectType::ULT] = new FlipEffect(U"resources/images/effects/" + jobname + U"/ult.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/" + jobname + U"/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0);
-	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.1);
+	flipeffect[EffectType::DAMAGE] = new FlipEffect(U"resources/images/effects/damage.png", EFFECTSIZE, EFFECTSIZE, 0, 0, 0.04);
+	flipeffect[EffectType::GUARD] = new FlipEffect(U"resources/images/effects/shield.png", EFFECTSIZE, EFFECTSIZE, 0, 0.003);
+	flipeffect[EffectType::HEAL] = new FlipEffect(U"resources/images/effects/heal.png", EFFECTSIZE, EFFECTSIZE, 0, 0.003);
+	aura = new AuraEffect(jobname);
 	//CSVファイルの読み込み
 	this->char_name = char_name;
 	this->hp = hp;
@@ -19,7 +21,7 @@ Character::Character(CharacterSubject* csubject, const FilePath& jobname, String
 	this->generic1 = generic1;
 	this->generic2 = generic2;
 	//キャラ画像の読み込み
-	TextureAsset::Register(char_name,U"resources/images/character/R"+char_name+U".png", AssetParameter::LoadAsync());
+	TextureAsset::Register(char_name,U"resources/images/character/"+char_name+U".png", AssetParameter::LoadAsync());
 	TextureAsset::Preload(char_name);
 	initx = ix;
 	inity = iy;
@@ -32,6 +34,7 @@ Character::~Character(void) {
 	for (int i = 0; i < EffectType::SIZE; i++) {
 		delete flipeffect[i];
 	}
+	delete aura;
 }
 
 bool Character::isReady(void) {
@@ -44,12 +47,15 @@ bool Character::isReady(void) {
 void Character::update(void) {
 	moveUpDown();
 	jobUpdate();
+	aura->update();
 }
 
 void Character::draw(void) {
+	aura->draw(x, y);
 	characterDraw();
 	jobDraw();
 	drawEffect();
+	
 }
 
 void Character::getEvent(Massage msg) {
@@ -74,8 +80,17 @@ int Character::getHp() {
 	return hp;
 }
 
-void Character::recovery(int amount) {
-	hp += amount;
+int Character::recovery(int amount) {
+	playEffect(EffectType::HEAL, x, y);
+	int difference = 0;
+	if (MAX_HP > hp) {
+		hp = MAX_HP;
+		difference = MAX_HP - hp;
+	}
+	else {
+		hp += amount;
+	}
+	return difference;
 }
 
 void Character::damage(int damage) {

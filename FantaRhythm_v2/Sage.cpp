@@ -9,6 +9,8 @@ Sage::Sage(CharacterSubject* csubject, String& char_name, int hp, int power, dou
 	recoveryClear();
 	chargeGauge = new Gauge(getX() - getW() / 2.0, getY() + getH() / 2.0, U"resources/images/effects/sage", RECOVERYMAX, Color(Palette::Black), Color(Palette::Burlywood));
 	chargeGauge->update(recoverycount);
+	canHeal = false;
+	curehp = 0;
 }
 
 Sage::~Sage() {
@@ -20,12 +22,15 @@ void Sage::jobDraw() {
 }
 
 void Sage::jobUpdate() {
-	Print << U"recovery count=" << recoverycount;			
+	//Print << U"recovery count=" << recoverycount;			
 }
 
 void Sage::recoverycharge() {
 	if (recoverycount < RECOVERYMAX) {
 		recoverycount += 1;
+	}
+	else if(recoverycount > 5){//‰ñ•œ‚Å‚«‚é‚È‚çƒI[ƒ‰’Ç‰Á
+		aura->setFlag(true);
 	}
 }
 
@@ -34,9 +39,15 @@ void Sage::recoveryClear() {
 }
 
 int Sage::isHeal() {
-	if (recoverycount > 5) {
-		curehp = getPower() * recoverycount;
-		return curehp;
+	if (canHeal) {
+		canHeal = false;
+		if (recoverycount > 5) {
+			aura->setFlag(false);
+			curehp = getPower() * recoverycount;
+			recoveryClear();
+			chargeGauge->update(recoverycount);
+			return curehp;
+		}		
 	}
 	return 0;
 }
@@ -47,9 +58,8 @@ void Sage::upEvent(void) {
 	chargeGauge->update(recoverycount);
 }
 void Sage::downEvent(void) {
-	isHeal();
-	recoveryClear();
-	chargeGauge->update(recoverycount);
+	canHeal = true;
+	playEffect(EffectType::ULT, getX(), getY());
 }
 void Sage::damageEvent(void) {
 	chargeGauge->update(recoverycount);

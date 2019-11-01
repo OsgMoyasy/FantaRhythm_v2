@@ -4,7 +4,7 @@
 //std::string deststr = "postman-echo.com";//送信先(IPアドレス)
 const int port = 3000;
 HttpClient::HttpClient() {
-	filepath = "test.json";
+	filepath = "chardata.json";
 	statusMassage = "初期化成功";
 	result = "";
 	int err = WSAStartup(MAKEWORD(2, 0), &wsaData);//winsock初期化
@@ -106,7 +106,7 @@ void HttpClient::Get(std::string path, std::string deststr, TH_STATUS& isFinish)
 	isFinish = TH_FINISH;
 }
 
-void HttpClient::Post(std::u8string post, std::string contentType, std::string path, std::string deststr) {
+void HttpClient::Post(std::string post, std::string path, std::string deststr, TH_STATUS& isFinish) {
 	std::string postMassage = encode(post);
 	result.clear();
 	try {
@@ -211,14 +211,14 @@ std::string HttpClient::getFilePath() {
 }
 
 
-std::string HttpClient::encode(const std::u8string& str) {
+std::string HttpClient::encode(const std::string& str) {
 	std::ostringstream os;
 
 	for (int i = 0; i < str.size(); i++) {
 		char c = str[i];
 		if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
 			(c >= '0' && c <= '9') ||
-			c == '-' || c == '_' || c == '.' || c == '~'|| c == '=') {
+			c == '-' || c == '_' || c == '.' || c == '~'|| c == '=' || c == '&') {
 			os << c;
 		}
 		else {

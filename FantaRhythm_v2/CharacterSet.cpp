@@ -10,10 +10,11 @@ CharacterSet::CharacterSet(const String& musicpath) {
 	enemy = new Enemy(musicpath);
 	csubject->addObserver(enemy);
 	
-	JSONReader json(U"test.json");
+	JSONReader json(U"chardata.json");
 	JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
 	for (int lane = 0; lane < CHANUMBER; lane++) {
 		int initx = 70 + lane * 90, inity = 250 + lane * 80;
+		
 
 		String char_name = jsonArray[lane][U"char_name"].get<String>();
 		int hp = jsonArray[lane][U"hp"].get<int>();
@@ -40,9 +41,11 @@ CharacterSet::CharacterSet(const String& musicpath) {
 		case JOB::COMBOSTAR:
 			cha[lane] = new Combostar(csubject, char_name, hp, power, generic1, generic2, initx, inity);
 			break;
+			/*未実装
 		case JOB::TANKER:
 			cha[lane] = new Tanker(csubject, char_name, hp, power, generic1, generic2, initx, inity);
 			break;
+			*/
 		default:
 			//エラー
 			break;
@@ -50,7 +53,7 @@ CharacterSet::CharacterSet(const String& musicpath) {
 		
 	}
 	totalhp = getCurrentHp();
-	damage = 20;
+	damage = 15;
 	//HPゲージの作成
 	constexpr int HPWIDTH = 400;
 	constexpr int HPHEIGHT = 30;
@@ -109,12 +112,23 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 	}
 	
 	for (int i = 0; i < CHANUMBER; i++) {//回復判定 要修正
-		if (typeid(cha[i]) == typeid(Healer)){//回復キャラなのか判定
-			int amount = ((Healer*)cha[i])->isHeal();
+	
+		if (Healer* p = dynamic_cast<Healer*>(cha[i])){//回復キャラなのか判定
+			int amount = ((Sage*)cha[i])->isHeal();
 			if (amount > 0) {
 				for (int j = 0; j < CHANUMBER; j++) {
-					cha[i]->recovery(amount);
+					int difference = cha[j]->recovery(amount);
+					amount += difference;//差分追加
 				}
+				int currenthp = getCurrentHp();
+
+				if (currenthp > totalhp) {
+					currenthp = totalhp;
+				}
+				else if (currenthp < 0) {
+					currenthp = 0;
+				}
+				hpGauge->update(currenthp);
 			}
 		}
 
@@ -130,7 +144,7 @@ int CharacterSet::getTotalDamage(void) {
 
 
 void CharacterSet::damageToSelves(int lane, int damage) {
-	cha[lane]->damage(damage);
+	cha[lane]->damage(damage);//これ消せばHP減らない！
 	int currenthp = getCurrentHp();
 
 	if (currenthp > totalhp) {

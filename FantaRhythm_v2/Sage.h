@@ -9,8 +9,9 @@ class Sage :public Character, public Healer{
 public:
 	Sage(CharacterSubject* csubject, String& char_name, int hp, int attack, double generic1, double generic2, double ix, double iy);
 	~Sage();
-private:
 	int isHeal();
+private:
+	bool canHeal;
 	int recoverycount;
 	int curehp;
 	void recoverycharge();

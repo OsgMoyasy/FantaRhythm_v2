@@ -7,7 +7,7 @@
 #include "FantaRhythm_v2.h"
 #include "SceneManager.h"
 #include "MusicManager.h"
-
+#include "RankingData.h"
 
 class Game : public Scene {
 public:

@@ -14,12 +14,15 @@ Game::Game(const String& music, const String& dif) {
 	
 	isClear = true;//falseになればゲームオーバー
 
+
 	TextureAsset::Register(U"gameback", U"resources/images/back/"+ FileSystem::FileName(musicpath) +U".jpg");
 
 	TextureAsset::Preload(U"gameback");
 
 	FontAsset::Register(U"gamefont", 30);
 	FontAsset::Preload(U"gamefont");
+
+	RankingData::setMusic_name(FileSystem::FileName(musicpath));
 	MusicManager::setMusicGame(musicpath);
 }
 Game::~Game() {
@@ -51,8 +54,9 @@ void Game::update() {
 void Game::draw() {
 	//背景画像描画
 	TextureAsset(U"gameback").draw();
-	notes->draw();
 	characterm->draw();
+	notes->draw();
+	
 }
 
 bool Game::getClearFlag(void) {

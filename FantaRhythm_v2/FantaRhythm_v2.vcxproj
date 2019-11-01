@@ -198,6 +198,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="AuraEffect.cpp" />
     <ClCompile Include="Berserker.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterSet.cpp" />
@@ -214,7 +215,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
-    <ClCompile Include="PlayerName.cpp" />
+    <ClCompile Include="RankingData.cpp" />
     <ClCompile Include="QrRead.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Sage.cpp" />
@@ -289,6 +290,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archer.h" />
+    <ClInclude Include="AuraEffect.h" />
     <ClInclude Include="Berserker.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterSet.h" />
@@ -308,13 +310,14 @@
     <ClInclude Include="LoadEffect.h" />
     <ClInclude Include="MyKey.h" />
     <ClInclude Include="MusicManager.h" />
+    <ClInclude Include="MyKeySound.h" />
     <ClInclude Include="MyThread.h" />
     <ClInclude Include="NotesManager.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="QrRead.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Sage.h" />
-    <ClInclude Include="PlayerName.h" />
+    <ClInclude Include="RankingData.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SelectMusic.h" />

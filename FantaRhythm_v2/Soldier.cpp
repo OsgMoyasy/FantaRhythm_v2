@@ -18,7 +18,7 @@ void Soldier::jobDraw() {
 }
 
 void Soldier::jobUpdate() {
-	Print << U"charge=" << chargeCount;
+	//Print << U"charge=" << chargeCount;
 }
 
 void Soldier::charge() {//小ダメージ　＆　チャージ
@@ -26,10 +26,14 @@ void Soldier::charge() {//小ダメージ　＆　チャージ
 	if (chargeCount < CHARGEMAX) {
 		chargeCount +=1;
 	}
+	else {
+		aura->setFlag(true);
+	}
 }
 
 void Soldier::chargeClear() {
-	chargeCount = 1;
+	aura->setFlag(false);
+	chargeCount = 0;
 }
 
 void Soldier::chargeAttack() {

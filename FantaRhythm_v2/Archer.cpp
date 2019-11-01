@@ -20,10 +20,11 @@ void Archer::jobDraw() {
 }
 
 void Archer::jobUpdate() {
-	Print << U"Having arrows=" << arrowscount;			//持っている矢の数、名前は仮
+	//Print << U"Having arrows=" << arrowscount;			//持っている矢の数、名前は仮
 }
 
 void Archer::arrowscharge() {		//矢のチャージ(5本まで)
+	aura->setFlag(true);
 	setAttackEvent(getPower(), EffectType::NOMAL);
 	if (arrowscount < ARROWSMAX) {
 		arrowscount += 1;
@@ -35,6 +36,9 @@ void Archer::arrowsClear() {		//攻撃した後、矢が正の整数ならば減らす
 	if (arrowscount > 0) {
 		arrowscount -= 1;
 		arrowEffect->take();
+	}
+	else {
+		aura->setFlag(false);
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "Observer.h"
 #include <Siv3D.hpp>
 #include "GameEffect.h"
+#include "AuraEffect.h"
 
 class Character {
 public:
@@ -14,6 +15,7 @@ public:
 		ULT,
 		DAMAGE,
 		GUARD,
+		HEAL,
 		SIZE,
 	};
 	bool isReady();
@@ -21,10 +23,11 @@ public:
 	void draw(void);
 	void getEvent(Massage msg);//CharacterSetからイベント受取
 	int getHp();
-
-	void recovery(int amount);	//キャラの回復
+	
+	int recovery(int amount);	//キャラの回復
 	void damage(int damage);	//キャラへのダメージ
 protected:
+	AuraEffect* aura;
 	//jobで使用するゲッター
 	String Character::getName();
 	int getPower(void);
@@ -34,6 +37,9 @@ protected:
 	double getY(void);
 	int    getW(void);
 	int    getH(void);
+	//エフェクト
+	void playEffect(EffectType type);
+	void playEffect(EffectType type, double x, double y);
 	
 	void setAttackEvent(int attack, EffectType type);//敵への攻撃イベント
 	//ジョブクラスでオーバーライド
@@ -52,13 +58,13 @@ private:
 	double initx, inity;//基本位置
 	double x, y;		//現在位置
 	int framecnt;		//上下移動に使うフレームカウント
+	const int MAX_HP;
 
 	//キャラ移動
 	void moveUpDown(void);
 	void characterDraw(void);
 	//エフェクト
-	void playEffect(EffectType type);
-	void playEffect(EffectType type, double x, double y);
+
 	void drawEffect(void);
 	void guard(void);	//ガードイベント
 };

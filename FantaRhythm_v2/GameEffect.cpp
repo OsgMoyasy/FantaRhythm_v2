@@ -2,14 +2,21 @@
 
 //SE///////////////////////////////////////////////////////////////////////////////////
 SE::SE(const FilePath& path) {
-	sound = new Audio(path);
+	exist = false;
+
+	if (path != U"") {
+		sound = new Audio(path);
+		exist = true;
+	}
 }
 SE::~SE() {
 	delete sound;
 }
 void SE::play() {
-	sound->stop();
-	sound->play();
+	if (exist) {
+		sound->stop();
+		sound->play();
+	}
 }
 
 //MapFlip///////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +91,7 @@ void FlipEffect::setPos(int xDraw, int yDraw) {
 	this->xDraw = xDraw;
 	this->yDraw = yDraw;
 }
-void FlipEffect::setSE(FilePath& path) {
+void FlipEffect::setSE(const FilePath& path) {
 	delete se;
 	se = new SE(path);
 	existSE = true;
