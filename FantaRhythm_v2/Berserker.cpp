@@ -59,6 +59,6 @@ void Berserker::downEvent(void) {
 	chargeGauge->update(selfcount);
 }
 void Berserker::damageEvent(void) {
-	chargeGauge->update(selfcount);
+
 }
 
