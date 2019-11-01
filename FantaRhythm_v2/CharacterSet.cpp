@@ -123,6 +123,7 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 
 			}
 		}
+		
 		int currenthp = getCurrentHp();
 
 		if (currenthp > totalhp) {

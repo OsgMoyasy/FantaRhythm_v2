@@ -70,8 +70,8 @@ void QrRead::update(void) {
 		if (th_status == TH_NONE) {		
 			std::stringstream st;
 			RankingData::setUser_id(readText);
-			st << "/getChar?user_hash="+readText.narrow();
-			th = std::thread(&HttpClient::Get, client, st.str(), "192.168.10.3",std::ref(th_status));
+			st << "/user/"+readText.narrow();
+			th = std::thread(&HttpClient::Get, client, st.str(), "127.0.0.1",std::ref(th_status));
 			msg = U"サーバーと通信中";
 			
 		}
