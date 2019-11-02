@@ -21,7 +21,7 @@ void SceneManager::finalize() {
 void SceneManager::updateScene() {
 	if (NOWSCENE != NEXTSCENE) {
 		isLoadFinished = false;
-		loadeffect->setTimer(2);
+		loadeffect->setTimer(1);
 		NOWSCENE = NEXTSCENE;
 	}
 	if (!isLoadFinished) {
@@ -50,17 +50,17 @@ void SceneManager::changeScene() {
 	switch (NEXTSCENE) {//nextsceneがNONE以外の時シーン移行する
 	case SCENE_TITLE:
 		delete scene;
-		loadeffect->setTimer(2);
+		loadeffect->setTimer(1);
 		scene = new Title();
 		break;
 	case SCENE_QRREAD:
 		delete scene;
-		loadeffect->setTimer(2);
+		loadeffect->setTimer(1);
 		scene = new QrRead();
 		break;
 	case SCENE_SELECTMUSIC:
 		delete scene;
-		loadeffect->setTimer(2);
+		loadeffect->setTimer(1);
 		scene = new SelectMusic();
 		break;
 	case SCENE_GAME: {
@@ -74,7 +74,7 @@ void SceneManager::changeScene() {
 		break;
 	}
 	case SCENE_RESULT: {
-		loadeffect->setTimer(2);
+		loadeffect->setTimer(1);
 		//判定のカウント数と敵への総ダメージ量を退避
 		int totalDamage = ((Game*)scene)->getTotalDamage();
 		bool isClear = ((Game*)scene)->getClearFlag();

@@ -21,6 +21,7 @@ struct NotesManager::Notes {
 	int longtime;
 	int judgetime;
 	bool display;
+	float shadow;
 };
 
 struct NotesManager::ProPos {
@@ -40,6 +41,8 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 
 	effect.set(JUDGE::GOOD, U"resources/images/effects/nortsEffect.png", 100, 100);
 	effect.set(JUDGE::GREAT, U"resources/images/effects/nortsEffect2.png", 100, 100);
+	effect[JUDGE::GOOD]->setSE(U"");
+	effect[JUDGE::GREAT]->setSE(U"");
 
 	//ジャッジエフェクト初期化
 	judgeEffect = new JudgeEffect(U"resources/images/items/judgeeffect/");
@@ -60,7 +63,12 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
 		case 0:
-			note.type = NOTESTYPE::NORMAL;
+			if (note.time % 21 == 0) {
+				note.type = NOTESTYPE::CRITICAL;
+			}
+			else {
+				note.type = NOTESTYPE::NORMAL;
+			}
 			note.judgetime = note.time;
 			break;
 		case 1:
@@ -73,6 +81,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 			break;
 		}
 		note.display = true;
+		note.shadow = 0;
 		notelist[lane].push_back(note);
 	}
 	note.type = NOTESTYPE::SENTINEL;//番兵の追加
@@ -83,6 +92,8 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	for (int i = 0; i < JUDGE::TYPE::TYPE_SIZE; i++) {
 		judgecount.cnt[i] = 0;
 	}
+	judgecount.maxcombo = 0;
+
 	for (int lane = 0; lane < LANESIZE; lane++) {//レーンごとに到着時間を格納
 		notelist[lane].push_back(note);//番兵の設置
 		displayitr[lane] = checkitr[lane] = notelist[lane].begin();//チェック用のイテレータ初期
@@ -247,7 +258,7 @@ void NotesManager::judgeLong(int lane) {
 		}
 	}
 	
-	if (nowtime >= checkitr[lane]->judgetime + JUDGE_RANGE::GOOD) {//判定を超えた時
+	if (nowtime >= checkitr[lane]->time + JUDGE_RANGE::GOOD) {//判定を超えた時
 		return judgeLongEvent(JUDGE::BAD, lane);
 	}
 }
@@ -303,18 +314,18 @@ void NotesManager::judgeLongEvent(JUDGE::TYPE type, int lane) {
 	pressedkey[lane] = 0;//判定したので長押しの状態を初期化
 }
 void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
-	if (next) {
-		noteNext(lane);
-	}
 	judgecount.cnt[type]++;//判定をカウントアップ
 	judgeEffect->setEffect(type);//判定エフェクトセット
 	if(type == JUDGE::BAD){
+		checkitr[lane]->shadow = 0.1;
 		combo.reset();
 		comboImNum->resetCombo();
 		setEvent(Massage::DAMAGE, lane);
 	}
 	else {
+		if (next) { checkitr[lane]->display = false; }//ディスプレイ表示オフ
 		combo.add();
+		judgecount.maxcombo = combo.getMax();
 		comboImNum->setCombo(combo.get());
 		switch (down[lane]) {//成功イベント送信
 		case PSHBTN::UP:
@@ -325,16 +336,21 @@ void NotesManager::judgeEvent(JUDGE::TYPE type, int lane, bool next) {
 			break;
 		}
 	}
+
+	if (next) {
+		noteNext(lane);
+	}
 }
 
 void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType) {
-	noteNext(lane);
 	judgecount.cnt[type]++;//判定をカウントアップ
 	judgeEffect->setEffect(type);//判定エフェクトセット
 	if (type == JUDGE::BAD) {//BADイベント送信
+		checkitr[lane]->shadow = 0.1;
 		setEvent(Massage::CRITICALDAMAGE, lane);
 	}
 	else {
+		checkitr[lane]->display = false;//ディスプレイ表示オフ
 		switch (buttonType) {//成功イベント送信
 		case PSHBTN::UP:
 			setEvent(Massage::UPATTACK, lane);
@@ -349,9 +365,9 @@ void NotesManager::judgeCriticalEvent(JUDGE::TYPE type, int lane, int buttonType
 			break;
 		}
 	}
+	noteNext(lane);
 }
 void NotesManager::noteNext(int lane) {
-	checkitr[lane]->display = false;//ディスプレイ表示オフ
 	plusItr(checkitr[lane]);//判定対象を次に進める
 }
 
@@ -384,16 +400,20 @@ void NotesManager::draw(void){
 
 			switch (itr->type){
 			case NOTESTYPE::NORMAL:
-				displayNormal(lane, itr->time);
+				displayNormal(lane, itr->time, itr->shadow);
 				break;
 			case NOTESTYPE::LONG:
-				displayLong(lane, itr->time, itr->longtime);
+				displayLong(lane, itr->time, itr->longtime, itr->shadow);
 				break;
 			case NOTESTYPE::CRITICAL:
-				displayCritical(lane, itr->time);
+				displayCritical(lane, itr->time, itr->shadow);
 				break;
 			default:
 				break;
+			}
+
+			if (0 < itr->shadow && itr->shadow < 0.5) {
+				itr->shadow += 0.15;
 			}
 		}	
 	}
@@ -414,7 +434,7 @@ void NotesManager::displayLane(int lane) {
 
 	static bool first = true;
 	if (first) {
-		constexpr int LINEBETWEEN = 7;	//線の間隔[ms]
+		constexpr int LINEBETWEEN = 3;	//線の間隔[ms]
 
 		for (int lane = 0;lane < LANESIZE;lane++) {
 			for (int i = nowtime;i < nowtime + timeRequired;i += LINEBETWEEN) {
@@ -433,16 +453,23 @@ void NotesManager::displayLane(int lane) {
 		first = false;
 	}
 
+	line& prev = laneRoad[lane][0];
 	for (auto& line : laneRoad[lane]) {
-		double weight = line.progressRate * 8;	//線の太さ
+		double weight = line.progressRate * 4;	//線の太さ
 		ColorF color = ColorF(Palette::Blue, line.progressRate / 2);	//線の色と透明度
 		Line(line.pos1, line.pos2).draw(weight, color);
+
+//		ColorF color2 = ColorF(Palette::Blue, line.progressRate);	//線の色と透明度
+//		Line(line.pos1, prev.pos1).draw(weight * 2 / 3, color2);
+//		Line(line.pos2, prev.pos2).draw(weight * 2 / 3, color2);
+//		prev = line;
 	}
 }
 void NotesManager::displayButton(int lane) {
 	Color color = press[lane] ? Palette::Skyblue : Palette::White;	//押されているボタンに対応した円を変色
 	static double circleScale = notewidth / 2 * (double)laneJudgeScale;
 	Circle(laneJudgeX[lane], laneJudgeY[lane], circleScale).draw(color);
+	Circle(laneJudgeX[lane], laneJudgeY[lane], circleScale).drawFrame(3, Palette::Blue);
 }
 
 
@@ -471,15 +498,16 @@ NotesManager::ProPos NotesManager::getProPos(int lane, int time) {
 }
 
 
-void NotesManager::displayNormal(int lane, int time) {
+void NotesManager::displayNormal(int lane, int time, float shadow) {
 	ProPos now = getProPos(lane, time);
 	if (now.y > laneGoalY) {
 		plusItr(displayitr[lane]);
 		return;
 	}
 	TextureAsset(U"note").scaled(now.scale).drawAt(now.x, now.y);
+	Circle(now.x, now.y, now.scale * notewidth / 2).draw(ColorF(Palette::Black, shadow));
 }
-void NotesManager::displayLong(int lane, int time, int longtime) {
+void NotesManager::displayLong(int lane, int time, int longtime, float shadow) {
 	//描画位置の計算
 	//上側
 	int longt = longtime < nowtime + timeRequired ? longtime : nowtime + timeRequired;
@@ -504,16 +532,22 @@ void NotesManager::displayLong(int lane, int time, int longtime) {
 			lineColor = longLineColor(linex, lane, time);
 			Line(a.x + linex * a.scale, a.y, b.x + linex * b.scale, b.y).draw(1, lineColor);
 			Line(a.x - linex * a.scale, a.y, b.x - linex * b.scale, b.y).draw(1, lineColor);
+			Line(a.x + linex * a.scale, a.y, b.x + linex * b.scale, b.y).draw(1, ColorF(Palette::Black, shadow));
+			Line(a.x - linex * a.scale, a.y, b.x - linex * b.scale, b.y).draw(1, ColorF(Palette::Black, shadow));
 		}
 	}
 	for (int linex = 0; linex <= (TextureAsset(U"note").width() / 2); linex++) {
 		lineColor = longLineColor(linex, lane, time);
 		Line(b.x + linex * b.scale, b.y, bgn.x + linex * bgn.scale, bgn.y).draw(1, lineColor);
 		Line(b.x - linex * b.scale, b.y, bgn.x - linex * bgn.scale, bgn.y).draw(1, lineColor);
+		Line(b.x + linex * b.scale, b.y, bgn.x + linex * bgn.scale, bgn.y).draw(1, ColorF(Palette::Black, shadow));
+		Line(b.x - linex * b.scale, b.y, bgn.x - linex * bgn.scale, bgn.y).draw(1, ColorF(Palette::Black, shadow));
 	}
 
 	TextureAsset(U"longnote").scaled(end.scale).drawAt(end.x, end.y);
 	TextureAsset(U"longnote").scaled(bgn.scale).drawAt(bgn.x, bgn.y);
+	Circle(end.x, end.y, end.scale * notewidth / 2).draw(ColorF(Palette::Black, shadow));
+	Circle(bgn.x, bgn.y, bgn.scale * notewidth / 2).draw(ColorF(Palette::Black, shadow));
 }
 
 Color NotesManager::longLineColor(int linex, int lane, int time) {
@@ -525,13 +559,14 @@ Color NotesManager::longLineColor(int linex, int lane, int time) {
 	}
 }
 
-void NotesManager::displayCritical(int lane, int time) {
+void NotesManager::displayCritical(int lane, int time, float shadow) {
 	ProPos now = getProPos(lane, time);
 	if (now.y > laneGoalY) {
 		plusItr(displayitr[lane]);
 		return;
 	}
 	TextureAsset(U"cri").scaled(now.scale).drawAt(now.x, now.y);
+	Circle(now.x, now.y, now.scale * notewidth / 2).draw(ColorF(Palette::Black, shadow));
 }
 void NotesManager::playNotesEffect(ProPos pos, JUDGE::TYPE type) {
 	if (type <= JUDGE::GREAT) {
@@ -552,13 +587,18 @@ void NotesManager::setEvent(Massage msg, int val) {
 
 NotesManager::Combo::Combo() {
 	count = 0;
+	max = 0;
 }
 void NotesManager::Combo::add(int val) {
 	count += val;
+	max = max > count ? max : count;
 }
 void NotesManager::Combo::reset() {
 	count = 0;
 }
 int NotesManager::Combo::get() {
 	return count;
+}
+int NotesManager::Combo::getMax() {
+	return max;
 }
