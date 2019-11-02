@@ -1,5 +1,7 @@
 #include "Result.h"
 #include <vector>
+#include"OperationTexture.h"
+#include"OperationSE.h"
 constexpr double NUMBER_SWTIME = 0.05;						//数字エフェクトが切り替わる時間
 constexpr double NUM_MAXTIME = NUMBER_SWTIME * 9 * 1000;	//数字が確定するまでの時間
 constexpr int NUMIM_WIDTH = 50, NUMIM_HEIGHT = 75;
@@ -121,14 +123,15 @@ void Result::start(void) {
 
 void Result::update(void) {
 	(this->*stateUpdate)();
-	if (MyKey::getReturnKey()) {
+	if (MyKey::getDecisionKey()) {
+		OperationSE::play(DECISION);
 		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
 	}
 }
 
 void Result::draw(void) {
 	(this->*stateDraw)();
-	
+	OperationTexture::draw(DECISION, { 10,650 }, U"：進む");
 }
 
 void Result::changeFontAlpha(void) {
@@ -210,7 +213,7 @@ void Result::failedUpdate(void) {
 
 void Result::failedDraw(void) {
 	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//背景描画
-	FontAsset(U"resultfont")(U"～ リターンキーでタイトルに戻る ～").drawAt(Window::Width() / 2, Window::Height() - 130, AlphaF(alphaFont));
+	FontAsset(U"resultfont")(U"～ リターンキーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 130, AlphaF(alphaFont));
 }
 
 

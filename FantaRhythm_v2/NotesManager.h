@@ -97,7 +97,7 @@ private:
 	void setEvent(Massage msg, int val);
 	
 public:
-	NotesManager(NotesSubject* sub,const String& difpath);
+	NotesManager(NotesSubject* sub,const String& difpath,float _notespeed);
 	~NotesManager();
 	bool isReady();
 	void update(void);

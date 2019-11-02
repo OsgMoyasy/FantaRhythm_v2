@@ -13,7 +13,7 @@ private:
 
 class MapFlip {	//渡された大きい画像から切り出した画像を返す
 public:
-	MapFlip(Texture map, int xFlipWidth, int yFlipHeight);
+	MapFlip(Texture _map, int _xFlipWidth, int _yFlipHeight, bool _loop = false);
 	bool nextFlip();			//次の切り出し画像の位置にセット。次がない(最後)ならfalseを返す
 	TextureRegion getFlip();	//切り出し画像を返す
 private:
@@ -21,6 +21,7 @@ private:
 	int xMapWidth, yMapHeight;		//大きい画像の大きさ
 	int xFlipWidth, yFlipHeight;	//切り出しサイズ
 	int xNowPos, yNowPos;			//現在の画像切り出し位置
+	bool loop;
 };
 
 struct FlipMovie :IEffect {//MapFlipを利用してパラパラ漫画を作るエフェクト
@@ -40,7 +41,7 @@ public:
 	~FlipEffect();
 	void setTexture(const FilePath& path, int xFlipWidth, int yFlipHeight);	//画像をセット("画像パス",切り出しサイズ)
 	void setPos(int xDraw, int yDraw);	//描画位置をセット
-	void setSE(const FilePath& path);			//SEをセット
+	void setSE(const FilePath& path);	//SEをセット
 	void play();						//再生開始
 	void play(int xDraw, int yDraw);	//再生開始(描画位置)
 	void draw();	//描画(フレーム毎に呼び出す必要あり)

@@ -215,6 +215,8 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
+    <ClCompile Include="OperationSE.cpp" />
+    <ClCompile Include="OperationTexture.cpp" />
     <ClCompile Include="Party.cpp" />
     <ClCompile Include="RankingData.cpp" />
     <ClCompile Include="QrRead.cpp" />
@@ -302,6 +304,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameEffect.h" />
     <ClInclude Include="Gauge.h" />
+    <ClInclude Include="OperationDefine.h" />
+    <ClInclude Include="OperationSE.h" />
+    <ClInclude Include="OperationTexture.h" />
     <ClInclude Include="Healer.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="ImageNumber.h" />
