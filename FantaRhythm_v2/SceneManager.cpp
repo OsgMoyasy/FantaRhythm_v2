@@ -67,8 +67,8 @@ void SceneManager::changeScene() {
 		loadeffect->setTimer(2);
 		//曲のパスと難易度選択のパスを退避
 
-		static String musicpath = ((SelectMusic*)scene)->getMusicPath();
-		static String filepath = ((SelectMusic*)scene)->getDifPath();
+		String musicpath = ((SelectMusic*)scene)->getMusicPath();
+		String filepath = ((SelectMusic*)scene)->getDifPath();
 		delete scene;
 		scene = new Game(musicpath, filepath);
 		break;
