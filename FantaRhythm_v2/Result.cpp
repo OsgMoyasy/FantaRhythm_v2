@@ -21,7 +21,7 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 	FontAsset::Register(U"resultfont", 40);
 	FontAsset::Preload(U"resultfont");
 
-	if (!isClear) {//ƒQ[ƒ€ƒNƒŠƒA
+	if (isClear) {//ƒQ[ƒ€ƒNƒŠƒA
 		client = new HttpClient();
 
 		//ƒeƒNƒXƒ`ƒƒ‰Šú‰»
@@ -180,7 +180,7 @@ int Result::calcScore(JUDGE::JudgeCount& jc) {//ƒXƒRƒAŒvZ ”»’è‚Ì”‚Æd‚İ‚ğŠ|‚¯‚
 
 bool Result::judgeUpdate() {
 	if (judgeDrawRow >= JUDGE::TYPE_SIZE) {//‘S‚Ä’Ç‰Á‚µI‚í‚Á‚½‚ç
-		judgeImNum[judgeDrawRow]->addMulti(judgeCnt.lastCombo, SCOREX, SCOREY + NUMIM_HEIGHT * (judgeDrawRow + 2));
+		judgeImNum[judgeDrawRow]->addMulti(judgeCnt.maxcombo, SCOREX, SCOREY + NUMIM_HEIGHT * (judgeDrawRow + 2));
 		return false;
 	}
 	if (stopwatch.msF() - judgePrevTime >= NUM_MAXTIME ) {//’Ç‰Á‚³‚¹‚éŠÔ‚ª—ˆ‚½‚ç”š‚ğ’Ç‰Á‚µ‰º•ûŒü‚Ö
@@ -210,7 +210,7 @@ void Result::failedUpdate(void) {
 
 void Result::failedDraw(void) {
 	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//”wŒi•`‰æ
-	FontAsset(U"resultfont")(U"` EscƒL[‚ÅI—¹ `").drawAt(Window::Width() / 2, Window::Height() - 130, AlphaF(alphaFont));
+	FontAsset(U"resultfont")(U"` ƒŠƒ^[ƒ“ƒL[‚Åƒ^ƒCƒgƒ‹‚É–ß‚é `").drawAt(Window::Width() / 2, Window::Height() - 130, AlphaF(alphaFont));
 }
 
 

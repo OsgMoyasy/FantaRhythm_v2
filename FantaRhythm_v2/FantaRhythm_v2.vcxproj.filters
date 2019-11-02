@@ -436,8 +436,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Party.h">
-    
-    <ClInclude Include="MyKeySound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
