@@ -105,7 +105,11 @@ bool MyKey::getReturnKey(void) {
 bool MyKey::getUpKey(void) {
 	if (!lock) {
 		if (padflag) {
-			return Gamepad(0).buttons[2].down();//è„
+			//return Gamepad(0).buttons[13].down();
+			if (Gamepad(0).axes[1] <= -1.0) {
+				return true;
+			}
+			return false;//è„
 		}
 		else {
 			return KeyUp.pressed();
@@ -116,7 +120,10 @@ bool MyKey::getUpKey(void) {
 bool MyKey::getDownKey(void) {
 	if (!lock) {
 		if (padflag) {
-			return Gamepad(0).buttons[3].down();//â∫
+			if (Gamepad(0).axes[1] >= 1.0) {
+				return true;
+			}
+			return false;//è„
 		}
 		else {
 			return KeyDown.pressed();

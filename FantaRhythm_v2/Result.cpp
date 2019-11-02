@@ -40,20 +40,15 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		score = calcScore(this->judgeCnt);
 		scoreStr = Format(score);
 		damageStr = Format(totalDamage);
+		std::string msg = "{\"music_name\": \"" + RankingData::getMusic_name().narrow() + "\",\"score\" : " + scoreStr.narrow() + ",\"damage\" : " + damageStr.narrow() + ",\"user_hash\" : \"" + Unicode::ToUTF8(RankingData::getUser_id()) + "\"}";
 
-		//ランキング送信
+		//ランキング送信;
 		if (RankingData::getUser_id() != U"gest") {//ゲストユーザーじゃなければ
 			int char_id[4];
 			RankingData::getChar_id(char_id);
 			std::string str = Unicode::ToUTF8(RankingData::getUser_id());
-			th = std::thread(&HttpClient::Post, client, "user_hash=" + str
-				+ "&music_name=" + RankingData::getMusic_name().narrow()
-				+ "&score=" + scoreStr.narrow() + "&damage=" + damageStr.narrow() +
-				"&character_id1=" + std::to_string(char_id[0]) +
-				"&character_id2=" + std::to_string(char_id[1]) +
-				"&character_id3=" + std::to_string(char_id[2]) +
-				"&character_id4=" + std::to_string(char_id[3])
-				, "/postScore", "192.168.10.3", std::ref(th_status));
+			th = std::thread(&HttpClient::Post, client, msg
+				, "/ranking", "127.0.0.1", std::ref(th_status));
 		}
 
 
