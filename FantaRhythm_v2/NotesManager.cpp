@@ -103,10 +103,10 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//描画関係の変数の初期化
 	//レーン基準円の位置
 	int centerX = Window::Width() / 2;
-	int centerY = 0;
+	int centerY = 50;
 
-	int startRange = 100;			//  上端の基準円の原点からの距離
-	int judgeRange = 600;			//判定線の基準円の原点からの距離
+	int startRange = 150;			//  上端の基準円の原点からの距離
+	int judgeRange = 500;			//判定線の基準円の原点からの距離
 	double laneBetween = 0.08_pi;	//レーン間の角度(基準円上の)
 	double laneCenter = 1.5_pi;		//レーン群の中心の角度(基準円上の)
 
