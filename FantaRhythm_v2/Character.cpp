@@ -84,11 +84,15 @@ int Character::recovery(int amount) {
 	playEffect(EffectType::HEAL, x, y);
 	int difference = 0;
 	if (MAX_HP > hp) {
-		hp = MAX_HP;
-		difference = MAX_HP - hp;
-	}
-	else {
-		hp += amount;
+		if ((MAX_HP - hp) < amount) {
+			difference = amount - (MAX_HP - hp);
+			hp = MAX_HP;
+			
+		}
+		else {
+			hp += amount;
+			difference -= amount;
+		}
 	}
 	return difference;
 }

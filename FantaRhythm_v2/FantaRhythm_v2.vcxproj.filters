@@ -156,6 +156,9 @@
     <ClCompile Include="AuraEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Party.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\example\siv3d-kun.png">
@@ -432,6 +435,8 @@
     <ClInclude Include="AuraEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Party.h">
+    
     <ClInclude Include="MyKeySound.h">
       <Filter>Header Files</Filter>
     </ClInclude>

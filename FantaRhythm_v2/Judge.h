@@ -10,9 +10,9 @@ namespace JUDGE {
 		NONE,
 	};
 
-	typedef struct _JudgeCount {//”»’è‚ÌƒJƒEƒ“ƒg”‚ğŠi”[‚µ‚Ä‚¢‚­
+	typedef struct _JudgeCount {//åˆ¤å®šã®ã‚«ã‚¦ãƒ³ãƒˆæ•°ã‚’æ ¼ç´ã—ã¦ã„ã
 		int cnt[TYPE::TYPE_SIZE];
-		int maxcombo;
+		int lastCombo;
 	}JudgeCount;
 }
 

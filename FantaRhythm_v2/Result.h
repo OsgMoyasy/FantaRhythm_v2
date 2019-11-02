@@ -23,7 +23,7 @@ private:
 	class SE* se;
 	class NumWithEffect* scoreNumEffect;
 	class NumWithEffect* damageNumEffect;
-	class ImageNumber* judgeImNum[JUDGE::TYPE_SIZE];
+	class ImageNumber* judgeImNum[JUDGE::TYPE_SIZE + 1];
 	
 	int score;
 	int totalDamage;
@@ -51,6 +51,7 @@ private:
 
 	void successUpdate(void);
 	void successDraw(void);
+
 
 	int calcScore(JUDGE::JudgeCount& judgeCnt);//スコア計算
 	void imNumberInit(void);//画像の数字に関する初期化　※使用する文字列の初期化より後に呼び出すこと

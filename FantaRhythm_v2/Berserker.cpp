@@ -28,6 +28,7 @@ void Berserker::attack() {		//•’Ê‚ÌUŒ‚
 	attackdamage = getPower() + getArgs1();
 	upcount += 1;
 	if (upcount >= 3 && selfcount == 0) {
+		aura->setFlag(true);
 		selfcount = 5;
 	}
 	setAttackEvent(attackdamage, EffectType::NOMAL);
@@ -42,6 +43,7 @@ void Berserker::BusterAttack() {
 		selfcount -= 1;
 	}
 	if (selfcount == 0) {
+		aura->setFlag(false);
 		upcount = 0;
 	}
 	setAttackEvent(busterdamage, EffectType::NOMAL);
@@ -57,6 +59,6 @@ void Berserker::downEvent(void) {
 	chargeGauge->update(selfcount);
 }
 void Berserker::damageEvent(void) {
-	chargeGauge->update(selfcount);
+
 }
 

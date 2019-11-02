@@ -215,6 +215,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="NotesManager.cpp" />
+    <ClCompile Include="Party.cpp" />
     <ClCompile Include="RankingData.cpp" />
     <ClCompile Include="QrRead.cpp" />
     <ClCompile Include="Result.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="MyThread.h" />
     <ClInclude Include="NotesManager.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="Party.h" />
     <ClInclude Include="QrRead.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Sage.h" />

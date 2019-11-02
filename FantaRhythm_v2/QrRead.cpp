@@ -44,12 +44,12 @@ void QrRead::update(void) {
 		SceneManager::setNextScene(SceneManager::SCENE_TITLE);
 	}
 	if (MyKey::getDecisionKey()) {//ゲストユーザー
-		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
-		/*
-		isRead = true;
 		readText = U"gest";
-		webcam.stop();
-		*/
+		RankingData::setName(readText);
+		client->filepath = "gest.json";
+		//webcam.stop();
+		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
+		
 	}
 	if (!isRead) {
 		if (webcam.hasNewFrame()) {
@@ -60,7 +60,7 @@ void QrRead::update(void) {
 			if (decoder.decode(image, qr)) {
 				readText = qr.text;
 				isRead = true;
-				webcam.stop();
+				//webcam.stop();
 			}
 		}
 	}
@@ -69,16 +69,16 @@ void QrRead::update(void) {
 		//HTTP GET 取得するファイルパス リクエスト先IP 
 		if (th_status == TH_NONE) {		
 			std::stringstream st;
-			st << "/getChar?user_id="+readText.narrow();
+			RankingData::setUser_id(readText);
+			st << "/users/"+readText.narrow();
 			th = std::thread(&HttpClient::Get, client, st.str(), "127.0.0.1",std::ref(th_status));
 			msg = U"サーバーと通信中";
 			
 		}
 		else if(th_status == TH_FINISH){
 			if (isChange) {
-				JSONReader json(U"test.json");
+				JSONReader json(U"chardata.json");
 				JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
-				RankingData::setUser_id(json[U"user"][U"id"].get<String>());
 				RankingData::setName(json[U"user"][U"nickname"].get<String>());
 				for (int i = 0; i < 4; i++) {
 					RankingData::setChar_id(i, jsonArray[i][U"character_id"].get<int>());
@@ -98,5 +98,5 @@ void QrRead::draw(void) {
 	if (camtexture) {
 		camtexture.drawAt(Window::Width() / 2, Window::Height()/2 + msgY);
 	}
-	Print << readText;
+	//Print << readText;
 }

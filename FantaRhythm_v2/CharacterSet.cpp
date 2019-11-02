@@ -1,7 +1,7 @@
 #include"CharacterSet.h"
 #include "Jobs.h"
 #include <typeinfo>
-
+#include "RankingData.h"
 
 
 CharacterSet::CharacterSet(const String& musicpath) {
@@ -9,8 +9,14 @@ CharacterSet::CharacterSet(const String& musicpath) {
 	
 	enemy = new Enemy(musicpath);
 	csubject->addObserver(enemy);
-	
-	JSONReader json(U"chardata.json");
+	String str;
+	if (RankingData::getName() == U"gest") {
+		str = U"gest.json";
+	}
+	else {
+		str = U"chardata.json";
+	}
+	JSONReader json(str);
 	JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
 	for (int lane = 0; lane < CHANUMBER; lane++) {
 		int initx = 70 + lane * 90, inity = 250 + lane * 80;
@@ -120,18 +126,19 @@ void CharacterSet::funcEvent(Obj obj) {//イベントを通達
 					int difference = cha[j]->recovery(amount);
 					amount += difference;//差分追加
 				}
-				int currenthp = getCurrentHp();
 
-				if (currenthp > totalhp) {
-					currenthp = totalhp;
-				}
-				else if (currenthp < 0) {
-					currenthp = 0;
-				}
-				hpGauge->update(currenthp);
 			}
 		}
+		
+		int currenthp = getCurrentHp();
 
+		if (currenthp > totalhp) {
+			currenthp = totalhp;
+		}
+		else if (currenthp < 0) {
+			currenthp = 0;
+		}
+		hpGauge->update(currenthp);
 	}
 }
 

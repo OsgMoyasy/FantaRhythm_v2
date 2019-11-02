@@ -20,7 +20,7 @@ private:
 	std::string statusMassage;
 	std::string result;
 
-	std::string filepath;
+	
 
 	std::string getStatusMassage();
 	std::string getResult();
@@ -33,5 +33,6 @@ public:
 	void jsonWriter();
 	void Get(std::string path, std::string deststr, TH_STATUS& isFinish);//ƒXƒŒƒbƒh‚É‘Î‰
 	void Post(std::string postMassage, std::string path, std::string deststr, TH_STATUS& isFinish);	
+	std::string filepath;
 	std::string encode(const std::string& str);
 };
