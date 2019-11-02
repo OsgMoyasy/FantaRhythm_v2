@@ -1,5 +1,6 @@
 #include "SelectMusic.h"
-
+#include"OperationSE.h"
+#include"OperationTexture.h"
 
 
 #define DEFAULT_ANGLE 120
@@ -16,7 +17,8 @@ SelectMusic::SelectMusic(void)  {
 	musicrotation = difrotation = 0;
 	initMusic();
 	initDifficulty();
-	changeState(MUSIC);//åˆæœŸçŠ¶æ…‹ã‚’æ›²é¸æŠã¸
+	changeState(MUSIC);//‰Šúó‘Ô‚ğ‹È‘I‘ğ‚Ö
+	notespeed = 0.8;
 }
 
 SelectMusic::~SelectMusic(void) {
@@ -35,19 +37,23 @@ bool SelectMusic::isReady(void) {
 }
 
 void SelectMusic::start(void) {
-	playMusic(musiccursor);//æœ€åˆã®æ›²ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’å†ç”Ÿ
+	playMusic(musiccursor);//Å‰‚Ì‹ÈƒvƒŒƒrƒ…[‚ğÄ¶
 }
 
 void SelectMusic::update(void) {
-	//çŠ¶æ…‹ã«åˆã‚ã›ãŸè¨ˆç®—å‡¦ç†
+	//ó‘Ô‚É‡‚í‚¹‚½ŒvZˆ—
 	(this->*stateUpdate)();
 }
 
 void SelectMusic::draw(void) {
-	//èƒŒæ™¯ç”»åƒæç”»
+	//”wŒi‰æ‘œ•`‰æ
 	TextureAsset(U"selectmusicback").draw();
-	//ç¾åœ¨ã®çŠ¶æ…‹ã«åˆã‚ã›ãŸé¸æŠè‚¢ã®æç”»
+	//Œ»İ‚Ìó‘Ô‚É‡‚í‚¹‚½‘I‘ğˆ‚Ì•`‰æ
 	(this->*stateDraw)();
+	OperationTexture::draw(DECISION,  { 10,500 }, U"F‘I‘ğ");
+	OperationTexture::draw(CANCEL,    { 10,550 }, U"F–ß‚é");
+	OperationTexture::draw(UPDOWN,    { 10,600 }, U"F‹ÈØ‚è‘Ö‚¦");
+	OperationTexture::draw(LEFTRIGHT, { 10,650 }, U"Fƒm[ƒcƒXƒs[ƒh‘Œ¸  {:.1f}"_fmt(notespeed));
 }
 
 void SelectMusic::changeState(SELECTSTATE nextstate) {
@@ -84,73 +90,107 @@ void SelectMusic::setArray(s3d::Array<FilePath>&array,const FilePath& filepath,i
 	array = FileSystem::DirectoryContents(filepath, false);
 	count = (int)array.count();
 }
-String SelectMusic::getDiffilepath(int cursor) {//é›£æ˜“åº¦ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹å–å¾—
+String SelectMusic::getDiffilepath(int cursor) {//“ïˆÕ“xƒtƒ@ƒCƒ‹ƒpƒXæ“¾
 	return (musicarray[cursor] + U"/score/");
 }
 
 void SelectMusic::updateMusic(void) {
-	if (!musicrotation) {//ç§»å‹•å‡¦ç†ãŒå®Œäº†ã—ã¦ã„ã‚‹ã¨ã
+	if (!musicrotation) {//ˆÚ“®ˆ—‚ªŠ®—¹‚µ‚Ä‚¢‚é‚Æ‚«
 		musicmoveCursor();
-		if (MyKey::getDecisionKey()) {//é›£æ˜“åº¦ã¸
+		if (MyKey::getDecisionKey()) {//“ïˆÕ“x‚Ö
+			OperationSE::play(LEVER);
 			changeState(DIFFICULTY);
-		}else if (MyKey::getReturnKey()) {//ã‚¿ã‚¤ãƒˆãƒ«ã¸æˆ»ã‚‹
+		}else if (MyKey::getReturnKey()) {//ƒ^ƒCƒgƒ‹‚Ö–ß‚é
+			OperationSE::play(CANCEL);
 			changeState(QRREAD);
 		}
 	}
 	else {
-		rotatemusic(musicrotation);//ç§»å‹•å‡¦ç†
+		rotatemusic(musicrotation);//ˆÚ“®ˆ—
 	}
 }
 void SelectMusic::updateDifficulty(void) {
-	if (!difrotation) {//ç§»å‹•å‡¦ç†ãŒå®Œäº†ã—ã¦ã„ã‚‹ã¨ã
-		difmoveCursor();//ä¸Šä¸‹ç§»å‹•å‡¦ç†
-		if (MyKey::getDecisionKey()) {//ã‚²ãƒ¼ãƒ ã¸
+	if (!difrotation) {//ˆÚ“®ˆ—‚ªŠ®—¹‚µ‚Ä‚¢‚é‚Æ‚«
+		difmoveCursor();//ã‰ºˆÚ“®ˆ—
+		if (MyKey::getDecisionKey()) {//ƒQ[ƒ€‚Ö
+			OperationSE::play(DECISION);
 			changeState(GAME);
-		}else if (MyKey::getReturnKey()) {//æ›²é¸æŠã¸
+		}else if (MyKey::getReturnKey()) {//‹È‘I‘ğ‚Ö
+			OperationSE::play(CANCEL);
 			changeState(MUSIC);
 		}
 	}
 	else {
-		rotatemusic(difrotation);//ç§»å‹•å‡¦ç†
+		rotatemusic(difrotation);//ˆÚ“®ˆ—
 	}
 }
 
 void SelectMusic::rotatemusic(int& rotation) {
 	if (rotation < 0) {
-		rotation += SPEED_ROTATION;//æ—¢å®šã®ä½ç½®ã«ãã‚‹ã¾ã§1ãƒ•ãƒ¬ãƒ¼ãƒ ãŠãã«è§’åº¦ã‚’ãƒ—ãƒ©ã‚¹
+		rotation += SPEED_ROTATION;//Šù’è‚ÌˆÊ’u‚É‚­‚é‚Ü‚Å1ƒtƒŒ[ƒ€‚¨‚«‚ÉŠp“x‚ğƒvƒ‰ƒX
 	}else if (rotation > 0) {
-		rotation -= SPEED_ROTATION;//æ—¢å®šã®ä½ç½®ã«ãã‚‹ã¾ã§1ãƒ•ãƒ¬ãƒ¼ãƒ ãŠãã«è§’åº¦ã‚’ãƒã‚¤ãƒŠã‚¹
+		rotation -= SPEED_ROTATION;//Šù’è‚ÌˆÊ’u‚É‚­‚é‚Ü‚Å1ƒtƒŒ[ƒ€‚¨‚«‚ÉŠp“x‚ğƒ}ƒCƒiƒX
 	}
 }
 
 void SelectMusic::musicmoveCursor(void) {
-	if (MyKey::getUpKey() == 1 && MyKey::getDownKey() == 1) {//ä¸Šä¸‹ä¸¡æ–¹æŠ¼ã•ã‚Œã¦ã‚Œã°ç§»å‹•ã•ã›ãªã„
+	if (MyKey::getUpKey() == 1 && MyKey::getDownKey() == 1) {//ã‰º—¼•û‰Ÿ‚³‚ê‚Ä‚ê‚ÎˆÚ“®‚³‚¹‚È‚¢
 		return;
 	}
 	if (MyKey::getUpKey()) {
-		musiccursor == 0 ? musiccursor = musiccount - 1 : musiccursor--;//0ã€€ï½ã€€count - 1ã‚’ä¸Šæ–¹å‘ãƒ«ãƒ¼ãƒ—
-		musicrotation = -DEFAULT_ROTATION;//é¸æŠè‚¢ã‚’å›è»¢ã•ã›ã‚‹ãŸã‚è§’åº¦ã‚’30åº¦ãƒã‚¤ãƒŠã‚¹
+		OperationSE::play(LEVER);
+		musiccursor == 0 ? musiccursor = musiccount - 1 : musiccursor--;//0@`@count - 1‚ğã•ûŒüƒ‹[ƒv
+		musicrotation = -DEFAULT_ROTATION;//‘I‘ğˆ‚ğ‰ñ“]‚³‚¹‚é‚½‚ßŠp“x‚ğ30“xƒ}ƒCƒiƒX
 		playMusic(musiccursor);
-		initDifficulty();//æ›²ã«åˆã‚ã›ãŸé›£æ˜“åº¦ã¸åˆæœŸåŒ–
+		initDifficulty();//‹È‚É‡‚í‚¹‚½“ïˆÕ“x‚Ö‰Šú‰»
 	}
 	else if (MyKey::getDownKey()) {
+		OperationSE::play(LEVER);
 		musiccursor == musiccount - 1 ? musiccursor = 0 : musiccursor++;
-		musicrotation = DEFAULT_ROTATION;//é¸æŠè‚¢ã‚’å›è»¢ã•ã›ã‚‹ãŸã‚è§’åº¦ã‚’30åº¦ãƒ—ãƒ©ã‚¹
+		musicrotation = DEFAULT_ROTATION;//‘I‘ğˆ‚ğ‰ñ“]‚³‚¹‚é‚½‚ßŠp“x‚ğ30“xƒvƒ‰ƒX
 		playMusic(musiccursor);
-		initDifficulty();//æ›²ã«åˆã‚ã›ãŸé›£æ˜“åº¦ã¸åˆæœŸåŒ–
+		initDifficulty();//‹È‚É‡‚í‚¹‚½“ïˆÕ“x‚Ö‰Šú‰»
+	}
+
+	static bool pressed = false;
+	if (MyKey::getLeftKey()) {
+		if (notespeed > 0.6)
+			notespeed -= 0.1;
+		pressed = true;
+	} else if (MyKey::getRightKey()) {
+		if (notespeed < 2.0)
+			notespeed += 0.1;
+		pressed = true;
+	} else {
+		pressed = false;
 	}
 }
 
 void SelectMusic::difmoveCursor(void) {
-	if (MyKey::getUpKey() == 1 && MyKey::getDownKey() == 1) {//ä¸Šä¸‹ä¸¡æ–¹æŠ¼ã•ã‚Œã¦ã‚Œã°ç§»å‹•ã•ã›ãªã„
+	if (MyKey::getUpKey() == 1 && MyKey::getDownKey() == 1) {//ã‰º—¼•û‰Ÿ‚³‚ê‚Ä‚ê‚ÎˆÚ“®‚³‚¹‚È‚¢
 		return;
 	}
 	if (MyKey::getUpKey()) {
-		difcursor == 0 ? difcursor = difcount - 1 : difcursor--;//0ã€€ï½ã€€count - 1ã‚’ä¸Šæ–¹å‘ãƒ«ãƒ¼ãƒ—
-		difrotation = -DEFAULT_ROTATION;//é¸æŠè‚¢ã‚’å›è»¢ã•ã›ã‚‹ãŸã‚è§’åº¦ã‚’30åº¦ãƒã‚¤ãƒŠã‚¹
+		OperationSE::play(LEVER);
+		difcursor == 0 ? difcursor = difcount - 1 : difcursor--;//0@`@count - 1‚ğã•ûŒüƒ‹[ƒv
+		difrotation = -DEFAULT_ROTATION;//‘I‘ğˆ‚ğ‰ñ“]‚³‚¹‚é‚½‚ßŠp“x‚ğ30“xƒ}ƒCƒiƒX
 	}else if (MyKey::getDownKey()) {
+		OperationSE::play(LEVER);
 		difcursor == difcount - 1 ? difcursor = 0 : difcursor++;
-		difrotation = DEFAULT_ROTATION;//é¸æŠè‚¢ã‚’å›è»¢ã•ã›ã‚‹ãŸã‚è§’åº¦ã‚’30åº¦ãƒ—ãƒ©ã‚¹
+		difrotation = DEFAULT_ROTATION;//‘I‘ğˆ‚ğ‰ñ“]‚³‚¹‚é‚½‚ßŠp“x‚ğ30“xƒvƒ‰ƒX
+	}
+
+	static bool pressed = false;
+	if (MyKey::getLeftKey()) {
+		if (notespeed > 0.6)
+			notespeed -= 0.1;
+		pressed = true;
+	} else if (MyKey::getRightKey()) {
+		if (notespeed < 2.0)
+			notespeed += 0.1;
+		pressed = true;
+	} else {
+		pressed = false;
 	}
 }
 
@@ -163,13 +203,13 @@ void SelectMusic::playMusic(int musicNum) {
 }
 
 void SelectMusic::drawMusic(void) {
-	/*æ›²åã®æç”»*/
+	/*‹È–¼‚Ì•`‰æ*/
 	for (int i = 0; i < 5; i++) {
-		//åº§æ¨™ã®æŒ‡å®š
+		//À•W‚Ìw’è
 		int angle = DEFAULT_ANGLE + FORWARD_ANGLE * i + musicrotation;
 		int x = (int)(1800 + cos((angle)* Math::Pi / 180.0) * 1000);
 		int y = (int)((Window::Height() / 2) - sin((angle)* Math::Pi / 180.0) * 500);
-		//æç”»
+		//•`‰æ
 		TextureAsset(U"selectmusictitle").drawAt(x, y);
 		FontAsset(U"selectmusicfont")(FileSystem::BaseName(musicarray[(musiccursor - 2 + i + musiccount) % musiccount])).drawAt(x, y, Color(0, 0, 0));
 		
@@ -177,7 +217,7 @@ void SelectMusic::drawMusic(void) {
 		int difcnt;
 		setArray(dif, getDiffilepath((musiccursor - 2 + i + musiccount) % musiccount), difcnt);
 		
-		Rect(x - 230, y - 30, 20, 10).draw(Palette::Green);			//é›£æ˜“åº¦ã®ä»˜ã‘
+		Rect(x - 230, y - 30, 20, 10).draw(Palette::Green);			//“ïˆÕ“x‚Ì•t‚¯
 		Rect(x - 230, y - 20, 20, 10).draw(Palette::Orange);
 		if (difcnt == 3) {
 			Rect(x - 230, y - 10, 20, 10).draw(Palette::Red);
@@ -185,13 +225,13 @@ void SelectMusic::drawMusic(void) {
 	}
 }
 void SelectMusic::drawDifficulty(void) {
-	/*æ›²åã®æç”»*/
+	/*‹È–¼‚Ì•`‰æ*/
 	for (int i = 0; i < 5; i++) {
-		//åº§æ¨™ã®æŒ‡å®š
+		//À•W‚Ìw’è
 		int angle = DEFAULT_ANGLE + FORWARD_ANGLE * i + difrotation;
 		int x = (int)(1800 + cos((angle)* Math::Pi / 180.0) * 1000);
 		int y = (int)((Window::Height() / 2) - sin((angle)* Math::Pi / 180.0) * 500);
-		//æç”»
+		//•`‰æ
 		TextureAsset(U"selectmusictitle").drawAt(x, y);
 		FontAsset(U"selectmusicfont")(FileSystem::BaseName(difarray[(difcursor - 2 + i + difcount) % difcount])).drawAt(x, y, Color(0, 0, 0));
 	}
@@ -202,4 +242,7 @@ String SelectMusic::getMusicPath(void) {
 }
 String SelectMusic::getDifPath(void) {
 	return difarray[difcursor];
+}
+float SelectMusic::getNoteSpeed(void) {
+	return notespeed;
 }

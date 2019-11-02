@@ -69,8 +69,9 @@ void SceneManager::changeScene() {
 
 		String musicpath = ((SelectMusic*)scene)->getMusicPath();
 		String filepath = ((SelectMusic*)scene)->getDifPath();
+		float notespeed = ((SelectMusic*)scene)->getNoteSpeed();
 		delete scene;
-		scene = new Game(musicpath, filepath);
+		scene = new Game(musicpath, filepath, notespeed);
 		break;
 	}
 	case SCENE_RESULT: {

@@ -18,6 +18,8 @@ public:
 	static bool getReturnKey(void);
 	static bool getUpKey(void);
 	static bool getDownKey(void);
+	static bool getLeftKey(void);
+	static bool getRightKey(void);
 	static void setKeyLock(bool lock);
 private:
 	static bool lock;

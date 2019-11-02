@@ -16,6 +16,7 @@ public:
 
 	String getMusicPath(void);
 	String getDifPath(void);
+	float getNoteSpeed(void);
 private:
 	enum SELECTSTATE {
 		MUSIC,
@@ -30,7 +31,7 @@ private:
 	int musiccount, difcount;
 	int musiccursor, difcursor;
 	int musicrotation, difrotation;
-	
+	float notespeed;
 
 	s3d::Array<FilePath> musicarray;
 	s3d::Array<FilePath> difarray;
