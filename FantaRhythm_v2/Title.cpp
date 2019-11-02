@@ -26,6 +26,7 @@ bool Title::isReady(void) {
 void Title::start(void) {
 	delete TitleAudio;
 	TitleAudio = new Audio(U"resources/musics/main/attacking ready!/attacking ready!.wav");
+	TitleAudio->setLoop(true);
 	TitleAudio->play();
 }
 
