@@ -107,7 +107,7 @@ void HttpClient::Get(std::string path, std::string deststr, TH_STATUS& isFinish)
 }
 
 void HttpClient::Post(std::string post, std::string path, std::string deststr, TH_STATUS& isFinish) {
-	std::string postMassage = post;//encode(post);
+	std::string postMassage = encode(post);
 	result.clear();
 	try {
 		sock = socket(AF_INET, SOCK_STREAM, 0);//ipv4 tcpŽw’è

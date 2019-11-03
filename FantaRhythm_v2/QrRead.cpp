@@ -78,10 +78,10 @@ void QrRead::update(void) {
 		else if(th_status == TH_FINISH){
 			if (isChange) {
 				JSONReader json(U"chardata.json");
-				JSONArrayView jsonArray = json[U"role"].arrayView();
-				RankingData::setName(json[U"nickname"].get<String>());
+				JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
+				RankingData::setName(json[U"user"][U"nickname"].get<String>());
 				for (int i = 0; i < 4; i++) {
-					RankingData::setChar_id(i, jsonArray[i][U"id"].get<int>());
+					RankingData::setChar_id(i, jsonArray[i][U"character_id"].get<int>());
 				}
 
 				SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
