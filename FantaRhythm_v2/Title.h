@@ -11,8 +11,11 @@ public:
 	void start(void);
 	void update(void);
 	void draw(void);
+	void drawTutorial(void);
+	bool tutorialF;
 private:
 	Audio *TitleAudio;
 	double alpha;
 	void changeAlpha(void);
+	Texture tutorial_img;
 };
