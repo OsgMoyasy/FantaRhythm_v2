@@ -4,7 +4,7 @@
 SE::SE(const FilePath& path) {
 	exist = false;
 
-	if (path != U"") {
+	if (FileSystem::Exists(path)) {
 		sound = new Audio(path);
 		exist = true;
 	}
@@ -20,20 +20,25 @@ void SE::play() {
 }
 
 //MapFlip///////////////////////////////////////////////////////////////////////////////////
-MapFlip::MapFlip(Texture map, int xFlipWidth, int yFlipHeight) {
-	this->map = map;
-	this->xFlipWidth = xFlipWidth;
-	this->yFlipHeight = yFlipHeight;
-	xMapWidth = map.width();	//大きい画僧の大きさを取得
-	yMapHeight = map.height();	//
+MapFlip::MapFlip(Texture _map, int _xFlipWidth, int _yFlipHeight, bool _loop) {
+	this->map = _map;
+	this->xFlipWidth = _xFlipWidth;
+	this->yFlipHeight = _yFlipHeight;
+	xMapWidth = _map.width();	//大きい画僧の大きさを取得
+	yMapHeight = _map.height();	//
 	xNowPos = 0;
 	yNowPos = 0;
+	loop = _loop;
 }
 bool MapFlip::nextFlip() {
 	if (xNowPos += xFlipWidth, xNowPos >= xMapWidth) {	//次の列へ
 		xNowPos = 0;
 		if (yNowPos += yFlipHeight, yNowPos >= yMapHeight) {	//次の行の一番左の列へ
-			return false;	//大きい画像の右下(最後)まで達していたらfalse
+			if (loop) {
+				yNowPos = 0;
+			} else {
+				return false;	//大きい画像の右下(最後)まで達していたらfalse
+			}
 		}
 	}
 	return true;
@@ -50,8 +55,6 @@ FlipMovie::FlipMovie(Texture map, int xFlipWidth, int yFlipHeight, int xDraw, in
 	switchTime = switchBetween;
 	this->switchBetween = switchBetween;//切り出し画像を切り替える間隔[秒?]
 }
-
-
 FlipMovie::~FlipMovie() {
 	delete mapflip;
 }

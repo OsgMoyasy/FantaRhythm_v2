@@ -1,5 +1,8 @@
 #include "Title.h"
 #include "SceneManager.h"
+#include"OperationTexture.h"
+#include"OperationSE.h"
+
 
 #define CYCLE 3000
 #define TWOPI 6.28318
@@ -33,6 +36,7 @@ void Title::start(void) {
 
 void Title::update(void) {
 	if (MyKey::getDecisionKey()) {
+		OperationSE::play(DECISION);
 		SceneManager::setNextScene(SceneManager::SCENE_QRREAD);
 	}
 	else {
@@ -47,6 +51,8 @@ void Title::draw(void) {
 	
 	FontAsset(U"titlefont")(U"Å`Press Button To StartÅ`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
 	FontAsset(U"titlefont")(U"Å`Press Button To StartÅ`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
+
+	OperationTexture::draw(DECISION, { 10,630 }, U"ÅFêiÇﬁ");
 }
 
 void Title::changeAlpha(void) {

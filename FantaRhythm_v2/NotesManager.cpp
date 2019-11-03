@@ -30,7 +30,7 @@ struct NotesManager::ProPos {
 	double y;
 };
 
-NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
+NotesManager::NotesManager(NotesSubject* sub, const String& difpath, float _notespeed) {
 	TextureAsset::Register(U"note", U"resources/images/items/Nort3rd.png", AssetParameter::LoadAsync());
 	TextureAsset::Register(U"longnote", U"resources/images/items/Nort2nd.png", AssetParameter::LoadAsync());
 	TextureAsset::Register(U"cri", U"resources/images/items/Nort2.png", AssetParameter::LoadAsync());
@@ -63,12 +63,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
 		case 0:
-			if (note.time % 21 == 0) {
-				note.type = NOTESTYPE::CRITICAL;
-			}
-			else {
-				note.type = NOTESTYPE::NORMAL;
-			}
+			note.type = NOTESTYPE::NORMAL;
 			note.judgetime = note.time;
 			break;
 		case 1:
@@ -103,10 +98,10 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	//描画関係の変数の初期化
 	//レーン基準円の位置
 	int centerX = Window::Width() / 2;
-	int centerY = 0;
+	int centerY = 50;
 
-	int startRange = 100;			//  上端の基準円の原点からの距離
-	int judgeRange = 600;			//判定線の基準円の原点からの距離
+	int startRange = 150;			//  上端の基準円の原点からの距離
+	int judgeRange = 500;			//判定線の基準円の原点からの距離
 	double laneBetween = 0.08_pi;	//レーン間の角度(基準円上の)
 	double laneCenter = 1.5_pi;		//レーン群の中心の角度(基準円上の)
 
@@ -122,8 +117,8 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath) {
 	laneGoalY = 730;//(画面Y座標限界 + 10)
 
 	//速さ
-	notespeed = 1.2;
-	timeRequired = 1500 / notespeed;
+	notespeed = _notespeed;
+	timeRequired = 1000 / _notespeed;
 	//ノーツの大きさ
 	notewidth = TextureAsset(U"note").width();
 	laneStartScale = 0.2;

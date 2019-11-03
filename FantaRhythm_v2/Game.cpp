@@ -1,12 +1,12 @@
 #include "Game.h"
 
-Game::Game(const String& music, const String& dif) {
+Game::Game(const String& music, const String& dif, float notespeed) {
 	musicpath = music;
 	difpath = dif;
 
 	notessubject = new NotesSubject();
 	
-	notes = new NotesManager(notessubject,difpath);
+	notes = new NotesManager(notessubject, difpath, notespeed);
 
 	characterm = new CharacterSet(musicpath);
 
@@ -70,9 +70,9 @@ JUDGE::JudgeCount* Game::getJudgeCount(void) {
 }
 void Game::gameEndCheck(void) {
 	if (characterm->getCurrentHp() <= 0 && isClear == true) {
-		MusicManager::setEndMusic();
+		//MusicManager::setEndMusic();
 		isClear = false;
-		characterm->gameEndEffect();
+		//characterm->gameEndEffect();
 	}
 	if (MusicManager::musicEndCheck() ) {//曲が終わっている　or ゲーム失敗している
 		return SceneManager::setNextScene(SceneManager::SCENE_RESULT);//シーン移行
