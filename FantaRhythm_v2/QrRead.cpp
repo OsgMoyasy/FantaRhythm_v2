@@ -46,6 +46,7 @@ void QrRead::update(void) {
 	if (MyKey::getDecisionKey()) {//ゲストユーザー
 		readText = U"gest";
 		RankingData::setName(readText);
+		RankingData::setUser_id(readText);
 		client->filepath = "gest.json";
 		//webcam.stop();
 		SceneManager::setNextScene(SceneManager::SCENE_SELECTMUSIC);
