@@ -17,12 +17,12 @@ CharacterSet::CharacterSet(const String& musicpath) {
 		str = U"chardata.json";
 	}
 	JSONReader json(str);
-	JSONArrayView jsonArray = json[U"user"][U"role"].arrayView();
+	JSONArrayView jsonArray = json[U"role"].arrayView();
 	for (int lane = 0; lane < CHANUMBER; lane++) {
 		int initx = 70 + lane * 90, inity = 250 + lane * 80;
 		
 
-		String char_name = jsonArray[lane][U"char_name"].get<String>();
+		String char_name = jsonArray[lane][U"name"].get<String>();
 		int hp = jsonArray[lane][U"hp"].get<int>();
 		int power = jsonArray[lane][U"power"].get<int>();
 		double generic1 = jsonArray[lane][U"generic1"].get<double>();
