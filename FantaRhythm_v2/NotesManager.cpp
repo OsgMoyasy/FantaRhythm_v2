@@ -11,8 +11,8 @@ enum class NotesManager::NOTESTYPE {
 namespace JUDGE_RANGE{
 	constexpr int BAD = 200;//判定の最大範囲[ms]÷2
 	constexpr int GOOD = 100;//GOOD判定範囲[ms]÷2
-	constexpr int GREAT = 25;//GREAT判定範囲[ms]÷2
-	constexpr int PERFECT = 5;//PERFECT判定範囲[ms]÷2
+	constexpr int GREAT = 50;//GREAT判定範囲[ms]÷2
+	constexpr int PERFECT = 10;//PERFECT判定範囲[ms]÷2
 }
 
 struct NotesManager::Notes {
