@@ -18,7 +18,7 @@ SelectMusic::SelectMusic(void)  {
 	initMusic();
 	initDifficulty();
 	changeState(MUSIC);//初期状態を曲選択へ
-	notespeed = 0.8;
+	notespeed = 0.9;
 }
 
 SelectMusic::~SelectMusic(void) {
@@ -50,10 +50,10 @@ void SelectMusic::draw(void) {
 	TextureAsset(U"selectmusicback").draw();
 	//現在の状態に合わせた選択肢の描画
 	(this->*stateDraw)();
-	OperationTexture::draw(DECISION,  { 10,500 }, U"：選択");
-	OperationTexture::draw(CANCEL,    { 10,550 }, U"：戻る");
-	OperationTexture::draw(UPDOWN,    { 10,600 }, U"：曲切り替え");
-	OperationTexture::draw(LEFTRIGHT, { 10,650 }, U"：ノーツスピード増減  {:.1f}"_fmt(notespeed));
+	OperationTexture::draw(DECISION,  { 10,480 }, U"：選択");
+	OperationTexture::draw(CANCEL,    { 10,530 }, U"：戻る");
+	OperationTexture::draw(UPDOWN,    { 10,580 }, U"：曲切り替え");
+	OperationTexture::draw(LEFTRIGHT, { 10,630 }, U"：ノーツスピード増減  {:.1f}"_fmt(notespeed));
 }
 
 void SelectMusic::changeState(SELECTSTATE nextstate) {
@@ -154,12 +154,12 @@ void SelectMusic::musicmoveCursor(void) {
 
 	static bool pressed = false;
 	if (MyKey::getLeftKey()) {
-		if (notespeed > 0.6)
-			notespeed -= 0.1;
+		if (!pressed)
+			notespeed = notespeed - 0.1 > 0.5 ? notespeed - 0.1 : 0.5;
 		pressed = true;
 	} else if (MyKey::getRightKey()) {
-		if (notespeed < 2.0)
-			notespeed += 0.1;
+		if (!pressed)
+			notespeed = notespeed + 0.1 < 2.0 ? notespeed + 0.1 : 2.0;
 		pressed = true;
 	} else {
 		pressed = false;
@@ -182,12 +182,12 @@ void SelectMusic::difmoveCursor(void) {
 
 	static bool pressed = false;
 	if (MyKey::getLeftKey()) {
-		if (notespeed > 0.6)
-			notespeed -= 0.1;
+		if (!pressed)
+			notespeed = notespeed - 0.1 > 0.5 ? notespeed - 0.1 : 0.5;
 		pressed = true;
 	} else if (MyKey::getRightKey()) {
-		if (notespeed < 2.0)
-			notespeed += 0.1;
+		if (!pressed)
+			notespeed = notespeed + 0.1 < 2.0 ? notespeed + 0.1 : 2.0;
 		pressed = true;
 	} else {
 		pressed = false;

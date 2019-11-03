@@ -143,7 +143,7 @@ bool MyKey::getDownKey(void) {
 bool MyKey::getLeftKey(void) {
 	if (!lock) {
 		if (padflag) {
-			if (Gamepad(0).axes[0] >= 1.0) {
+			if (Gamepad(0).axes[0] <= -1.0) {
 				return true;
 			}
 			return false;

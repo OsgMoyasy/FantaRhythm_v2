@@ -52,7 +52,7 @@ void Title::draw(void) {
 	FontAsset(U"titlefont")(U"Å`Press Button To StartÅ`").drawAt(Window::Width() / 2 + 3, Window::Height() - 150 + 3, ColorF(0, 0, 0, alpha - 0.05));
 	FontAsset(U"titlefont")(U"Å`Press Button To StartÅ`").drawAt(Window::Width() / 2, Window::Height() - 150, AlphaF(alpha));
 
-	OperationTexture::draw(DECISION, { 10,650 }, U"ÅFêiÇﬁ");
+	OperationTexture::draw(DECISION, { 10,630 }, U"ÅFêiÇﬁ");
 }
 
 void Title::changeAlpha(void) {
