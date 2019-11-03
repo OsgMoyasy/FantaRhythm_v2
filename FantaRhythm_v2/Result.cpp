@@ -40,8 +40,10 @@ Result::Result(JUDGE::JudgeCount judgeCnt, int totalDamage, bool isClear) {
 		score = calcScore(this->judgeCnt);
 		scoreStr = Format(score);
 		damageStr = Format(totalDamage);
-		std::string msg = "{\"music_name\": \"" + RankingData::getMusic_name().narrow() + "\",\"score\" : " + scoreStr.narrow() + ",\"damage\" : " + damageStr.narrow() + ",\"user_hash\" : \"" + Unicode::ToUTF8(RankingData::getUser_id()) + "\"}";
+		//std::string msg = R"({"user_hash" : ")" + Unicode::ToUTF8(RankingData::getUser_id()) + R"(", "ranking" : { "music_name" : ")" + RankingData::getMusic_name().narrow() + R"(", "damage" : )" + damageStr.narrow() + R"( , "score" : )" + scoreStr.narrow() + R"(} })";
+		//std::string msg = "{music_name : " + RankingData::getMusic_name().narrow() + "score : " + scoreStr.narrow() + "damage : " + damageStr.narrow() + "user_hash : " + Unicode::ToUTF8(RankingData::getUser_id()) + "}";
 
+		std::string msg = "music_name="+ RankingData::getMusic_name().narrow() + "&score="+scoreStr.narrow()+"&damage="+damageStr.narrow()+"&user_hash="+Unicode::ToUTF8(RankingData::getUser_id())+"";
 		//ランキング送信;
 		if (RankingData::getUser_id() != U"gest") {//ゲストユーザーじゃなければ
 			int char_id[4];
