@@ -171,7 +171,7 @@ void Result::successDraw(void) {
 	for (auto judgeimnum : judgeImNum) {
 		judgeimnum->draw();
 	}
-	FontAsset(U"resultfont")(U"～ リターンキーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 80, ColorF(0.0, 0.0, 0.0, alphaFont));
+	FontAsset(U"resultfont")(U"～ 決定キーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 80, ColorF(0.0, 0.0, 0.0, alphaFont));
 }
 
 int Result::calcScore(JUDGE::JudgeCount& jc) {//スコア計算 判定の数と重みを掛けた総和をスコアとする
@@ -215,7 +215,7 @@ void Result::failedUpdate(void) {
 
 void Result::failedDraw(void) {
 	TextureAsset(U"resultback").drawAt(Window::Width() / 2, Window::Height() / 2, AlphaF(alphaBack));//背景描画
-	FontAsset(U"resultfont")(U"～ リターンキーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 130, AlphaF(alphaFont));
+	FontAsset(U"resultfont")(U"～ 決定キーでタイトルへ ～").drawAt(Window::Width() / 2, Window::Height() - 130, AlphaF(alphaFont));
 }
 
 
