@@ -56,7 +56,7 @@ void OperationTexture::draw(Operation button, Vec2 drawpos, String string) {
 		break;
 	}
 
-	(*font)(string).draw(drawpos + Vec2{ TEXTURE_SIZE + 3, 0 }, Palette::Black);
+	(*font)(string).draw(drawpos + Vec2{ TEXTURE_SIZE + 4, 0 }, Palette::Black);
 	(*font)(string).draw(drawpos + Vec2{ TEXTURE_SIZE, 0 });
 }
 void OperationTexture::flipdraw(Operation button, MapFlip* mapflip, Vec2 drawpos) {

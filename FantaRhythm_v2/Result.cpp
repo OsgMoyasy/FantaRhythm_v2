@@ -131,7 +131,7 @@ void Result::update(void) {
 
 void Result::draw(void) {
 	(this->*stateDraw)();
-	OperationTexture::draw(DECISION, { 10,650 }, U"：進む");
+	OperationTexture::draw(DECISION, { 10,630 }, U"：進む");
 }
 
 void Result::changeFontAlpha(void) {
