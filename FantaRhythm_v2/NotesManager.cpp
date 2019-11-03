@@ -63,12 +63,7 @@ NotesManager::NotesManager(NotesSubject* sub, const String& difpath, float _note
 		int lane = csv.get<int>(row, 2);
 		switch (csv.get<int>(row, 3)) {
 		case 0:
-			if (note.time % 21 == 0) {
-				note.type = NOTESTYPE::CRITICAL;
-			}
-			else {
-				note.type = NOTESTYPE::NORMAL;
-			}
+			note.type = NOTESTYPE::NORMAL;
 			note.judgetime = note.time;
 			break;
 		case 1:
